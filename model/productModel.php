@@ -4,31 +4,78 @@ class producto_model extends modeloPrincipal {
 
     /* funciones de catálogo de productos */
     public static function obtenerCatalogo () {
-        $catalogo = modeloPrincipal::consultar("SELECT * FROM productos");
+        
+        $catalogo = modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos"); 
 
-        while ($mostrar = mysqli_fetch_assoc($catalogo)) {
-            $idSecure = modeloPrincipal::encryptionId($mostrar["id"]); 
+        
+        if (mysqli_num_rows($catalogo) > 0) { ?>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <?php
+    
+                    while ($mostrar = mysqli_fetch_array($catalogo)) { 
+                        // $idSecure = modeloPrincipal::encryptionId($mostrar["id"]);
+    
+                        $imgSrc = explode(',', $mostrar['images']);
+                        $url = $mostrar["id"].'/'.$imgSrc[0];
+                ?>
+            
+                    <div class="group bg-slate-900/40 border border-slate-800 rounded-[2rem] overflow-hidden hover:border-purple-500/50 transition-all duration-500 animate-slide-up">
+                        <div class="relative h-64 overflow-hidden cursor-pointer" onclick="openModal(<?= $mostrar['id'] ?>)">
+                            <img src="storage/<?= $url ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-4 py-1 rounded-full border border-white/10">
+                                <span class="text-sm font-bold text-white"><?= $mostrar['price'] ? '$' . $mostrar['price'] : 'Bajo pedido' ?></span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-white text-md font-semibold mb-1 truncate mb-4"><?= $mostrar['name'] ?></h3>
 
-            ?>
-            <div class="group bg-slate-900/40 border border-slate-800 rounded-[2rem] overflow-hidden hover:border-purple-500/50 transition-all duration-500 animate-slide-up">
-                <div class="relative h-64 overflow-hidden cursor-pointer" onclick="openModal(<?= $mostrar['id'] ?>)">
-                    <img src="" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    <div class="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-4 py-1 rounded-full border border-white/10">
-                        <span class="text-sm font-bold text-white"><?= $mostrar['price'] ? '$' . $mostrar['price'] : 'Bajo pedido' ?></span>
+                            <form action="./producto" method="get" data-type-form="load">
+                                <input type="hidden" value="<?= $mostrar['id'] ?>" name="id" />
+                                <button type="submit" class="w-full bg-slate-800 hover:bg-purple-600 text-white py-3 rounded-2xl transition-all flex items-center justify-center gap-2">
+                                    <i class="fab fa-whatsapp text-lg"></i> <span class="text-sm font-bold">Consultar</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+        <?php }else{ ?>
+
+            <div class="grid grid-cols-1 gap-4">
+                <div class="bg-red-700 border border-slate-800 rounded-[2rem] transition-all duration-500 animate-slide-up">
+                    
+                    <div class="p-4">
+                        <h3 class="text-center text-white text-md font-semibold mb-1 truncate mb-4">En este momento no hay productos disponibles.</h3>
+
                     </div>
                 </div>
-                <div class="p-6">
-                    <h3 class="text-white font-semibold text-lg mb-1 truncate"><?= $mostrar['name'] ?></h3>
-                    <p class="text-purple-400 text-xs font-bold uppercase mb-4 tracking-wider">category</p>
-                    <form action="./producto" method="get">
-                        <input type="hidden" value="<?= $idSecure ?>" name="id" />
-                        <button type="submit" class="w-full bg-slate-800 hover:bg-purple-600 text-white py-3 rounded-2xl transition-all flex items-center justify-center gap-2">
-                            <i class="fab fa-whatsapp text-lg"></i> <span class="text-sm font-bold">Consultar</span>
-                        </button>
-                    </form>
+            </div>
+        <?php }
+    }
+
+    public static function obtenerProductosPublicados (){
+
+        $catalogo = modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos"); 
+
+        while ($mostrar = mysqli_fetch_array($catalogo)) {  
+            
+            $imgSrc = explode(',', $mostrar['images']);
+            $url = $mostrar["id"].'/'.$imgSrc[0];
+        ?>
+
+            <div class="bg-slate-900/40 border border-slate-800 p-3 rounded-2xl flex items-center gap-4 hover:bg-slate-800/40 transition">
+                <img src="storage/<?= $url ?>" class="w-16 h-16 object-cover rounded-xl shadow-md">
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-white font-medium truncate"><?= $mostrar['nombre'] ?></h4>
+                    <p class="text-slate-500 text-xs"><?= $mostrar['price'] ? '$' . $mostrar['price'] : 'Bajo pedido' ?></p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="prepareEdit(<?= $mostrar['id']; ?>)" class="p-2 text-blue-400 hover:bg-blue-400/10 rounded-lg transition"><i class="fas fa-edit"></i></button>
+                    <button onclick="deleteProduct(<?= $mostrar['id']; ?>)" class="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
-        <?php } 
+        <?php }
     }
 
 

@@ -80,15 +80,15 @@ $quety = mysqli_fetch_assoc($query);
                 <?php 
                     $active = 'active';
                     foreach ($files as $file) {
-                        echo '<div class="carousel-item '.$active.' text-center">';
-                        echo '<img src="'.$file.'" style="max-height: 30rem; max-width: 30rem;" class="d-block w-100" alt="...">';
+                        echo '<div class="carousel-item '.$active.' ">';
+                        echo '<img src="'.$file.'" style="" class="sm:w-[10rem] md:w-[20rem] lg:w-[30rem] d-block" alt="...">';
                         echo '</div>';
                         $active = '';
                     }
                 ?>
 
             </div>
-            
+
             <button class="text-purple-900 carousel-control-prev carousel-dark" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon bg-primary p-4 rounded-2xl" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -101,7 +101,7 @@ $quety = mysqli_fetch_assoc($query);
 
         <div class="p-6">
             <h3 class="text-white font-semibold text-lg mb-2 truncate"><?= $quety['name'] ?></h3>
-            <span class="text-sm font-bold text-white mb-4"><?= $id == null ? 'Bajo pedido' : $quety['price'] ?></span>
+            <span class="text-sm font-bold text-white mb-4"><?= $id == null ? 'Bajo pedido' : $quety['price'] ?> <?= modeloPrincipal::generar_uuid(); ?></span>
             <button onclick="askWhatsApp(1)" class="w-full bg-slate-800 hover:bg-purple-600 text-white py-3 rounded-2xl transition-all flex items-center justify-center gap-2">
                 <i class="fab fa-whatsapp text-lg"></i> <span class="text-sm font-bold">Consultar</span>
             </button>

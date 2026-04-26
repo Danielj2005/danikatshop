@@ -1,5 +1,5 @@
 
-
+    
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -7,7 +7,7 @@
 <meta content="E-comerce, catálogo de productos, ventas, pedidos, whatsapp" name="keywords">
 <meta content="Daniel Barrueta" name="author">
 
-<title> <?= COMPANY ?> - <?= SLOGAN ?> </title>
+<title>DanikatShop - Todo lo que buscas en un solo lugar </title>
 
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -30,14 +30,14 @@
 </script>
 
 <!-- Favicons -->
-<link href="<?= SERVERURL; ?>/view/img/logo.jpeg" rel="shortcut icon" type="image/x-icon">
+<link href="./img/logo.jpeg" rel="shortcut icon" type="image/x-icon">
 
 <!-- Custom fonts for this template-->
-<link href="<?= SERVERURL; ?>view/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link href="./vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
-<link href="<?= SERVERURL; ?>view/css/app.css" rel="stylesheet">
-<link href="<?= SERVERURL; ?>view/css/bootstrap.min.css" rel="stylesheet">
-<link href="<?= SERVERURL; ?>view/css/bootstrap-icons.css" rel="stylesheet">
-<link href="<?= SERVERURL; ?>view/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-<link href="<?= SERVERURL; ?>view/css/sweetalert2.min.css" rel="stylesheet">
-<link href="<?= SERVERURL; ?>view/css/toastify.css" rel="stylesheet">
+<link href="./css/app.css" rel="stylesheet">
+<link href="./css/bootstrap.min.css" rel="stylesheet">
+<link href="./css/bootstrap-icons.css" rel="stylesheet">
+<link href="./css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="./css/sweetalert2.min.css" rel="stylesheet">
+<link href="./css/toastify.css" rel="stylesheet">

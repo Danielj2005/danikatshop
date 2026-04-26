@@ -17,7 +17,6 @@
 <script src="<?= SERVERURL; ?>view/js/datatables.min.js"></script>
 <script src="<?= SERVERURL; ?>view/js/dataTables.bootstrap5.min.js"></script>
 
-
 <script type="text/javascript">
     $(document).ready(function() {
         var t = $('#example').DataTable( { 

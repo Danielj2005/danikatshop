@@ -139,7 +139,7 @@ body {
 .brand-bg {
     background: radial-gradient(circle at top right, rgba(147, 51, 234, 0.15), transparent),
                 radial-gradient(circle at bottom left, rgba(217, 70, 239, 0.1), transparent);
-    height: 100vh;
+    /* height: 100vh; */
     background-repeat: no-repeat;
 }
 

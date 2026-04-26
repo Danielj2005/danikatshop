@@ -4,9 +4,6 @@ session_start();
 include_once "../include/modelos_include.php"; // se incluyen los modelos necesarios para la vista
 
 // se obtiene la configuracion de la base de datos
-$configuracion = ['caracteres' => config_model::obtener_dato('c_caracteres'),
-    'simbolos' => config_model::obtener_dato('c_simbolos'),
-    'numeros' => config_model::obtener_dato('c_numeros')];
 
 
 // modulo a trabajar
@@ -88,35 +85,6 @@ if($modulo === "Guardar"){
             alert_model::alerta_simple("¡Ocurrió un error!","No se pudo registrar al usuario en el sistema.","error");
         }
 
-    } catch (Exception $e) {
-        alert_model::alerta_simple("Ocurrido un error!", " ocurrio un error al registrar al usuario en el sistema.", "error");
-        exit();
-    }
-    
-
-    try {
-
-        model_user::asignar_preguntas_seguridad_usuario();
-
-    } catch (Exception $e) {
-        alert_model::alerta_simple("Ocurrido un error!", "ocurrio un error al asignar preguntas de seguridad del usuario", "error");
-        exit();
-    }
-
-    try {
-
-        $id_usuario = model_user::obtener_id_usuario_recien_registrado();
-        $rol_asignado = model_user::obtener_info_de_un_usuario('id_rol',$id_usuario);
-
-        bitacora::bitacora("Registro exitoso de un nuevo usuario.",'<p class="mb-3 text-primary-emphasis text-center"><i class="bi bi-exclamation-circle-fill"></i>&nbsp;Se registró un nuevo usuario con la siguiente informacón.</p> 
-            <h4 class="text-center card-title"><b> Información del usuario </b></h4>
-            <div class="d-flex justify-content-between border-bottom"> <p> Cédula</p> <span>'.$cedula.'</span> </div>
-            <div class="d-flex justify-content-between border-bottom"> <p> Nombre y Apellido</p> <span>'.$nombre.' '.$apellido.'</span> </div>
-            <div class="d-flex justify-content-between border-bottom"> <p> Correo</p> <span>'.$correo.'</span>  </div>
-            <div class="d-flex justify-content-between border-bottom"> <p> Dirección</p> <span>'.$direccion.'</span> </div>
-            <div class="d-flex justify-content-between border-bottom"> <p> Teléfono</p> <span>'.$telefono.'</span> </div>
-            <div class="d-flex justify-content-between border-bottom"> <p> Rol asignado</p> <span>'.$rol_asignado.'</span> </div>');
-            
         alert_model::alert_reg_success();
         exit();
     } catch (Exception $e) {
@@ -132,108 +100,26 @@ if($modulo === "Guardar"){
 if($modulo === "modificar_info_personal_usuario"){
     
     /*------------------ información personal de el usuario ------------------*/
-    $cedula = modeloprincipal::limpiar_cadena($_POST["nacionalidad"].$_POST["cedula"]);
     $nombre = modeloprincipal::limpiar_mayusculas($_POST["nombres"]);
-    $apellido = modeloprincipal::limpiar_mayusculas($_POST["apellido"]);
     $correo =  modeloprincipal::limpiar_cadena($_POST["email"]);
-    $direccion = modeloprincipal::limpiar_mayusculas($_POST["direccion"]);
-    $telefono = modeloprincipal::limpiar_cadena($_POST["telefono"]);
-
     // Se verifica que no se hayan recibido campos vacíos.
-    modeloPrincipal::validar_campos_vacios([$cedula, $nombre, $apellido, $correo, $telefono, $direccion]);
+    modeloPrincipal::validar_campos_vacios([$nombre,$correo]);
 
-    if (modeloprincipal::verificar_datos("[V|E|J|P][0-9|-]{7,10}",$cedula)) {
-        alert_model::alert_of_format_wrong("CÉDULA");
-        exit();
-    }
     if (modeloprincipal::verificar_datos("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{3,60}",$nombre)) {
         alert_model::alert_of_format_wrong("NOMBRE");
         exit();
     }
-    if (modeloprincipal::verificar_datos("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{3,60}",$apellido)) {
-        alert_model::alert_of_format_wrong("APELLIDO");
-        exit();
-    } 
     if (modeloprincipal::verificar_datos("[A-Za-zÁÉÍÚÓáéíóúñÑ@.0-9]{11,100}",$correo)) {
         alert_model::alert_of_format_wrong("CORREO");
         exit();
     }
-    if (modeloprincipal::verificar_datos("[0-9]{11}",$telefono)) {
-        alert_model::alert_of_format_wrong("'teléfono'");
-        exit();
-    }
-    if (modeloprincipal::verificar_datos("[A-Za-zÁÉÍÚÓáéíóúñÑ0-9-, ]{10,250}",$direccion)) {
-        alert_model::alert_of_format_wrong("'dirección'");
-        exit();
-    }
-
-    $cedula_user = $_SESSION['dataUsuario']['dni'];
-    $nombre_user = $_SESSION['dataUsuario']['nombre'];
-    $apellido_user = $_SESSION['dataUsuario']['apellido'];
-    $correo_user = $_SESSION['dataUsuario']['correo'];
-    $telefono_user = $_SESSION['dataUsuario']['telefono'];
-    $direccion_user = $_SESSION['dataUsuario']['direccion'];
-
+    
     // Se actualizara la información personal del usuario
     try {
         $actualizar = modeloPrincipal::UpdateSQL("usuario","cedula = '$cedula', nombre = '$nombre', apellido = '$apellido', correo = '$correo', telefono = '$telefono', direccion = '$direccion'", "id_usuario = $id_usuario");
         
-        $_SESSION['dataUsuario']['dni'] = $cedula;
-        $_SESSION['dataUsuario']['nombre'] = $nombre ;
-        $_SESSION['dataUsuario']['apellido'] = $apellido ;
-        $_SESSION['dataUsuario']['correo'] = $correo ;
-        $_SESSION['dataUsuario']['telefono'] = $telefono ;
-        $_SESSION['dataUsuario']['direccion'] = $direccion ;
-
         if (!$actualizar) {
             alert_model::alerta_simple("Ha ocurrido un error!", "ocurrio un error al actualizar la información personal del usuario.", "error");
-            exit();
-        }
-
-        $cambios = [
-            "dni" => config_model::obtener_comparacion([$cedula_user, $cedula_user], [ $cedula, $cedula]),
-
-            "nombre" => config_model::obtener_comparacion([$nombre_user, $nombre_user], [ $nombre, $nombre]),
-
-            "apellido" => config_model::obtener_comparacion([$apellido_user, $apellido_user], [ $apellido, $apellido]),
-
-            "correo" => config_model::obtener_comparacion([$correo_user, $correo_user], [ $correo, $correo]),
-
-            "telefono" => config_model::obtener_comparacion([$telefono_user, $telefono_user], [ $telefono, $telefono]),
-
-            "direccion" => config_model::obtener_comparacion([$direccion_user, $direccion_user], [ $direccion, $direccion])
-        ];
-
-        $bitacora_modificacion_info_usuario = bitacora::bitacora("Modificación exitosa del perfil de usuario",
-        '<p class="mb-3 text-primary-emphasis text-center"><i class="bi bi-exclamation-circle-fill"></i>&nbsp;El usuario actualizó la configuración del sistema.</p> 
-                <h4 class="text-center card-title"><b> Información del usuario </b></h4>
-                <div class="d-flex justify-content-between border-bottom">
-                    <p> Cédula</p>
-                    '.$cambios['dni'].'
-                </div>
-                <div class="d-flex justify-content-between border-bottom">
-                    <p> Nombre</p>
-                    '.$cambios['nombre'].'
-                </div>
-                <div class="d-flex justify-content-between border-bottom">
-                    <p> Apellido</p>
-                    '.$cambios['apellido'].'
-                </div>
-                <div class="d-flex justify-content-between border-bottom">
-                    <p> Correo</p>
-                    '.$cambios['correo'].'
-                </div>
-                <div class="d-flex justify-content-between border-bottom">
-                    <p> Dirección</p>
-                    '.$cambios['telefono'].'
-                </div>
-                <div class="d-flex justify-content-between border-bottom">
-                    <p> Teléfono</p>
-                    '.$cambios['direccion'].'
-                </div>');
-
-        if (!$bitacora_modificacion_info_usuario) {
-            alert_model::alerta_simple("Ha ocurrido un error!", "ocurrio un error al guardar la modificación en bitácora.", "error");
             exit();
         }
 

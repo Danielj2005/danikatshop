@@ -9,25 +9,25 @@ class model_user extends modeloPrincipal {
     
 
     public static function consultar_usuario($fields) {
-        $consul = modeloPrincipal::consultar("SELECT $fields FROM usuario");
+        $consul = modeloPrincipal::consultar("SELECT $fields FROM users");
         modeloPrincipal::verificar_consulta($consul,'usuario'); // se verifica si la consulta fue exitosa
         return $consul;
     }
 
     public static function consulta_usuario_id($fields, $id_usuario) {
-        $consul = modeloPrincipal::consultar("SELECT $fields FROM usuario WHERE id_usuario = '$id_usuario'");
+        $consul = modeloPrincipal::consultar("SELECT $fields FROM users WHERE id = '$id_usuario'");
         modeloPrincipal::verificar_consulta($consul, 'usuario'); // se verifica si la consulta fue exitosa
         return $consul;
     }
 
     public static function consulta_usuario_condicion($fields,$condition) {
-        $consul = modeloPrincipal::consultar("SELECT $fields FROM usuario WHERE $condition");
+        $consul = modeloPrincipal::consultar("SELECT $fields FROM users WHERE $condition");
         modeloPrincipal::verificar_consulta($consul,'usuario'); // se verifica si la consulta fue exitosa
         return $consul;
     }
 
     public static function consulta_usuario_existe($query,$condition) {
-        $consul = modeloPrincipal::consultar("SELECT $query FROM usuario AS U INNER JOIN rol AS R ON U.id_rol = R.id_rol WHERE $condition");
+        $consul = modeloPrincipal::consultar("SELECT $query FROM users AS U INNER JOIN rol AS R ON U.id_rol = R.id_rol WHERE $condition");
         modeloPrincipal::verificar_consulta($consul,'usuario'); // se verifica si la consulta fue exitosa
         return $consul;
     }
@@ -173,7 +173,7 @@ class model_user extends modeloPrincipal {
         $id_usuario = $_SESSION['id_usuario']; // se obtiene el id del usuario que inicio sesion
 
         $lista_usuario = modeloPrincipal::consultar("SELECT *
-            FROM usuario 
+            FROM users 
             WHERE id_usuario != '$id_usuario' 
             AND id_rol != 1 
             ORDER BY nombre ASC");
@@ -193,7 +193,7 @@ class model_user extends modeloPrincipal {
                             data-bs-toggle="modal" 
                             data-bs-target="#modal" 
                             value="<?= modeloPrincipal::encryptionId($mostrar["id_usuario"]); ?>" 
-                            class="btn_modal btn btn-warning <?= ICONO_MODIFICAR ?>">
+                            class="btn_modal btn btn-warning">
                         </button>
                     </th>
                     <th scope="col" class="col text-center">
@@ -212,7 +212,7 @@ class model_user extends modeloPrincipal {
     } 
 
     public static function options_usuarios() {
-        $lista_usuario = modeloPrincipal::consultar("SELECT * FROM usuario WHERE id_rol != 1 ORDER BY nombre ASC");
+        $lista_usuario = modeloPrincipal::consultar("SELECT * FROM users WHERE id_rol != 1 ORDER BY nombre ASC");
 
         while($row = mysqli_fetch_array($lista_usuario)) { ?>
 
@@ -365,7 +365,7 @@ class model_user extends modeloPrincipal {
             $nombre_rol = rol_model::obtener_nombre_rol_usuario($id_rol);
             $info_usuario[$info] = $nombre_rol;
         }else{
-            $info_usuario = mysqli_fetch_array(modeloPrincipal::consultar("SELECT $info FROM usuario WHERE id_usuario = $id_usuario"));
+            $info_usuario = mysqli_fetch_array(modeloPrincipal::consultar("SELECT $info FROM users WHERE id_usuario = $id_usuario"));
         }
 
         return $info_usuario[$info];
@@ -374,7 +374,7 @@ class model_user extends modeloPrincipal {
 
     public static function obtener_info_de_un_usuario($info,$id_usuario) {
         if ($info == 'id_rol') {
-            $id_rol = modeloPrincipal::consultar("SELECT id_rol FROM usuario WHERE id_usuario = $id_usuario");
+            $id_rol = modeloPrincipal::consultar("SELECT id_rol FROM users WHERE id_usuario = $id_usuario");
 
             if (!$id_rol) {
                 alert_model::alerta_simple("¡Ocurrió un error inesperado!","No se encontró el rol del usuario, por favor verifique e intente nuevamente","error");
@@ -386,7 +386,7 @@ class model_user extends modeloPrincipal {
             $nombre_rol = rol_model::obtener_nombre_rol_usuario($id_rol);
             $info_usuario[$info] = $nombre_rol;
         }else{
-            $info_usuario = mysqli_fetch_array(modeloPrincipal::consultar("SELECT $info FROM usuario WHERE id_usuario = $id_usuario"));
+            $info_usuario = mysqli_fetch_array(modeloPrincipal::consultar("SELECT $info FROM users WHERE id_usuario = $id_usuario"));
         }
 
         return $info_usuario[$info];
@@ -395,7 +395,7 @@ class model_user extends modeloPrincipal {
     // funcion para obtener el id de un usuario
 
     public static function obtener_id_usuario_recien_registrado(){
-        $id_usaurio = mysqli_fetch_array(modeloPrincipal::consultar("SELECT MAX(id_usuario) AS id FROM usuario"));
+        $id_usaurio = mysqli_fetch_array(modeloPrincipal::consultar("SELECT MAX(id_usuario) AS id FROM users"));
         $id_usaurio = $id_usaurio['id'];
         return $id_usaurio;
     }
