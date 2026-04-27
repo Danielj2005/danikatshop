@@ -79,7 +79,7 @@ function SendFormAjax() {
                 return;
             }
 
-            Swal.fire({
+            DanikatAlert.fire({
                 title: title_alerta[`${type_form}`],
                 text: text_alerta[`${type_form}`],
                 icon: type_alerta[`${type_form}`],

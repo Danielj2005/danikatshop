@@ -41,3 +41,4 @@
 <link href="./css/dataTables.bootstrap5.min.css" rel="stylesheet">
 <link href="./css/sweetalert2.min.css" rel="stylesheet">
 <link href="./css/toastify.css" rel="stylesheet">
+<link href="./css/select2.min.css" rel="stylesheet">

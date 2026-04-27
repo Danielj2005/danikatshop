@@ -89,20 +89,22 @@ if ($datos_usuario["state"] == 0) {
 $_SESSION['logged_in'] = true; // variable de inicio de sesion
 
 $_SESSION['dataUser'] = [
-    "nombre" => $datos_usuario["fullname"],
+    "nombre" => $datos_usuario["full_name"],
     "correo" => $datos_usuario["correo"],
     "id" => $datos_usuario["id"],
-    "rol" => $datos_usuario["role"]
+    "rol" => $datos_usuario["role"],
+    "estado" => $datos_usuario["state"]
 ];
 
 
 echo '<script type="text/javascript">
-        Swal.fire({
-            title:"Acceso Exitoso!",
-            text:"Bienvenido '.$_SESSION['dataUser']['nombre'].'",
+
+        DanikatAlert.fire({
+            title: "¡Acceso Exitoso!",
+            text: "Bienvenido '.$_SESSION['dataUser']['nombre'].'",
             icon: "success",
-            confirmButtonText: "Aceptar"
-        
+            confirmButtonText: "OK",
+            
         }).then((result) => {
             if (result.isConfirmed) {    
                 window.location = "./view";

@@ -1,4 +1,7 @@
 
+
+const tiempo_config = 60 * 60 * 1000; // Convertimos minutos a milisegundos
+
 function detectar_actividad() {
     let tiempo_id; // Almacena el ID del temporizador de inactividad
     let advertencia_tiempo_id; // Almacena el ID del temporizador de advertencia
@@ -10,10 +13,12 @@ function detectar_actividad() {
     }
 
     function mostrar_advertencia() {
+
         const tiempo_advertencia = 30000;
-		Swal.fire({
-            title: '¡Estás inactivo!',
-            text: `Tu sesión se cerrará automáticamente en ${tiempo_advertencia / 1000} segundos debido a la inactividad.`,
+        
+        DanikatAlert.fire({
+            title: '¡Sesión por expirar!',
+            html: `Se cerrará tu sesión por inactividad en <b></b> segundos.`,
             icon: 'warning',
 			showCancelButton: true,
 			confirmButtonText: "Seguir aquí!",
@@ -28,17 +33,28 @@ function detectar_actividad() {
             timerProgressBar: true,
             didOpen: () => {
                 const b = Swal.getHtmlContainer().querySelector('b');
+                // Actualizamos el número cada 100ms para que sea fluido
+                timerInterval = setInterval(() => {
+                    // Math.ceil convierte los ms restantes en segundos
+                    b.textContent = Math.ceil(Swal.getTimerLeft() / 1000);
+                }, 1000);
+
                 advertencia_tiempo_id = setTimeout(() => {
-                    location.href = "../include/bitacora_tiempo_inactividad.php"; 
+                    location.href = "../controller/logout.php"; 
                 }, tiempo_advertencia);
+            },
+
+            willClose: () => {
+                clearInterval(timerInterval);
             }
         }).then((result) => {
             if (result.isConfirmed) {
                 resetear_temporizador();
             }  else if (result.dismiss === Swal.DismissReason.timer || result.isDenied || result.dismiss === Swal.DismissReason.cancel){
-                location.href = "../include/bitacora_tiempo_inactividad.php"; 
+                location.href = "../controller/logout.php"; 
             }
         });
+
     }
 
     // Eventos que reinician el temporizador de inactividad

@@ -153,7 +153,7 @@
         <div class="flex gap-4 items-center">
             <button onclick="navigate('admin')" class="d-none text-purple-400 text-sm font-bold">Gestionar</button>
             <button onclick="logout()" class="d-none text-slate-500 text-xs"><i class="fas fa-sign-out-alt"></i></button>
-            <a href="login" class="text-slate-700 hover:text-purple-500 transition"><i class="fas fa-user-lock"></i></a> 
+            <a href="./login.php" class="text-slate-700 hover:text-purple-500 transition"><i class="fas fa-user-lock"></i></a> 
         </div>
     </div>
 </nav>

@@ -1,14 +1,9 @@
 <?php 
 session_start();
 
-require_once "../modelo/modeloPrincipal.php"; // se incluye el modelo principal
-require_once "../modelo/configuracion_model.php"; // se incluye el modelo producto
-require_once "../modelo/productos_model.php"; // se incluye el modelo producto
-require_once "../modelo/alert_model.php"; // se incluye el modelo producto
-require_once "../modelo/bitacora_model.php"; // se incluye el modelo de bitacora
-require_once "../modelo/categoria_model.php"; // se incluye el modelo categoria
-require_once "../modelo/presentacion_model.php"; // se incluye el modelo presentacion
-require_once "../modelo/marca_model.php"; // se incluye el modelo de marcas
+require_once "../model/mainModel.php"; // se incluye el model principal
+require_once "../model/alertModel.php"; // se incluye el model de alertas
+require_once "../model/productModel.php"; // se incluye el model de categorias
 
 // modulo a trabajar
 modeloPrincipal::verificarModuloATrabajar("modulo");
@@ -18,81 +13,77 @@ $modulo = modeloprincipal::limpiar_cadena($_POST["modulo"]);
 // verificar si el modulo es guardar
 if($modulo === 'Guardar'){
     
-    $code = $_POST['code']; // codigo de barras (opcional)
-    $nombre_producto = $_POST['nombre_producto'];
-    $marcas = $_POST['marcas'];
-    $presentacion = $_POST['presentacion'];
-    $categoria = $_POST['categoria'];
+    $producto = $_POST['producto'];
+    $price = $_POST['price'] ?? 0.00; // si no se envía un precio, se asigna un valor por defecto de 1.00
+    $price = number_format($price, 2, '.', ',');
+    $category = $_POST['category'];
+    $image = $_POST['image'];
+    $desc = $_POST['desc'];
 
-    
-    $vista = (!isset($_POST['vista'])) ? 0 : modeloPrincipal::limpiar_cadena($_POST['vista']);
+    $uploaded_paths = [];
+    $UID = modeloPrincipal::generar_uuid();
+
+    // 1. Procesar los archivos si existen
+    if (isset($_FILES['image'])) {
+        $files = $_FILES['image'];
+        $i = 1;
+        foreach ($files['tmp_name'] as $key => $tmp_name) {
+            if ($files['error'][$key] === 0) {
+                // Obtenemos la extensión del nombre original (ej: "foto.JPG" -> "jpg")
+                $extension = strtolower(pathinfo($files['name'][$key], PATHINFO_EXTENSION));
+
+                $name = $UID . '_' . $i++ . "." . $extension;
+
+                $target = "../storage/$name";
+                
+                if (move_uploaded_file($tmp_name, $target)) {
+                    $target = "./storage/$name";
+
+                    $uploaded_paths[] = $target;
+                }
+            }
+        }
+    }
+
+    // 2. Convertir el array de rutas a un solo string para la BD
+    $images_string = implode(',', $uploaded_paths);
     
     // Se verifica que no se hayan recibido campos vacíos.
-    modeloPrincipal::validar_campos_vacios([$code, $categoria, $presentacion, $nombre_producto, $marcas]);
-    
-    // se comprueba que no exista un producto con los mismos datos
-    producto_model::verificar_producto_existe($code, $nombre_producto, $marcas, $presentacion, $categoria);
+    modeloPrincipal::validar_campos_vacios([$producto, $category, $desc]);
     
     // se valida el campo nombre del producto
-    producto_model::validar_nombre_producto($nombre_producto);
-    
-    // se registran los datos del producto
-    try {
-        $registrar = producto_model::registrar($code, $categoria, $nombre_producto, $presentacion, $marcas);
-
-        if (!$registrar) {
-            alert_model::alerta_simple("¡Ocurrió un error!","ocurrio un error al registrar un producto.","error");
-        }
-
-    } catch (Exception $e) {
-        alert_model::alerta_simple("Ocurrido un error!", "No se pudo registrar el producto, revisa los datos e intenta nuevamente.","error");
+    if (modeloPrincipal::verificar_datos("[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]{3,200}", $producto)) {
+        alert_model::alerta_simple("¡Ocurrió un error!","El nombre del producto $producto no cumple con el formato establecido","error");
         exit();
     }
 
-    // se realiza la bitácora con los datos del producto a registrar
+    // se registran los datos del producto
     try {
-        $id_productos = modeloPrincipal::obtener_array_id_producto_recien_registrado(count($nombre_producto));
 
-        $datos_productos_registrados = producto_model::obtener_datos_recien_registrados($id_productos);
+        $registrar = modeloPrincipal::InsertSQL("productos", "nombre, precio, description, images, state, created_at" ,"'$producto', $price, '$desc', '$images_string', 1, NOW()");
 
-        $bitacora = "";
-
-        for ( $i = 0;  $i < count($id_productos); $i++) {
-
-            $bitacora .= '<h4 class="text-center card-title"><b> Información del producto '.$code[$i].'</b></h4>
-                <div class="d-flex justify-content-between border-bottom mb-2">
-                    <p> Código</p>
-                    <span>'.$code[$i].'</span>
-                </div>
-                <div class="d-flex justify-content-between border-bottom mb-2">
-                    <p> Nombre</p>
-                    <span>'.modeloPrincipal::primeraLetraMayus($datos_productos_registrados['nombre'][$i]).'</span>
-                </div>
-                <div class="d-flex justify-content-between border-bottom mb-2">
-                    <p> Marca</p>
-                    <span>'.modeloPrincipal::primeraLetraMayus($datos_productos_registrados['marca'][$i]).'</span>
-                </div>
-                <div class="d-flex justify-content-between border-bottom mb-2">
-                    <p> Formato</p>
-                    <span>'.modeloPrincipal::primeraLetraMayus($datos_productos_registrados['presentacion'][$i]).'</span>
-                </div>
-                <div class="d-flex justify-content-between border-bottom mb-2">
-                    <p> Categoría</p>
-                    <span class="text-primary fw-bold mb-1">'.modeloPrincipal::primeraLetraMayus($datos_productos_registrados['categoria'][$i]).'</span>
-                </div>';
-
-        }
-        
-        bitacora::bitacora("Registro Exitoso de uno o más Productos.",'<p class="mb-3 text-primary-emphasis text-center"><i class="bi bi-exclamation-circle-fill"></i>&nbsp;El usuario registró los siguientes productos.</p>'.$bitacora.'');
-        
-        if ($vista == 1) {
-            alert_model::alerta_condicional("¡Registro Exitoso!","Los Datos Se Registraron Correctamente", "success","document.querySelector('.btn-danger').click();");
+        if (!$registrar) {
+            alert_model::alerta_simple("¡Ocurrió un error!","ocurrio un error al registrar un producto.","error");
             exit();
+        }
+
+        $id_producto = producto_model::obtener_id_recien_registrada();
+
+        foreach ($category as $key) {
+            $categoria_id = modeloPrincipal::decryptionId($key);
+            $registrar = modeloPrincipal::InsertSQL("categorias_productos", "categoria_id, producto_id" ,"$categoria_id, $id_producto");
+        
+            if (!$registrar) {
+                alert_model::alerta_simple("¡Ocurrió un error!","ocurrio un error al registrar las categorías de un producto.","error");
+                exit();
+            }
         }
 
         alert_model::alert_reg_success();
         exit();
     } catch (Exception $e) {
+        echo $price;
+        echo $e;
         alert_model::alert_reg_error();
         exit();
     }
@@ -110,54 +101,6 @@ if($modulo === 'Modificar'){
     // Se verifica que no se hayan recibido campos vacíos.
     modeloPrincipal::validar_campos_vacios([$price, $id_producto]);
 
-    $datos_producto_original = [
-        'codigo' => [],
-        'nombre_producto' =>[],
-        'marca' => [],
-        'presentacion' => [],
-        'representacion' => [],
-        'categoria' => [],
-        'fecha' => [],
-        'precio_venta' => [],
-        'estado' => []
-    ];
-    
-    $datos_producto_nuevo = [
-        'codigo' => [],
-        'nombre_producto' =>[],
-        'marca' => [],
-        'presentacion' => [],
-        'representacion' => [],
-        'categoria' => [],
-        'fecha' => [],
-        'precio_venta' => [],
-        'estado' => []
-    ];
-    
-    try {
-
-        $datos_producto = mysqli_fetch_array(producto_model::consultar_por_id($id_producto));
-        
-        $datos_producto_original['codigo'] = [$datos_producto['codigo'], $datos_producto['codigo']];
-        $datos_producto_original['nombre_producto'] = [$datos_producto['nombre_producto'], $datos_producto['nombre_producto']];
-        $datos_producto_original['marca'] = [$datos_producto['marca'], $datos_producto['marca']];
-
-        $datos_producto_original['presentacion'] = [$datos_producto['presentacion']." ".$datos_producto['representacion'], $datos_producto['presentacion']." ".$datos_producto['representacion']];
-        
-        $datos_producto_original['categoria'] = [$datos_producto['categoria'], $datos_producto['categoria']];
-
-        $fecha = date("d-m-Y h:i:a", strtotime($datos_producto['fecha_ultima_actualizacion']));
-        $datos_producto_original['fecha'] = [$fecha, $fecha];
-        $datos_producto_original['precio_venta'] = [$datos_producto['precio_venta'], $datos_producto['precio_venta']." $"];
-
-        $estado = ($datos_producto['estado'] == '1') ? 'Activo' : 'Inactivo' ;
-        $datos_producto_original['estado'] = [$estado, $estado];
-        
-    } catch (Exception $e) {
-        alert_model::alerta_simple("Ocurrido un error!", "No se pudo procesar la información actual del producto, revisa los datos e intenta nuevamente.","error");
-        exit();
-    }
-
     // se modifican los datos del producto
     try {
         $actualizar = producto_model::actualizar_producto($price, $id_producto);
@@ -166,59 +109,6 @@ if($modulo === 'Modificar'){
             alert_model::alerta_simple("¡Ocurrió un error!","ocurrio un error al actualizar el precio de un producto.","error");
         }
 
-    } catch (Exception $e) {
-        alert_model::alerta_simple("Ocurrido un error!", "No se pudo actualizar el precio del producto, revisa los datos e intenta nuevamente.","error");
-        exit();
-    }
-
-    // se realiza la bitácora con los datos del producto a actualizar
-    try {
-        
-        $datos_producto = mysqli_fetch_array(producto_model::consultar_por_id($id_producto));
-
-        
-        $datos_producto_nuevo['codigo'] = [$datos_producto['codigo'],$datos_producto['codigo']];
-        $datos_producto_nuevo['nombre_producto'] = [$datos_producto['nombre_producto'],$datos_producto['nombre_producto']];
-        $datos_producto_nuevo['marca'] = [$datos_producto['marca'],$datos_producto['marca']];
-
-        $datos_producto_nuevo['presentacion'] = [$datos_producto['presentacion']." ".$datos_producto['representacion'], $datos_producto['presentacion']." ".$datos_producto['representacion']];
-        $datos_producto_nuevo['categoria'] = [$datos_producto['categoria'],$datos_producto['categoria']];
-
-        $fecha = date("d-m-Y h:i:a", strtotime($datos_producto['fecha_ultima_actualizacion']));
-        $datos_producto_nuevo['fecha'] = [$fecha, $fecha];
-        $datos_producto_nuevo['precio_venta'] = [$datos_producto['precio_venta'],$datos_producto['precio_venta']." $"];
-        $datos_producto_nuevo['estado'] = [$datos_producto['estado'],$datos_producto['estado']];
-
-        $estado = ($datos_producto['estado'] == '1') ? 'Activo' : 'Inactivo' ;
-        $datos_producto_nuevo['estado'] = [$estado, $estado];
-
-        $cambios = [
-            "codigo" => config_model::obtener_comparacion($datos_producto_original['codigo'], $datos_producto_nuevo['codigo']),
-            "nombre_producto" => config_model::obtener_comparacion($datos_producto_original['nombre_producto'], $datos_producto_nuevo['nombre_producto']),
-            "marca" => config_model::obtener_comparacion($datos_producto_original['marca'], $datos_producto_nuevo['marca']),
-
-            "presentacion" => config_model::obtener_comparacion($datos_producto_original['presentacion'], $datos_producto_nuevo['presentacion']),
-            "representacion" => config_model::obtener_comparacion($datos_producto_original['representacion'], $datos_producto_nuevo['representacion']),
-            "categoria" => config_model::obtener_comparacion($datos_producto_original['categoria'], $datos_producto_nuevo['categoria']),
-
-            "fecha" => config_model::obtener_comparacion($datos_producto_original['fecha'], $datos_producto_nuevo['fecha']),
-            "precio_venta" => config_model::obtener_comparacion($datos_producto_original['precio_venta'], $datos_producto_nuevo['precio_venta']),
-            "estado" => config_model::obtener_comparacion($datos_producto_original['estado'], $datos_producto_nuevo['estado']),
-        ];
-
-
-        $bitacora = '<h4 class="text-center card-title"><b> Información del producto '.$datos_producto_original['codigo'][0].'</b></h4>
-            <div class="d-flex justify-content-between border-bottom mb-2"> <p> Código</p> '.$cambios['codigo'].' </div>
-            <div class="d-flex justify-content-between border-bottom mb-2"> <p> Nombre</p> '.$cambios['nombre_producto'].' </div>
-            <div class="d-flex justify-content-between border-bottom mb-2"> <p> Marca</p> '.$cambios['marca'].' </div>
-            <div class="d-flex justify-content-between border-bottom mb-2"> <p> Formato</p> '.$cambios['presentacion'].' </div>
-            <div class="d-flex justify-content-between border-bottom mb-2"> <p> Categoría</p> '.$cambios['categoria'].' </div>
-            <div class="d-flex justify-content-between border-bottom mb-2"> <p> Precio ($)</p> '.$cambios['precio_venta'].' </div>
-            <div class="d-flex justify-content-between border-bottom mb-2"> <p> Fecha y Hora de la Actualizacion</p> '.$cambios['fecha'].' </div>
-            <div class="d-flex justify-content-between border-bottom mb-2"> <p> Estado</p> '.$cambios['estado'].' </div>';
-
-        bitacora::bitacora("Modificación Exitosa de un Producto.",'<p class="mb-3 text-primary-emphasis text-center"><i class="bi bi-exclamation-circle-fill"></i>&nbsp;El usuario modificó el siguiente producto.</p>'.$bitacora.'');
-        
         alert_model::alert_mod_success();
         exit();
     } catch (Exception $e) {

@@ -4,7 +4,8 @@ $(document).ready(function(){
         e.preventDefault();
 
         // Llamar a un archivo PHP para destruir las variables de sesión
-        Swal.fire({
+    
+        DanikatAlert.fire({
             title: 'Estas Seguro(a)?',
             text: "Se cerrará la sesión",
             icon: 'warning',
@@ -15,7 +16,7 @@ $(document).ready(function(){
             cancelButtonText: ' No, Cancelar!'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href="../controlador/salir.php";
+                window.location.href="../controller/logout.php";
             }
         });
     });

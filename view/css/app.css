@@ -1,5 +1,13 @@
 
-:root{
+
+:root {
+    --swal2-background: #0f172a; /* Slate-900 */
+    --swal2-title-color: #e879f9; /* Fuchsia-400 */
+    --swal2-content-color: #94a3b8; /* Slate-400 */
+    --swal2-success-line-color: #a855f7; /* Purple-500 */
+    --swal2-border-radius: 24px;
+    
+
 	 /* Texto claro */
     --text: #f3f4f6; 
     --danger: #f87171;
@@ -93,7 +101,11 @@
     --tw-content: '';
     --tw-text-opacity: 1;
 }
-
+/* Para darle un efecto de brillo neón al borde */
+.swal2-popup {
+    border: 1px solid rgba(168, 85, 247, 0.2);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(168, 85, 247, 0.1);
+}
 
 * {
 	margin: 0;

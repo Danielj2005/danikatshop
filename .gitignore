@@ -1,5 +1,6 @@
 #ignorar la carpeta vendor
 /vendor
+/storage
 
 #ignorar archivos de configuración de composer.json
 Composer

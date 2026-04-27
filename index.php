@@ -96,7 +96,7 @@ include_once "./model/productModel.php"; // se incluye el model producto
             <h2 class="text-4xl font-bold italic text-white mb-2">Todo lo que buscas en un solo lugar</h2>
         </header>
         <main class="max-w-7xl mx-auto p-6">
-            <?php   producto_model::obtenerCatalogo();  ?>
+            <?php  producto_model::obtenerCatalogo();  ?>
         </main>
     </div>
 
@@ -105,7 +105,6 @@ include_once "./model/productModel.php"; // se incluye el model producto
 
     <script src="view/js/bootstrap.min.js"></script>
     <!-- Custom scripts for all pages-->
-    <script src="view/js/SendForm.js"></script>
     <script src="view/js/sweetalert2.min.js"></script>
     <script src="view/js/app.js"></script>
 </body>

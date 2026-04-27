@@ -40,11 +40,22 @@ window.handleLogin = async (e) => {
     const p = e.target.pass.value;
 
     if (!Validator.email(u)) {
-        Swal.fire("Ocurio un Error!","El correo no cumple con el formato establecido.","error");
+        DanikatAlert.fire({
+            title: 'Ocurio un Error!',
+            text: "El correo no cumple con el formato establecido.",
+            icon: 'error',
+            confirmButtonText: 'OK',
+        });
+
         return;
     }
     if (!Validator.password(p)) {
-        Swal.fire("Ocurio un Error!","La contraseña debe tener al menos 8 caracteres, incluyendo letras y números.","error");
+        DanikatAlert.fire({
+            title: 'Ocurio un Error!',
+            text: "La contraseña debe tener al menos 8 caracteres, incluyendo letras y números.",
+            icon: 'error',
+            confirmButtonText: 'OK',
+        });
         return;
     }
     
@@ -66,7 +77,13 @@ window.handleProductSubmit = async (e) => {
     const validation = Validator.product(productData);
 
     if (!validation.isValid) {
-        alert("Errores en el formulario:\n- " + validation.errors.join("\n- "));
+        
+        DanikatAlert.fire({
+            title: "¡Ocurrio un Error!",
+            text: "Errores en el formulario:\n- " + validation.errors.join("\n- "),
+            icon: "error",
+            confirmButtonText: "OK",
+        });
         return;
     }
 

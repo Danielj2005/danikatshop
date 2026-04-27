@@ -12,7 +12,7 @@ class alert_model {
 
     public static function alerta_simple ($title, $text, $icon){
         echo '<script type="text/javascript">
-                Swal.fire({
+                DanikatAlert.fire({
                     title: "'.$title.'",
                     text: "'.$text.'",
                     icon: "'.$icon.'",
@@ -23,7 +23,7 @@ class alert_model {
 
     public static function alert_reset_forms ($title, $text, $icon, $condition = "$('.SendFormAjax')[0].reset();"){
         echo "<script>
-                Swal.fire({
+                DanikatAlert.fire({
                     title: '$title',
                     text: '$text',
                     icon: '$icon',
@@ -35,7 +35,7 @@ class alert_model {
 
     public static function alerta_condicional ($title, $text, $icon, $condition = "location.reload();", $reset_forms = "$('.SendFormAjax')[0].reset();"){
         echo "<script>
-                Swal.fire({
+                DanikatAlert.fire({
                     title: '$title',
                     text: '$text',
                     icon: '$icon',
@@ -70,20 +70,21 @@ class alert_model {
 
     public static function alert_reg_success(){
         echo '<script type="text/javascript">
-            Swal.fire({
-                title:"¡Registro Exitoso!",
-                text:"Los Datos Se Registraron Correctamente",
-                icon: "success",
-                confirmButtonText: "Aceptar"
-            
-            }).then((result) => {
-                if (result.isConfirmed) {    
-                    location.reload();
-                } else {    
-                    location.reload();
-                } 
-            });
-            $(".SendFormAjax")[0].reset();
+                
+                DanikatAlert.fire({
+                    title:"¡Registro Exitoso!",
+                    text:"Los Datos Se Registraron Correctamente",
+                    icon: "success",
+                    confirmButtonText: "Aceptar"
+                }).then((result) => {
+                    if (result.isConfirmed) {    
+                        location.reload();
+                    } else {    
+                        location.reload();
+                    } 
+                });
+                $(".SendFormAjax")[0].reset();
+                
         </script>';
     }
 
@@ -98,7 +99,8 @@ class alert_model {
     }
     public static function alert_reg_error(){
         echo '<script type="text/javascript">
-            Swal.fire({
+            
+            DanikatAlert.fire({
                 title: "¡Ocurrio un error!",
                 text: "los datos no se pudieron registrar, verifique e intente nuevamente",
                 icon: "error",
@@ -109,7 +111,8 @@ class alert_model {
 
     public static function alert_mod_success(){
         echo '<script type="text/javascript">
-            Swal.fire({
+        
+            DanikatAlert.fire({
                 title: "¡Modificación exitosa!",
                 text: "Los datos se modificaron correctamente",
                 icon: "success",
@@ -137,7 +140,8 @@ class alert_model {
     public static function alert_mod_error(){
         
         echo'<script type="text/javascript">
-            Swal.fire({
+            
+            DanikatAlert.fire({
                 title: "¡Ocurrio un error!",
                 text: "Los datos no se modificaron, verifique e intente nuevamente",
                 icon: "error",
@@ -149,7 +153,7 @@ class alert_model {
     
     public static function alert_fields_empty(){
         echo '<script type="text/javascript">
-                Swal.fire({ 
+                DanikatAlert.fire({ 
                     title: "¡Ocurrio un error!",
                     text: "Exiten campos obligatorios que estan vacíos",
                     icon: "error", 
@@ -161,7 +165,7 @@ class alert_model {
 
     public static function alert_of_format_wrong($campo){
         echo '<script type="text/javascript">
-            Swal.fire({
+            DanikatAlert.fire({
                 title: "¡Ocurrio un error!",
                 text: "El campo '.$campo.' no cumple con el formato establecido",
                 icon: "error",
@@ -174,7 +178,7 @@ class alert_model {
     // se verifica si el campo es un string o un array
     
         echo '<script type="text/javascript">
-                Swal.fire({
+                DanikatAlert.fire({
                     title:"¡Ocurrió un error!",
                     text:"'.$campo.' ingresada ya se encuentra registrada(o) en el sistema. le sugerimos revisar los datos o utilizar una información diferente",
                     icon: "error",

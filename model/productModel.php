@@ -45,8 +45,9 @@ class producto_model extends modeloPrincipal {
             <div class="grid grid-cols-1 gap-4">
                 <div class="bg-red-700 border border-slate-800 rounded-[2rem] transition-all duration-500 animate-slide-up">
                     
-                    <div class="p-4">
-                        <h3 class="text-center text-white text-md font-semibold mb-1 truncate mb-4">En este momento no hay productos disponibles.</h3>
+                    <div class="p-4 text-center">
+                        <i class="bi bi-exclamation-triangle-fill fs-1"></i>
+                        <h3 class="h1 text-center text-white font-semibold mb-1 truncate mb-4">En este momento no hay productos disponibles.</h3>
 
                     </div>
                 </div>
@@ -166,25 +167,15 @@ class producto_model extends modeloPrincipal {
     
     // funcion para obtener el id de un categoria
     public static function obtener_id_recien_registrada(){
-        $id_producto = mysqli_fetch_array(modeloPrincipal::consultar("SELECT MAX(id_producto) AS id FROM producto"));
+        $id_producto = mysqli_fetch_array(modeloPrincipal::consultar("SELECT MAX(id) AS id FROM productos"));
         $id_producto = $id_producto['id'];
         return $id_producto;
     }
 
     
-    public static function registrar ($codigo, $id_categorias, $nombre_producto, $id_presentaciones, $id_marcas) {
+    public static function registrar ($producto, $price, $desc, $images) {
 
-        for ($i = 0; $i < count($nombre_producto); $i++) {
-
-            $code = ucwords(strtolower(modeloPrincipal::limpiar_cadena($codigo[$i])));
-            $nombre = ucwords(strtolower(modeloPrincipal::limpiar_cadena($nombre_producto[$i])));
-            $categoria = modeloPrincipal::decryptionId($id_categorias[$i]);
-            $presentacion = modeloPrincipal::decryptionId($id_presentaciones[$i]);
-            $marca = modeloPrincipal::decryptionId($id_marcas[$i]);
-            $fecha = date("Y-m-d H:i:s");
-
-            $registrar = modeloPrincipal::InsertSQL("producto", "codigo, nombre_producto, id_marca, id_presentacion, id_categoria, stock_actual, fecha_ultima_actualizacion, estado" ,"'$code', '$nombre', $marca, $presentacion, $categoria, 0, '$fecha', 0");
-        }
+        $registrar = modeloPrincipal::InsertSQL("productos", "nombre, precio, description, images, state, created_at" ,"'$producto', '$price', '$desc', '$images', 1, NOW()");
         return $registrar;
     }
 
@@ -199,148 +190,45 @@ class producto_model extends modeloPrincipal {
 
     }
 
-    public static function verificar_producto_existe($code, $nombre_producto, $marcas, $presentaciones, $categorias){
-        // se comprueba que no exista un producto con los mismos datos
-        for ($i = 0; $i < count($nombre_producto); $i++) {
-        
-            $codigo = $code[$i];
-            $nombre = strtolower($nombre_producto[$i]);
-            $marca = modeloPrincipal::decryptionId($marcas[$i]);
-            $presentacion = modeloPrincipal::decryptionId($presentaciones[$i]);
-            $categoria = modeloPrincipal::decryptionId($categorias[$i]);
-
-            $sql = modeloPrincipal::consultar("SELECT P.codigo, lower(P.nombre_producto) AS nombre_producto,
-                M.nombre as marca, M.id as id_marca, 
-                PS.cantidad AS presentacion, R.nombre AS representacion, PS.id AS id_presentacion,
-                C.nombre AS categoria, C.id_categoria
-                FROM producto AS P
-                INNER JOIN marca AS M ON M.id = P.id_marca   
-                INNER JOIN presentacion AS PS ON PS.id = P.id_presentacion
-                INNER JOIN representacion AS R ON R.id = PS.id_representacion
-                INNER JOIN categoria AS C ON C.id_categoria = P.id_categoria
-                WHERE lower(P.nombre_producto) = '$nombre'
-                AND P.id_marca = $marca
-                AND P.id_presentacion = $presentacion
-                AND P.id_categoria = $categoria ");
-
-            $buscarCode = modeloPrincipal::consultar("SELECT P.codigo FROM producto AS P WHERE P.codigo = '$codigo'");
-
-            if (mysqli_num_rows($buscarCode) > 0) {
-                /********** No se puede registrar un usuario si ya existe **********/
-                alert_model::alerta_simple(
-                "¡Ocurrio un error!",
-                "El código del producto ya se encuentra en el sistema, verifica he intenta nuevamente.",
-                "error");
-                exit();
-            }
-
-            if (mysqli_num_rows($sql) > 0) {
-                $mostrar = mysqli_fetch_assoc($sql);
-                
-                $codigo = $mostrar['codigo'];
-                $nombre = $nombre == $mostrar['nombre_producto'] ? " - ".$nombre : "";
-
-                $marcas = $marca == $mostrar['id_marca'] ? " - ".$mostrar['marca'] : "";
-                $presentacion = $presentacion == $mostrar['id_presentacion'] ? " - ".$mostrar['presentacion']." ".$mostrar['representacion'] : "";
-                $categoria = $categoria == $mostrar['id_categoria'] ? " - ".$mostrar['categoria'] : "";
-
-                /********** No se puede registrar un usuario si ya existe **********/
-                alert_model::alerta_simple(
-                "¡Ocurrio un error!",
-                "Uno de estos datos del producto (".$codigo.$nombre.$marcas.$presentacion.$categoria.") ya se encuentra en el sistema, verifica he intenta nuevamente.",
-                "error");
-                exit();
-            }
-            
-            // $nombre_producto[$i] = ucwords(strtolower($nombre_producto[$i]));
-        }
-        // return $nombre_producto;
-    }
-
-
-    // se valida el campo nombre del producto
-    
-    public static function validar_nombre_producto($nombre_producto) {
-        for ($i = 0; $i < count($nombre_producto); $i++) {
-            if (modeloPrincipal::verificar_datos("[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]{3,50}",$nombre_producto[$i])) {
-                return alert_model::alerta_simple("¡Ocurrió un error!","El nombre del producto '".$nombre_producto[$i]."' no cumple con el formato establecido","error");
-            }
-        }
-    }
-
 
     public static function lista(){
-        $consulta = self::obtener_todos_los_datos();
+        
         // se guardan los datos en un array y se imprime
+        
+        $catalogo = modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos"); 
+        
 
-        while ($mostrar = mysqli_fetch_assoc($consulta)) {
+
+        while ($mostrar = mysqli_fetch_assoc($catalogo)) {
             $idSecure = modeloPrincipal::encryptionId($mostrar["id_producto"]); 
 
-            $colorText = "";
-            $colorTextBg = "";
-
-            if ($mostrar["stock_actual"] <= "0" || $mostrar["stock_actual"] === null) {
-
-                $mostrar["stock_actual"] = 0;
-
-                $colorText = "text-danger";
-                $colorTextBg = "text-bg-danger";
-
-            }else if ($mostrar["stock_actual"] > "0" && $mostrar["stock_actual"] < "10") {
-
-                $colorText = "text-danger";
-                $colorTextBg = "text-bg-danger";
-
-            }else if ($mostrar["stock_actual"] > "9" && $mostrar["stock_actual"] < "19") {
-
-                $colorText = "text-warning";
-                $colorTextBg = "text-bg-warning";
-
-            }else if ($mostrar["stock_actual"] > "18") {
-
-                $colorText = "text-primary";
-                $colorTextBg = "text-bg-primary";
-            }
+            $id_producto = $mostrar["id"];
+            $categorias = modeloPrincipal::consultar("SELECT C.nombre FROM `categorias_productos` AS CP 
+                INNER JOIN categorias AS C ON C.id = CP.categoria_id
+                WHERE CP.producto_id = $id_producto"); 
 
             ?>
             <tr class="text-center">
                 <td class="text-center"></td>
                 <td class="text-start">
-                    <p class="text-secondary fw-bold mb-1"> Código: <?= $mostrar["codigo"] ?> </p>
-                    <p class=" <?=  $colorText ?>  fw-bold mb-1"><?= $mostrar["marca"].' / '.$mostrar["nombre_producto"] ?> </p>
-                    <small class="d-block text-muted">
-                        <span class="fw-bold">Formato:</span> <?= $mostrar["presentacion"] . ' ' . $mostrar["representacion"] ?>
+                    <p class=" fw-bold mb-1"><?= $mostrar["nombre"] ?> </p>
+                    <small class="d-block text-muted"> <span class="fw-bold">Categoria:</span> <?= $mostrar["categoria"] ?> 
+                        <span class="badge text-bg-success fw-bold fs-italic">Repostew</span>
                     </small>
-                    <small class="d-block text-muted"> <span class="fw-bold">Categoria:</span> <?= $mostrar["categoria"] ?> </small>
                 </td>
                 <td class="text-center">
                     <div class="row justify-content-center">
-                        <p class="col-12 col-md-6"><span class="badge <?= $colorTextBg ?> fs-6"><?= $mostrar["stock_actual"] == 0 ? 0 : $mostrar["stock_actual"]; ?></span></p>
+                        <p class="col-12 col-md-6 text-black"><span class="badge text-bg-secondary fs-6"><?= $mostrar["precio"] < 1 ? "Bajo pedido": "$ ".$mostrar["precio"]; ?></span></p>
                     </div>
-                </td>
-                <td class="text-center">
-                    <div class="row justify-content-center">
-                        <p class="col-12">
-                            <span class="badge <?= $colorTextBg ?> fs-6">
-                                <?= $mostrar["precio_venta"] == 0 ? '0 $' : modeloPrincipal::number_format_prices($mostrar["precio_venta"]).' $' ; ?>
-                            </span>
-                        </p>
-                    </div>
-
-                </td>
-                <td class="text-center">
-                    <small class="d-block text-muted">
-                        <span class="fw-bold">Fecha:</span> <?= date("d-m-Y", strtotime($mostrar["fecha_ultima_actualizacion"])); ?>
-                    </small>
-                    <small class="d-block text-muted">
-                        <span class="fw-bold">Hora:</span> <?= date("h:i:a", strtotime($mostrar["fecha_ultima_actualizacion"])); ?>
-                    </small>
                 </td>
                 <td class="col text-center">
-                    <button 
-                        <?= $mostrar["stock_actual"] == "0" || $mostrar["stock_actual"] === null ? "disabled" : 'value="'.$idSecure.'" modal="productoModificar" data-bs-toggle="modal" data-bs-target="#modal"' ?>
-                        class="btn_modal btn btn-<?= $mostrar["stock_actual"] == "0" || $mostrar["stock_actual"] === null ? "secondary" : 'warning' ?>">
-                        ¡
+                    <button class="btn_modal btn btn-warning">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                </td>
+                <td class="col text-center">
+                    <button class="btn_modal btn btn-danger">
+                        <i class="bi bi-trash"></i>
                     </button>
                 </td>
             </tr>
