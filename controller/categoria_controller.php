@@ -34,12 +34,12 @@ if($modulo === "Guardar"){
         exit(); 
     }
 
-    if (modeloPrincipal::verificar_datos("[a-zA-ZáéíóúÁÉÍÓÚñÑ., ]{3,40}",$nombre)) {
+    if (modeloPrincipal::verificar_datos("[a-zA-ZáéíóúÁÉÍÓÚñÑ.,\/ ()]{3,100}",$nombre)) {
         alert_model::alert_of_format_wrong("nombre");
         exit();
     }
 
-    if (modeloPrincipal::verificar_datos("[a-zA-ZáéíóúÁÉÍÓÚñÑ,. ]{3,200}",$descripcion)) {
+    if (modeloPrincipal::verificar_datos("[a-zA-ZáéíóúÁÉÍÓÚñÑ.,\/ ()]{3,200}",$descripcion)) {
         alert_model::alert_of_format_wrong("Descripción");
         exit();
     }

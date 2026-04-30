@@ -33,7 +33,7 @@
 <link href="./img/logo.jpeg" rel="shortcut icon" type="image/x-icon">
 
 <!-- Custom fonts for this template-->
-<link href="./vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link href="./fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
 <link href="./css/app.css" rel="stylesheet">
 <link href="./css/bootstrap.min.css" rel="stylesheet">

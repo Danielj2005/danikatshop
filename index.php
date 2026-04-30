@@ -67,9 +67,7 @@ include_once "./model/productModel.php"; // se incluye el model producto
             </div>
 
             <div class="flex gap-4 items-center">
-                <button onclick="navigate('admin')" class="d-none text-purple-400 text-sm font-bold">Gestionar</button>
-                <button onclick="logout()" class="d-none text-slate-500 text-xs"><i class="fas fa-sign-out-alt"></i></button>
-                <a href="login.php" class="text-slate-700 hover:text-purple-500 transition"><i class="fas fa-user-lock"></i></a> 
+                <a href="login.php" class="text-slate-700 hover:text-purple-500 transition"><i class="fs-3 fas fa-user-lock"></i></a> 
             </div>
         </div>
     </nav>
@@ -90,8 +88,6 @@ include_once "./model/productModel.php"; // se incluye el model producto
     </div>
 
     <div id="app" style="display:none !important;" class=" min-h-screen">
-
-
         <header class="py-12 px-6 text-center animate-fade-in">
             <h2 class="text-4xl font-bold italic text-white mb-2">Todo lo que buscas en un solo lugar</h2>
         </header>

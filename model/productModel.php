@@ -5,7 +5,8 @@ class producto_model extends modeloPrincipal {
     /* funciones de catálogo de productos */
     public static function obtenerCatalogo () {
         
-        $catalogo = modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos"); 
+        $catalogo = modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos ORDER BY id ASC"); 
+        // $telefono = mysqli_fetch_assoc(modeloPrincipal::consultar("SELECT telefono FROM uders WHERE role = 2"))['telefono']; 
 
         
         if (mysqli_num_rows($catalogo) > 0) { ?>
@@ -17,18 +18,18 @@ class producto_model extends modeloPrincipal {
                         // $idSecure = modeloPrincipal::encryptionId($mostrar["id"]);
     
                         $imgSrc = explode(',', $mostrar['images']);
-                        $url = $mostrar["id"].'/'.$imgSrc[0];
+                        $url = $imgSrc[0];
                 ?>
             
                     <div class="group bg-slate-900/40 border border-slate-800 rounded-[2rem] overflow-hidden hover:border-purple-500/50 transition-all duration-500 animate-slide-up">
                         <div class="relative h-64 overflow-hidden cursor-pointer" onclick="openModal(<?= $mostrar['id'] ?>)">
-                            <img src="storage/<?= $url ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <img src="<?= $url ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-4 py-1 rounded-full border border-white/10">
-                                <span class="text-sm font-bold text-white"><?= $mostrar['price'] ? '$' . $mostrar['price'] : 'Bajo pedido' ?></span>
+                                <span class="text-sm font-bold text-white"><?= $mostrar['precio'] >= 1.00 ? '$' . $mostrar['precio'] : 'Bajo pedido' ?></span>
                             </div>
                         </div>
                         <div class="p-6">
-                            <h3 class="text-white text-md font-semibold mb-1 truncate mb-4"><?= $mostrar['name'] ?></h3>
+                            <h3 class="text-white text-md font-semibold mb-1 truncate mb-4"><?= $mostrar['nombre'] ?></h3>
 
                             <form action="./producto" method="get" data-type-form="load">
                                 <input type="hidden" value="<?= $mostrar['id'] ?>" name="id" />
@@ -57,7 +58,7 @@ class producto_model extends modeloPrincipal {
 
     public static function obtenerProductosPublicados (){
 
-        $catalogo = modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos"); 
+        $catalogo = modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos ORDER BY id ASC"); 
 
         while ($mostrar = mysqli_fetch_array($catalogo)) {  
             
@@ -200,10 +201,13 @@ class producto_model extends modeloPrincipal {
 
 
         while ($mostrar = mysqli_fetch_assoc($catalogo)) {
-            $idSecure = modeloPrincipal::encryptionId($mostrar["id_producto"]); 
+            $idSecure = modeloPrincipal::encryptionId($mostrar["id"]); 
+
+            $imgSrc = $mostrar['images'];
+            // $url = '.' . $imgSrc[0];
 
             $id_producto = $mostrar["id"];
-            $categorias = modeloPrincipal::consultar("SELECT C.nombre FROM `categorias_productos` AS CP 
+            $categorias = modeloPrincipal::consultar("SELECT C.nombre AS categorias FROM `categorias_productos` AS CP 
                 INNER JOIN categorias AS C ON C.id = CP.categoria_id
                 WHERE CP.producto_id = $id_producto"); 
 
@@ -212,22 +216,35 @@ class producto_model extends modeloPrincipal {
                 <td class="text-center"></td>
                 <td class="text-start">
                     <p class=" fw-bold mb-1"><?= $mostrar["nombre"] ?> </p>
-                    <small class="d-block text-muted"> <span class="fw-bold">Categoria:</span> <?= $mostrar["categoria"] ?> 
-                        <span class="badge text-bg-success fw-bold fs-italic">Repostew</span>
+                    <small class="flex gap-1 text-muted items-center"> 
+                        <?php while ($cat = mysqli_fetch_assoc($categorias)) { ?> 
+                            <span class="bg-indigo-600 text-white px-2 py-1 rounded-3xl text-xs">
+                                <?= $cat['categorias'] ?>
+                            </span>
+                        <?php } ?> 
                     </small>
                 </td>
                 <td class="text-center">
-                    <div class="row justify-content-center">
-                        <p class="col-12 col-md-6 text-black"><span class="badge text-bg-secondary fs-6"><?= $mostrar["precio"] < 1 ? "Bajo pedido": "$ ".$mostrar["precio"]; ?></span></p>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <span class="badge text-bg-secondary fs-6">
+                            <?= $mostrar["precio"] < 1 ? "Bajo pedido": "$ ".$mostrar["precio"]; ?>
+                        </span>
                     </div>
                 </td>
-                <td class="col text-center">
-                    <button class="btn_modal btn btn-warning">
-                        <i class="bi bi-pencil-square"></i>
+                <td>
+                    <button onclick="verImagen('<?= $imgSrc; ?>','<?= $mostrar['nombre'] ?>' )" class="bg-slate-500 hover:bg-slate-800 text-white px-2 py-1 rounded text-xs">
+                        <i class="fas fa-image mr-1"></i> 
+                        <span class="xs:hidden font-bold">Ver Imagen</span>
                     </button>
                 </td>
                 <td class="col text-center">
-                    <button class="btn_modal btn btn-danger">
+                    <button data-bs-toggle="modal" data-bs-target="#editar_producto"
+                        dataId="<?= modeloPrincipal::encryptionId($mostrar["id"]); ?>" class="btn_edit_produto btn btn-warning">
+                            <i class="bi bi-pencil-square"></i>
+                    </button>
+                </td>
+                <td class="col text-center">
+                    <button dataId="<?= modeloPrincipal::encryptionId($mostrar["id"]); ?>" class="btn_modal btn btn-danger">
                         <i class="bi bi-trash"></i>
                     </button>
                 </td>

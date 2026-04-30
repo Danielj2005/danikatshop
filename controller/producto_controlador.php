@@ -117,3 +117,30 @@ if($modulo === 'Modificar'){
     }
     
 }
+
+if($modulo === 'Eliminar'){
+        
+    $id_producto = modeloPrincipal::decryptionId($_POST["id"]);
+    $id_producto = modeloPrincipal::limpiar_cadena($id_producto);
+
+    $price = modeloPrincipal::limpiar_cadena($_POST['precio']);
+
+    // Se verifica que no se hayan recibido campos vacíos.
+    modeloPrincipal::validar_campos_vacios([$price, $id_producto]);
+
+    // se modifican los datos del producto
+    try {
+        $actualizar = producto_model::actualizar_producto($price, $id_producto);
+
+        if (!$actualizar) {
+            alert_model::alerta_simple("¡Ocurrió un error!","ocurrio un error al actualizar el precio de un producto.","error");
+        }
+
+        alert_model::alert_mod_success();
+        exit();
+    } catch (Exception $e) {
+        alert_model::alert_mod_error();
+        exit();
+    }
+    
+}

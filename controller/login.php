@@ -7,7 +7,7 @@ include_once "../model/userModel.php";  // se incluye el model de usuario
 // include_once "../../model/roleModel.php"; // se incluye el model rol
 
 // include_once "../../model/bitacoraModel.php"; // se incluye el model de bitacora
-include_once "../mmodel/alertModel.php"; // se incluye el model de alertas
+include_once "../model/alertModel.php"; // se incluye el model de alertas
 
 // se incluyen los modelos necesarios para la vista
 
@@ -99,19 +99,7 @@ $_SESSION['dataUser'] = [
 
 echo '<script type="text/javascript">
 
-        DanikatAlert.fire({
-            title: "¡Acceso Exitoso!",
-            text: "Bienvenido '.$_SESSION['dataUser']['nombre'].'",
-            icon: "success",
-            confirmButtonText: "OK",
-            
-        }).then((result) => {
-            if (result.isConfirmed) {    
-                window.location = "./view";
-            } else {    
-                window.location = "./view";
-            } 
-        });
+        window.location = "./view/index.php";
     </script>';
 
 

@@ -79,16 +79,17 @@ include_once "./model/mainModel.php"; // se incluye el model principal
 
         <main class="max-w-7xl mx-auto p-6">
             
-            <div class="flex items-center justify-center min-h-[60vh] p-4">
-                <form onsubmit="handleLogin(event)" method="POST" action="controller/login.php" data-type-form="load" autocomplete="off" class="SendFormAjax text-start bg-[#020617] border border-slate-800 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
+            <div class="row items-center justify-center p-4">
+                <form method="POST" action="./controller/login.php" data-type-form="load" autocomplete="off" class="SendFormAjax text-start bg-[#020617] border border-slate-800 p-8 rounded-[2.5rem] col-10 col-md-4 shadow-2xl">
                     
                     <div class="text-center mb-4">
                         <h2 class="text-2xl font-bold text-center my-8 bg-gradient-to-r from-purple-400 to-fuchsia-500 bg-clip-text text-transparent">Acceso Administrativo</h2>
                     </div>
         
-                    <label for="user" class="form-label fw-bold">Correo Electrónico <span style="color:#f00; font-size: 1rem;">*</span></label>
+                    <label for="user" class="form-label fw-bold"><i style="font-size: 1.2rem" class="bi bi-person-circle"></i>&nbsp; Correo Electrónico &nbsp;<span style="color:#f00; font-size: 1rem;">*</span></label>
                     <input id="user" name="user" type="email" placeholder="Correo" required class="w-full p-2 rounded-2xl mb-4 text-black outline-none ring-purple-500 focus:ring-2">
-                    <label for="pass" class="form-label fw-bold">Contraseña <span style="color:#f00; font-size: 1rem;">*</span></label>
+                    
+                    <label for="pass" class="form-label fw-bold"><i style="font-size: 1.2rem" class="bi bi-lock"></i>&nbsp; Contraseña &nbsp;<span style="color:#f00; font-size: 1rem;">*</span></label>
                     <input id="pass" name="pass" type="password" placeholder="Contraseña" required class="w-full p-2 rounded-2xl mb-6 text-black outline-none ring-purple-500 focus:ring-2">
                     
                     <div class="text-start mb-4">
@@ -138,9 +139,9 @@ include_once "./model/mainModel.php"; // se incluye el model principal
     <script type="text/javascript" src="view/js/jquery-3.6.0.min.js"></script>
     <script src="view/js/bootstrap.min.js"></script>
     <!-- Custom scripts for all pages-->
-    <script src="view/js/SendForm.js"></script>
     <script src="view/js/sweetalert2.min.js"></script>
     <script src="view/js/app.js"></script>
+    <script src="view/js/SendForm.js"></script>
     <script src="view/js/validator.js"></script>
 </body>
 
