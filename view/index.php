@@ -5,7 +5,9 @@ require_once "../model/mainModel.php"; // se incluye el model principal
 require_once "../model/productModel.php"; // se incluye el model producto
 require_once "../model/categoryModel.php"; // se incluye el model de categorias
 
-$catalogo = modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos ORDER BY nombre ASC"); 
+
+$estado = (!isset($_POST['estado_rol'])) ? '1' : $_POST['estado_rol'];
+$catalogo = modeloPrincipal::consultar("SELECT id FROM productos WHERE state = 1"); 
 
 
 if ($_SESSION['logged_in'] === true) { ?>
@@ -103,11 +105,21 @@ if ($_SESSION['logged_in'] === true) { ?>
                             <div class="text-center mb-2 d-flex justify-content-between">
                                 <h3 class="text-lg font-bold text-black mb-4 ">Productos en Línea (<?=  mysqli_num_rows($catalogo); ?>)</h3>
 
+                                    
+                                <div class=" mb-1 ">
+                                    <form action="./index.php" method="post">
+                                        <input type="hidden" name="estado_rol" value="<?= ($estado == '0') ? "1" : "0"?>">
+                                        <button type="submit" class="col-12 btn btn-secondary">
+                                            <?= ($estado == '0') ? "Productos activos" : "Productos inactivos"?>
+                                        </button>
+                                    </form>
+                                </div>
                                 <div class="text-center mb-2">
                                     <button type="button" data-bs-toggle="modal" data-bs-target="#registrar_producto" 
                                         class="mb-2 btn_modal btn btn-success"><i class="bi bi-plus-circle"></i>&nbsp;Registrar Nuevo
                                     </button>
                                 </div>
+
                             </div>
                         </div> 
                     
@@ -121,11 +133,11 @@ if ($_SESSION['logged_in'] === true) { ?>
                                         <th class="col text-center" scope="col">Precio ($)</th>
                                         <th class="col text-center" scope="col">Imagen</th>
                                         <th class="col text-center" scope="col">Editar</th>
-                                        <th class="col text-center" scope="col">Eliminar</th>
+                                        <th class="col text-center" scope="col">Estado</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php producto_model::lista();  ?>
+                                    <?php producto_model::lista($estado);  ?>
                                 </tbody>
                             </table>
                         </div>
@@ -234,9 +246,10 @@ if ($_SESSION['logged_in'] === true) { ?>
                     </div>
                     
                     <div class="modal-body m-0"> 
-                        <form id="editProduct" action="../controller/producto.php" method="post" class="SendFormAjax" autocomplete="off" data-type-form="update" enctype="multipart/form-data" >
+                        <form id="editProduct" action="../controller/producto_controlador.php" method="post" class="SendFormAjax" autocomplete="off" data-type-form="update" enctype="multipart/form-data" >
+                            <input type="hidden" name="modulo" value="Modificar">
                             <div id="tableModalEdit" class="row justify-content-center align-items-center">
-                                
+
                             </div>
                         </form>
                     </div>

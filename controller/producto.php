@@ -34,15 +34,14 @@ try {
         $stmt->execute();
         $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $products = $products[0];
-        $products['imgs'] = explode(",",$products['images']);
-        
         // Convertimos el string de imágenes de nuevo a Array para el JS
+        $products['imgs'] = explode(",",$products['images']);  ?>
 
-            ?>
             <div class="col-12 col-md-6 mb-3">
                 <label class="col-form-label">Nombre del producto <span style="color:#f00;">*</span> </label>
                 <input name="producto" value="<?= $products['nombre'] ?>" placeholder="Nombre" required class="mb-3 w-full bg-slate-800 p-3 rounded-xl border-none text-white outline-none focus:ring-1 ring-purple-500">
             </div>
+
             <div class="col-12 col-md-6 mb-3">
                 <label class="col-form-label">Precio (opcional)</label>
                 <input name="price" value="<?= $products['precio'] ?>" type="number" step="0.01" placeholder="Precio ($)" class="w-full mb-3 bg-slate-800 p-3 rounded-xl border-none text-white outline-none focus:ring-1 ring-purple-500">
@@ -61,8 +60,7 @@ try {
                     <tbody>
                         <?php
                         
-                        foreach ($products['imgs'] as $img) {
-                            ?>
+                        foreach ($products['imgs'] as $img) { ?>
                             
                             <tr class="text-black">
                                 <th class="col text-center" scope="col">
@@ -95,80 +93,9 @@ try {
                 <textarea name="desc" value="<?= $products['description'] ?>" placeholder="Descripción del producto..." class="w-full bg-slate-800 p-3 rounded-xl border-none text-white h-24 text-sm outline-none focus:ring-1 ring-purple-500"><?= $products['description'] ?></textarea>
             </div>
             
-            
-            <?php
+        <?php
     }
-
-    // --- GUARDAR O ACTUALIZAR PRODUCTO (POST) ---
-    if ($method === 'POST') {
-        
-
-        // Dentro de api.php, en la sección del POST
-        $data = json_decode(file_get_contents("php://input"), true);
-        $action = $data['action'];
-
-        switch ($action) {
-            case 'login':
-                $stmt = $conn->prepare("SELECT * FROM users WHERE username = ? AND password = ?");
-                $stmt->execute([$data['user'], $data['pass']]);
-                $user = $stmt->fetch(PDO::FETCH_ASSOC);
-                if ($user) {
-                    echo json_encode(["status" => "success", "user" => ["name" => $user['full_name'], "role" => $user['role']]]);
-                } else {
-                    echo json_encode(["status" => "error"]);
-                }
-                break;
-
-            case 'add_product':
-                $c = $data['content'];
-                $sql = "INSERT INTO products (name, price, category, description, images) VALUES (?, ?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute([$c['name'], $c['price'], $c['category'], $c['description'], $c['images']]);
-                echo json_encode(["status" => "success"]);
-                break;
-
-            case 'update_product':
-                $c = $data['content'];
-                $sql = "UPDATE products SET name=?, price=?, category=?, description=?, images=? WHERE id=?";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute([$c['name'], $c['price'], $c['category'], $c['description'], $c['images'], $c['id']]);
-                echo json_encode(["status" => "success"]);
-                break;
-
-            case 'delete_product':
-                $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
-                $stmt->execute([$data['id']]);
-                echo json_encode(["status" => "success"]);
-                break;
-        }
-    }
-    if ($method === 'PATCH') {
-        
-
-        // Dentro de api.php, en la sección del POST
-        $data = json_decode(file_get_contents("php://input"), true);
-        $action = $data['action'];
-
-        $c = $data['content'];
-        $sql = "UPDATE products SET name=?, precio=?, description=?, images=? WHERE id=?";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([$c['name'], $c['price'], $c['category'], $c['description'], $c['images'], $c['id']]);
-        echo json_encode(["status" => "success"]);
-        
-    }
-
-    if ($method === 'DELETE') {
-
-        // $data = json_decode(file_get_contents("php://input"), true);
-        // $action = $data['action'];
-
-        // $c = $data['content'];
-        // $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
-        // $stmt->execute([$data['id']]);
-        // echo json_encode(["status" => "success"]);
-        echo "{message: 'producto eliminado correctamente.' }";
-
-    }
+    
 } catch(PDOException $e) {
     echo json_encode(["status" => "error", "message" => $e->getMessage()]);
 }

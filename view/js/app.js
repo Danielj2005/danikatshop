@@ -232,25 +232,10 @@ async function editingProduct(ID) {
         // Consultamos al PHP que trae los datos de MySQL
         const resp = await fetch('../controller/producto.php?UID=' + ID);
         const data = await resp.text();
-        
+
         document.getElementById('tableModalEdit').innerHTML = data;
 
     } catch (error) {
         console.error("Fallo de conexión con BD:", error);
     }
 }
-
-const editProduct = document.querySelectorAll('.btn_edit_produto');
-
-editProduct.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-
-        let ID = btn.getAttribute('dataId');
-        editingProduct(ID);
-
-    });
-});
-
-
-

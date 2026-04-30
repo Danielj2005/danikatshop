@@ -5,13 +5,13 @@ class producto_model extends modeloPrincipal {
     /* funciones de catálogo de productos */
     public static function obtenerCatalogo () {
         
-        $catalogo = modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos ORDER BY id ASC"); 
+        $catalogo = modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos WHERE state = 1 ORDER BY nombre ASC"); 
         // $telefono = mysqli_fetch_assoc(modeloPrincipal::consultar("SELECT telefono FROM uders WHERE role = 2"))['telefono']; 
 
         
         if (mysqli_num_rows($catalogo) > 0) { ?>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="row justify-content-around align-items-center">
                 <?php
     
                     while ($mostrar = mysqli_fetch_array($catalogo)) { 
@@ -21,7 +21,7 @@ class producto_model extends modeloPrincipal {
                         $url = $imgSrc[0];
                 ?>
             
-                    <div class="group bg-slate-900/40 border border-slate-800 rounded-[2rem] overflow-hidden hover:border-purple-500/50 transition-all duration-500 animate-slide-up">
+                    <div class="col-12 col-sm-12 col-md-4 col-lg-3 group bg-slate-900/40 border border-slate-800 rounded-[2rem] overflow-hidden hover:border-purple-500/50 transition-all duration-500 animate-slide-up">
                         <div class="relative h-64 overflow-hidden cursor-pointer" onclick="openModal(<?= $mostrar['id'] ?>)">
                             <img src="<?= $url ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-4 py-1 rounded-full border border-white/10">
@@ -29,14 +29,25 @@ class producto_model extends modeloPrincipal {
                             </div>
                         </div>
                         <div class="p-6">
-                            <h3 class="text-white text-md font-semibold mb-1 truncate mb-4"><?= $mostrar['nombre'] ?></h3>
-
-                            <form action="./producto" method="get" data-type-form="load">
-                                <input type="hidden" value="<?= $mostrar['id'] ?>" name="id" />
-                                <button type="submit" class="w-full bg-slate-800 hover:bg-purple-600 text-white py-3 rounded-2xl transition-all flex items-center justify-center gap-2">
-                                    <i class="fab fa-whatsapp text-lg"></i> <span class="text-sm font-bold">Consultar</span>
-                                </button>
-                            </form>
+                            <h3 class="text-white text-md font-semibold mb-1 truncate mb-4"><?= ucwords(strtolower($mostrar['nombre'])) ?></h3>
+                            <div class="row justify-content-center align-items-center">
+                                <div class="col-12 mb-3">
+                                    <form action="./producto" method="get" data-type-form="load">
+                                        <input type="hidden" value="<?= $mostrar['id'] ?>" name="id" />
+                                        <button type="submit" class="w-full bg-slate-800 hover:bg-purple-600 text-white py-3 rounded-2xl transition-all flex items-center justify-center gap-2">
+                                            <i class="bi bi-eye text-lg"></i> <span class="text-sm font-bold">Ver Detalles</span>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <form action="./producto" method="get" data-type-form="load">
+                                        <input type="hidden" value="<?= $mostrar['id'] ?>" name="id" />
+                                        <button type="submit" class="w-full bg-slate-800 hover:bg-purple-600 text-white py-3 rounded-2xl transition-all flex items-center justify-center gap-2">
+                                            <i class="fab fa-whatsapp text-lg"></i> <span class="text-sm font-bold">Consultar</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 <?php } ?>
@@ -69,7 +80,7 @@ class producto_model extends modeloPrincipal {
             <div class="bg-slate-900/40 border border-slate-800 p-3 rounded-2xl flex items-center gap-4 hover:bg-slate-800/40 transition">
                 <img src="storage/<?= $url ?>" class="w-16 h-16 object-cover rounded-xl shadow-md">
                 <div class="flex-1 min-w-0">
-                    <h4 class="text-white font-medium truncate"><?= $mostrar['nombre'] ?></h4>
+                    <h4 class="text-white font-medium truncate"><?= ucwords(strtolower($mostrar['nombre'])) ?></h4>
                     <p class="text-slate-500 text-xs"><?= $mostrar['price'] ? '$' . $mostrar['price'] : 'Bajo pedido' ?></p>
                 </div>
                 <div class="flex gap-2">
@@ -192,11 +203,11 @@ class producto_model extends modeloPrincipal {
     }
 
 
-    public static function lista(){
+    public static function lista($estado = 1){
         
         // se guardan los datos en un array y se imprime
         
-        $catalogo = modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos"); 
+        $catalogo = modeloPrincipal::consultar("SELECT id, nombre, precio, images, state FROM productos WHERE state = $estado ORDER BY nombre ASC"); 
         
 
 
@@ -215,7 +226,7 @@ class producto_model extends modeloPrincipal {
             <tr class="text-center">
                 <td class="text-center"></td>
                 <td class="text-start">
-                    <p class=" fw-bold mb-1"><?= $mostrar["nombre"] ?> </p>
+                    <p class=" fw-bold mb-1"><?= ucwords(strtolower($mostrar["nombre"])) ?> </p>
                     <small class="flex gap-1 text-muted items-center"> 
                         <?php while ($cat = mysqli_fetch_assoc($categorias)) { ?> 
                             <span class="bg-indigo-600 text-white px-2 py-1 rounded-3xl text-xs">
@@ -239,66 +250,44 @@ class producto_model extends modeloPrincipal {
                 </td>
                 <td class="col text-center">
                     <button data-bs-toggle="modal" data-bs-target="#editar_producto"
-                        dataId="<?= modeloPrincipal::encryptionId($mostrar["id"]); ?>" class="btn_edit_produto btn btn-warning">
+                        onclick="editingProduct('<?= modeloPrincipal::encryptionId($mostrar['id']) ?>')" class="btn_edit_produto btn btn-warning">
                             <i class="bi bi-pencil-square"></i>
                     </button>
                 </td>
                 <td class="col text-center">
-                    <button dataId="<?= modeloPrincipal::encryptionId($mostrar["id"]); ?>" class="btn_modal btn btn-danger">
-                        <i class="bi bi-trash"></i>
-                    </button>
+                    <?php 
+                        if ($mostrar["state"] == 1) { ?>
+                        <form action="../controller/producto_controlador.php" method="post" class="SendFormAjax" data-type-form="update_estate" >
+                            <input type="hidden" name="modulo" value="activo">          
+                            <input type="hidden" name="id" value="<?= modeloPrincipal::encryptionId($mostrar['id']) ?>">
+                            <button class="btn btn-success bi-check-circle" title="state de la categoría"></button>
+                        </form>
+                    <?php } else { ?>
+                        <form action="../controller/producto_controlador.php" method="post" class="SendFormAjax" data-type-form="update_estate" >
+                            <input type="hidden" name="modulo" value="inactivo">          
+                            <input type="hidden" name="id" value="<?= modeloPrincipal::encryptionId($mostrar['id']) ?>">
+                            <button class="btn btn-danger bi-x-circle" title="estado del producto" type="submit"></button>
+                        </form>
+                    <?php }  ?>
                 </td>
             </tr>
         <?php } 
     }
 
-    public static function options($estado = "") {
-        if ($estado == "1") {
-            $consulta = modeloPrincipal::consultar("SELECT P.id_producto, P.nombre_producto,
-                PS.cantidad AS presentacion, R.nombre AS representacion,
-                M.nombre as marca
-                FROM producto AS P 
-                INNER JOIN presentacion AS PS ON PS.id = P.id_presentacion
-                INNER JOIN representacion AS R ON R.id = PS.id_representacion
-                INNER JOIN marca AS M ON M.id = P.id_marca
-                WHERE P.estado = 1 AND P.stock_actual > 0 
-                ORDER BY P.nombre_producto
-            ");
-        }else {
-            $consulta = modeloPrincipal::consultar("SELECT P.id_producto, P.nombre_producto,
-                PS.cantidad AS presentacion, R.nombre AS representacion,
-                M.nombre as marca
-                FROM producto AS P 
-                INNER JOIN presentacion AS PS ON PS.id = P.id_presentacion
-                INNER JOIN representacion AS R ON R.id = PS.id_representacion
-                INNER JOIN marca AS M ON M.id = P.id_marca 
-                ORDER BY P.nombre_producto
-            ");
-        }
-        // se guardan los datos en un array y se imprime
-        
-        while ( $mostrar = mysqli_fetch_array($consulta)) { 
-            echo '<option value="'.modeloPrincipal::encryptionId($mostrar["id_producto"]).'">
-                    '.$mostrar["marca"].' '.$mostrar["nombre_producto"].' '.$mostrar["presentacion"].' '.$mostrar["representacion"].'
-                </option>';
-        }
-    }
-
     public static function actualizar_estado($estado, $id_producto){
         // se comprueba que no exista un registro con los mismos datos
         
-        if (!modeloprincipal::UpdateSQL("producto", "estado = $estado", "id_producto = $id_producto")) {
+        if (!modeloprincipal::UpdateSQL("productos", "state = $estado", "id = $id_producto")) {
             return false;
         }
         return true;
     }
 
-    public static function actualizar_producto($price, $id_producto){
+    public static function delete_producto($id_producto){
         // se comprueba que no exista un registro con los mismos datos
         
-        $fecha = date("Y-m-d H:i:s");
 
-        if (!modeloprincipal::UpdateSQL("producto", "precio_venta = '$price', fecha_ultima_actualizacion = '$fecha'", "id_producto = $id_producto")) {
+        if (!modeloprincipal::DeleteSQL("producto", "id = $id_producto")) {
             return false;
         }
         return true;
