@@ -114,5 +114,5 @@ function SendFormAjax() {
 }
 
 $(document).ready(function () {
-    SendFormAjax();
+    // SendFormAjax();
 });

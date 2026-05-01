@@ -19,15 +19,9 @@ const DanikatAlert = Swal.mixin({
 
 
 
-let state = {
-    category: [],
-    users: [],
+let estado = {
     loading: true, // Empezamos cargando
-    currentUser: null,
-    currentPage: 1,
-    itemsPerPage: 15,
-    searchTerm: "",
-    view: 'catalog',
+    productState: true,
     selectedProduct: null,
     editingId: null
 };
@@ -39,86 +33,17 @@ const saveToStorage = async () => {
     localStorage.setItem('products', JSON.stringify(state.products));
     localStorage.setItem('users', JSON.stringify(state.users));
 
-    // 2. Sincronizar con el servidor (Para que todos los clientes lo vean)
-    await syncWithServer('products', state.products);
 };
-
-// Nueva función para hablar con PHP
-async function syncWithServer(type, content) {
-    try {
-        const response = await fetch('./controller/api.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                type: type,
-                content: content
-            })
-        });
-
-        const result = await response.json();
-        
-        if (result.status === 'success') {
-            console.log(`Servidor actualizado: ${type}`);
-        } else {
-            console.error(`Error de servidor: ${result.message}`);
-            alert("Atención: Los cambios se guardaron en tu navegador pero NO en el servidor. Revisa permisos de carpeta.");
-        }
-    } catch (error) {
-        console.error("Error en la petición fetch:", error);
-    }
-}
 
 
 // --- LÓGICA DE WHATSAPP ---
-window.askWhatsApp = (id) => {
-    const p = state.products.find(item => item.id === id);
-    const precioTxt = p.price ? `por un valor de *$${p.price}*` : "(Precio a convenir según pedido)";
-    const msg = `¡Hola DanikatShop! Me interesa su producto:\n\n*${p.name}*\nCategoría: ${p.category}\n${precioTxt}\n\n¿Podrían darme más detalles?`;
-    window.open(`https://wa.me/584244189963?text=${encodeURIComponent(msg)}`, '_blank');
+window.askWhatsApp = (nombre, precio, numeroWhats) => {
+    
+    const precioTxt = precio ? `por un valor de *$${precio}*` : "(Precio a convenir según pedido)";
+    const msg = `¡Hola DanikatShop! Me interesa su producto:\n\n*${nombre}*\n\n${precioTxt}\n\n¿Podrían darme más detalles?`;
+    window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(msg)}`, '_blank');
 };
 
-
-// --- RENDERIZADO ---
-function render() {
-    const app = document.getElementById('app');
-
-    // SI ESTÁ CARGANDO: Mostrar el Loader
-    if (state.loading) {
-        app.innerHTML = `
-            <div class="flex flex-col items-center justify-center min-h-screen">
-                <div class="w-12 h-12 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin"></div>
-                <p class="mt-4 text-slate-500 animate-pulse">Cargando DanikatShop...</p>
-            </div>
-        `;
-        return; // Detenemos el renderizado aquí hasta que loading sea false
-    }
-
-    // SI NO ESTÁ CARGANDO: Renderizar la App normal
-    const filtered = state.products.filter(p => 
-        p.name.toLowerCase().includes(state.searchTerm) || 
-        p.category.toLowerCase().includes(state.searchTerm)
-    );
-
-    let content = '';
-
-    if (state.view === 'login') {
-        content += ViewLogin();
-    } 
-    else if (state.view === 'admin' && state.currentUser) {
-        content += ViewAdminPanel();
-    } 
-    else {
-        content += ViewCatalog(filtered);
-    }
-
-    if (state.selectedProduct) {
-        content += ViewProductModal(state.selectedProduct);
-    }
-
-    app.innerHTML = content;
-}
 
 
 // --- EVENTOS Y NAVEGACIÓN ---
@@ -133,6 +58,61 @@ window.handleSearch = (val) => {
     render(); 
 };
 
+let tableActiveHtml = ``;
+let tableInactiveHtml = ``;
+
+
+async function getProductos() {
+    try {
+        // Consultamos al PHP que trae los datos de MySQL
+        const active = await fetch(`../controller/listaProductos.php?UID=${1}`);
+        const data = await active.text();
+
+        const inactive = await fetch(`../controller/listaProductos.php?UID=${0}`);
+        const inact = await inactive.text();
+
+        // let tableActive = document.getElementById('activos');
+        let tbodyActive = document.querySelector('#activos tbody');
+        let tbodyInactive = document.querySelector('#inactivos tbody');
+
+        tbodyActive.innerHTML = data;
+        tbodyInactive.innerHTML = inact;
+
+        tableActiveHtml = tbodyActive.innerHTML; // Guardamos el HTML original para futuras actualizaciones
+        tableInactiveHtml = tbodyInactive.innerHTML; // Guardamos el HTML original para futuras actualizaciones
+
+        dataTable("tableActivos");
+        dataTable("tableInactivos");
+        SendFormAjax();
+
+        // document.getElementById('activos').innerHTML = data;
+        // document.getElementById('inactivos').innerHTML = data;
+        // dataTable("tableInactivos");
+
+    } catch (error) {
+        console.error("Fallo de conexión con BD:", error);
+    }
+}
+
+function changeState () {
+        
+    const btn = document.getElementById('btnChangeState');
+        
+    if (estado.productState) {
+        document.getElementById('inactivos').classList.remove('d-none');
+        document.getElementById('activos').classList.add('d-none');
+        btn.textContent = "Productos inactivos";
+        estado.productState = false;
+    }else{
+        btn.textContent = "Productos activos";
+        document.getElementById('activos').classList.remove('d-none');
+        document.getElementById('inactivos').classList.add('d-none');
+        estado.productState = true;
+    }
+    
+
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('loader')) {
@@ -144,87 +124,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1500);
     }
 
+    if (index) {
+        getProductos();
+    } 
 });
 
 
-const createList = (body) =>  `
-    <div class="table table-responsive">
-        <table class="table table-striped mb-3 tableListModal" id="tableList">
-            ${body}
-        </table>
-    </div>`;
 
-
-// --- CARGA DE DATOS EXTERNOS ---
-async function getList() {
-    try {
-
-        // Consultamos al PHP que trae los datos de MySQL
-        const resp = await fetch('../controller/api.php');
-        const data = await resp.text();
-
-        document.getElementById('bodyModalList').innerHTML = createList(data);
-        dataTable("tableListModal");
-
-    } catch (error) {
-        console.error("Fallo de conexión con BD:", error);
-    }
-}
-
-
-// Iniciar app
-// getList();
-const createEditTable = (id, images) => 
-    images.map((i) => (
-        `<tr class="text-black">
-            <th class="col text-center" scope="col">
-                <div class="d-flex justify-content-center align-items-center">
-                    <img src=".${i}" style="width: 5rem; height:5rem; " class="d-block" alt="...">
-                </div>
-            </th>
-            <th class="col text-center" scope="col">
-                <input type="file" name="image[]" multiple accept="image/*" class="rounded-3xl border my-3 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-purple-600 hover:file:bg-purple-500 cursor-pointer text-white transition"/>
-            </th>
-            <th class="col text-center" scope="col">
-                <button dataId="${id}" class="btn_modal btn btn-danger">
-                    <i class="bi bi-trash"></i>
-                </button>
-            </th>
-        </tr>`
-    )).join("");
-
-
-const createModalEditProduct = (data) => `
-    <div class="col-12 col-md-6 mb-3">
-        <label class="col-form-label">Nombre del producto <span style="color:#f00;">*</span> </label>
-        <input name="producto" value="${data.nombre}" placeholder="Nombre" required class="mb-3 w-full bg-slate-800 p-3 rounded-xl border-none text-white outline-none focus:ring-1 ring-purple-500">
-    </div>
-    <div class="col-12 col-md-6 mb-3">
-        <label class="col-form-label">Precio (opcional)</label>
-        <input name="price" value="${data.precio}" type="number" step="0.01" placeholder="Precio ($)" class="w-full mb-3 bg-slate-800 p-3 rounded-xl border-none text-white outline-none focus:ring-1 ring-purple-500">
-    </div>
-    
-    <div class="rounded-3xl mb-4 bg-white col-12 table-responsive overflow-hidden overflow-x-auto">
-
-        <table class="mb-3 no-footer table table-borderless table-group-divider table-hover table-striped">
-            <thead>
-                <tr class="text-black">
-                    <th class="col text-center" scope="col">Imagen</th>
-                    <th class="col text-center" scope="col">Editar</th>
-                    <th class="col text-center" scope="col">Eliminar</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${ createEditTable(data.id, data.imgs) }
-            </tbody>
-        </table>
-    </div>
-
-    <div class="col-12 mb-3">
-        <label class="col-form-label">Descripción <span style="color:#f00;">*</span> </label>
-        <textarea name="desc" value="${data.descripcion}" placeholder="Descripción del producto..." class="w-full bg-slate-800 p-3 rounded-xl border-none text-white h-24 text-sm outline-none focus:ring-1 ring-purple-500"></textarea>
-    </div>
-    `;
 
 
 async function editingProduct(ID) {
@@ -239,3 +145,4 @@ async function editingProduct(ID) {
         console.error("Fallo de conexión con BD:", error);
     }
 }
+

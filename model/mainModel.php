@@ -9,6 +9,7 @@ const SERVER = "localhost"; // Servidor de mysql
 const DB = "danikat_db"; // Nombre de la base de datos
 const USER = "root";  // Nombre de usuario de mysql
 const PASSWORD = ""; // Contraseña de myqsl
+const PHONE = "584244189963"; // Contraseña de myqsl
 
 /*----------  Datos de la encriptacion (No modificar) ----------*/
 const METHOD="AES-256-CBC";

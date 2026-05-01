@@ -43,7 +43,7 @@ include_once "./model/mainModel.php"; // se incluye el model principal
     <link href="./view/img/logo.jpeg" rel="shortcut icon" type="image/x-icon">
 
     <!-- Custom fonts for this template-->
-    <link href="./view/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="./view/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
     <link href="./view/css/app.css" rel="stylesheet">
     <link href="./view/css/bootstrap.min.css" rel="stylesheet">
@@ -68,19 +68,17 @@ include_once "./model/mainModel.php"; // se incluye el model principal
             </div>
 
             <div class="flex gap-4 items-center">
-                <button onclick="navigate('admin')" class="d-none text-purple-400 text-sm font-bold">Gestionar</button>
-                <button onclick="logout()" class="d-none text-slate-500 text-xs"><i class="fas fa-sign-out-alt"></i></button>
-                <a href="login" class="text-slate-700 hover:text-purple-500 transition"><i class="fas fa-user-lock"></i></a> 
+                <a href="./index.php" class="text-slate-400 hover:text-purple-500 transition"><i class="fs-2 bi bi-house-fill me-3"></i>Volver al Catálogo</a> 
             </div>
         </div>
     </nav>
 
     <div id="app" class=" min-h-screen">
-
+    
         <main class="max-w-7xl mx-auto p-6">
             
             <div class="row items-center justify-center p-4">
-                <form method="POST" action="./controller/login.php" data-type-form="load" autocomplete="off" class="SendFormAjax text-start bg-[#020617] border border-slate-800 p-8 rounded-[2.5rem] col-10 col-md-4 shadow-2xl">
+                <form method="POST" action="./controller/login.php" data-type-form="load" autocomplete="off" class="SendFormAjax text-start bg-[#020617] border border-slate-800 p-8 rounded-[2.5rem] col-12 col-md-4 shadow-2xl">
                     
                     <div class="text-center mb-4">
                         <h2 class="text-2xl font-bold text-center my-8 bg-gradient-to-r from-purple-400 to-fuchsia-500 bg-clip-text text-transparent">Acceso Administrativo</h2>
@@ -140,8 +138,13 @@ include_once "./model/mainModel.php"; // se incluye el model principal
     <script src="view/js/bootstrap.min.js"></script>
     <!-- Custom scripts for all pages-->
     <script src="view/js/sweetalert2.min.js"></script>
+        <script type="text/javascript" >
+            const index = false;
+        </script>
     <script src="view/js/app.js"></script>
     <script src="view/js/SendForm.js"></script>
+    <script> SendFormAjax(); </script>
+
     <script src="view/js/validator.js"></script>
 </body>
 

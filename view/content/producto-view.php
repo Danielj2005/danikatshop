@@ -42,6 +42,7 @@
 </div>
 
 <?php
+
 $id = substr($_SERVER['REQUEST_URI'], strrpos($_SERVER['REQUEST_URI'], '=') + 1) ?? null;
 
 
@@ -50,7 +51,6 @@ $directory = "storage/$id";
 // Busca todos los archivos que terminen en .jpg, .png o .webp
 // Devuelve un array con las rutas completas: ["storage/foto1.jpg", "storage/torta.png"]
 $files = glob("$directory/*.{jpg,png,jpeg,webp,jfif}", GLOB_BRACE);
-
 
 $query = modeloPrincipal::consultar("SELECT BIN_TO_UUID(id) AS id, name, price, images FROM productos WHERE id = UUID_TO_BIN('$id')"); 
 $quety = mysqli_fetch_assoc($query);

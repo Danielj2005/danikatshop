@@ -46,26 +46,6 @@ function verImagen(url, producto) {
         confirmButtonText: 'Cerrar'
     });
 }
-
-$(document).ready(function() {
-
-    var t = $('#example').DataTable( { 
-        language: {
-            url: 'js/dataTables-Español.json'
-        },
-        lengthMenu: [[5, 10, 15, 20, 25, 50, 100, -1], [5, 10, 15, 20, 25, 50, 100, "Todos"]],
-        responsive: true,
-    } );
-
-    t.on( 'order.dt search.dt', function () {
-        let i = 1;
-
-        t.cells(null, 0, {search:'applied', order:'applied'}).every( function (cell) {
-            this.data(i++);
-        } );
-    } ).draw();
-} );
-
 function dataTable(classTable = "example"){
     var t = $(`.${classTable}`).DataTable( { 
         language: {

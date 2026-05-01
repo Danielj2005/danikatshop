@@ -41,7 +41,7 @@ include_once "./model/productModel.php"; // se incluye el model producto
 <link href="./view/img/logo.jpeg" rel="shortcut icon" type="image/x-icon">
 
 <!-- Custom fonts for this template-->
-<link href="./view/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link href="./view/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
 <link href="./view/css/app.css" rel="stylesheet">
 <link href="./view/css/bootstrap.min.css" rel="stylesheet">
@@ -102,6 +102,9 @@ include_once "./model/productModel.php"; // se incluye el model producto
     <script src="view/js/bootstrap.min.js"></script>
     <!-- Custom scripts for all pages-->
     <script src="view/js/sweetalert2.min.js"></script>
+        <script type="text/javascript" >
+            const index = false;
+        </script>
     <script src="view/js/app.js"></script>
 </body>
 

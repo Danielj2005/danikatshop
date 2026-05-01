@@ -107,12 +107,7 @@ if ($_SESSION['logged_in'] === true) { ?>
 
                                     
                                 <div class=" mb-1 ">
-                                    <form action="./index.php" method="post">
-                                        <input type="hidden" name="estado_rol" value="<?= ($estado == '0') ? "1" : "0"?>">
-                                        <button type="submit" class="col-12 btn btn-secondary">
-                                            <?= ($estado == '0') ? "Productos activos" : "Productos inactivos"?>
-                                        </button>
-                                    </form>
+                                    <button id="btnChangeState" onclick="changeState()" type="submit" class="col-12 btn btn-secondary">Productos activos</button>
                                 </div>
                                 <div class="text-center mb-2">
                                     <button type="button" data-bs-toggle="modal" data-bs-target="#registrar_producto" 
@@ -123,9 +118,9 @@ if ($_SESSION['logged_in'] === true) { ?>
                             </div>
                         </div> 
                     
-                        <div class="table-responsive overflow-hidden overflow-x-auto">
+                        <div id="activos" class="table-responsive overflow-hidden overflow-x-auto">
                             
-                            <table class="dataTable example mb-3 no-footer table table-group-divider table-hover table-striped" id="example">
+                            <table class="tableActivos mb-3 no-footer table table-group-divider table-hover table-striped" id="tableActivos">
                                 <thead>
                                     <tr class="text-black">
                                         <th class="col text-center" scope="col">N.º</th>
@@ -137,10 +132,30 @@ if ($_SESSION['logged_in'] === true) { ?>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php producto_model::lista($estado);  ?>
+
                                 </tbody>
                             </table>
                         </div>
+
+                        <div  id="inactivos" class="d-none table-responsive overflow-hidden overflow-x-auto">
+
+                            <table class="tableInactivos mb-3 no-footer table table-group-divider table-hover table-striped" id="tableInactivos">
+                                <thead>
+                                    <tr class="text-black">
+                                        <th class="col text-center" scope="col">N.º</th>
+                                        <th class="col text-center" scope="col">Producto</th>
+                                        <th class="col text-center" scope="col">Precio ($)</th>
+                                        <th class="col text-center" scope="col">Imagen</th>
+                                        <th class="col text-center" scope="col">Editar</th>
+                                        <th class="col text-center" scope="col">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </main>
@@ -287,8 +302,11 @@ if ($_SESSION['logged_in'] === true) { ?>
         <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <!-- Custom scripts for all pages-->
-        <script src="js/SendForm.js"></script>
         <script src="js/sweetalert2.min.js"></script>
+        <script src="js/SendForm.js"></script>
+        <script type="text/javascript" >
+            const index = true;
+        </script>
         <script src="js/app.js"></script>
         <script src="js/validator.js"></script>
         <script src="js/tiempo_inactividad.js"></script>
@@ -298,7 +316,7 @@ if ($_SESSION['logged_in'] === true) { ?>
         <script src="js/jquery.dataTables.min.js"></script>
         <script src="js/datatables.min.js"></script>
         <script src="js/dataTables.bootstrap5.min.js"></script>
-
+        
         <script type="text/javascript" src="js/select2.min.js"></script>
         <script type="text/javascript" src="js/initialApp.js"></script>
     </body>

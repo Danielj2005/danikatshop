@@ -1,6 +1,6 @@
 
 
-const tiempo_config = 60 * 60 * 1000; // Convertimos minutos a milisegundos
+const tiempo_config = 10 * 60 * 1000; // Convertimos minutos a milisegundos
 
 function detectar_actividad() {
     let tiempo_id; // Almacena el ID del temporizador de inactividad

@@ -1,31 +1,13 @@
 <?php
-// api.php
 
-require_once "../model/mainModel.php"; // se incluye el model principal
-
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-
-// Datos de conexión (Cámbialos por los que te da InfinityFree)
-/*
-$host = 'sql204.infinityfree.com'; 
-$db_name = 'if0_41737603_danikat_bd';
-$username = 'if0_41737603';
-$password = '0iAMk3Kc0lb'; 
-*/
-
-$host = 'localhost'; 
-$db_name = 'danikat_db';
-$username = 'root';
-$password = '';
+require_once "../model/mainModel.php"; 
+require_once "../config/SERVER.php";
 
 try {
-    $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $method = $_SERVER['REQUEST_METHOD'];
 
-    // --- OBTENER PRODUCTOS (GET) ---
+    // --- OBTENER PRODUCTOS PARA EDITAR (GET) ---
     if ($method === 'GET') {
         $id = modeloPrincipal::decryptionId($_GET['UID']);
 
@@ -95,6 +77,7 @@ try {
             
         <?php
     }
+
     
 } catch(PDOException $e) {
     echo json_encode(["status" => "error", "message" => $e->getMessage()]);

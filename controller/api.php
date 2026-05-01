@@ -1,22 +1,10 @@
 <?php
 // api.php
 // conexión (Cámbialos por los que te da InfinityFree)
-/*
-$host = 'sql204.infinityfree.com'; 
-$db_name = 'if0_41737603_danikat_bd';
-$username = 'if0_41737603';
-$password = '0iAMk3Kc0lb'; 
-*/
-
-$host = 'localhost'; 
-$db_name = 'danikat_db';
-$username = 'root';
-$password = '';
+require_once "../config/SERVER.php"; // se incluye el model principal
 
 try {
-    $conn = new PDO("mysql:host=$host;dbname=$db_name", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+    
     // --- OBTENER CATEGORÍAS (GET) ---
     $stmt = $conn->prepare("SELECT * FROM categorias ORDER BY nombre ASC");
     $stmt->execute();
