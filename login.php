@@ -53,22 +53,15 @@ include_once "./model/mainModel.php"; // se incluye el model principal
 </head>
 
 <body id="" class="font-sans antialiased brand-bg">
-	<nav class="sticky top-0 z-40 bg-slate-950 border-b border-purple-900/20 p-4">
+	<nav class="top-0 z-40 bg-slate-950 border-b border-purple-900/20 p-4">
         <div class="max-w-7xl mx-auto d-flex flex-col flex-md-row gap-4 justify-content-between align-items-center">
             <a href="./" class=" text-center md:text-left">
                 <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-fuchsia-500 bg-clip-text text-transparent">DanikatShop</h1>
                 <p class="text-[10px] text-slate-500 uppercase tracking-widest">Todo lo que buscas en un solo lugar</p>
             </a>
 
-            <div class="relative w-full md:w-1/2">
-                <input type="text" placeholder="Buscar tortas, arreglos, manualidades..." 
-                    oninput="handleSearch()" value=""
-                    class="w-full bg-slate-900 border border-slate-700 rounded-full px-5 py-2 text-sm focus:ring-2 ring-purple-500 outline-none">
-                <i class="fas fa-search absolute right-4 top-2.5 text-slate-500"></i>
-            </div>
-
             <div class="flex gap-4 items-center">
-                <a href="./index.php" class="text-slate-400 hover:text-purple-500 transition"><i class="fs-2 bi bi-house-fill me-3"></i>Volver al Catálogo</a> 
+                <a href="./index.php" class="d-flex align-items-center text-slate-400 hover:text-purple-500 transition"><i class="fs-2 bi bi-house-fill me-3"></i>Volver al Catálogo</a> 
             </div>
         </div>
     </nav>
@@ -78,7 +71,7 @@ include_once "./model/mainModel.php"; // se incluye el model principal
         <main class="max-w-7xl mx-auto p-6">
             
             <div class="row items-center justify-center p-4">
-                <form method="POST" action="./controller/login.php" data-type-form="load" autocomplete="off" class="SendFormAjax text-start bg-[#020617] border border-slate-800 p-8 rounded-[2.5rem] col-12 col-md-4 shadow-2xl">
+                <form id="login" method="POST" action="./controller/login.php" data-type-form="load" autocomplete="off" class="SendFormAjax text-start bg-[#020617] border border-slate-800 p-8 rounded-[2.5rem] col-12 col-md-4 shadow-2xl">
                     
                     <div class="text-center mb-4">
                         <h2 class="text-2xl font-bold text-center my-8 bg-gradient-to-r from-purple-400 to-fuchsia-500 bg-clip-text text-transparent">Acceso Administrativo</h2>

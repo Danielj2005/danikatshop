@@ -38,10 +38,24 @@ const saveToStorage = async () => {
 
 // --- LÓGICA DE WHATSAPP ---
 window.askWhatsApp = (nombre, precio, numeroWhats) => {
+
+    const numeroLimpio = numeroWhats.replace(/\D/g, '');
     
     const precioTxt = precio ? `por un valor de *$${precio}*` : "(Precio a convenir según pedido)";
     const msg = `¡Hola DanikatShop! Me interesa su producto:\n\n*${nombre}*\n\n${precioTxt}\n\n¿Podrían darme más detalles?`;
-    window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(msg)}`, '_blank');
+    
+    const url = `https://api.whatsapp.com/send?phone=${numeroLimpio}&text=${encodeURIComponent(msg)}`;
+
+    // 2. Detectar si es móvil para usar una redirección más agresiva
+    const isMobile = /iPhone|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        // En móviles, mejor cambiar la ubicación de la pestaña actual
+        window.location.href = url;
+    } else {
+        // En PC, abrimos pestaña nueva
+        window.open(url, '_blank');
+    }
 };
 
 
@@ -133,8 +147,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
 async function editingProduct(ID) {
+
     try {
+
         // Consultamos al PHP que trae los datos de MySQL
         const resp = await fetch('../controller/producto.php?UID=' + ID);
         const data = await resp.text();
@@ -146,3 +163,28 @@ async function editingProduct(ID) {
     }
 }
 
+
+function handleLogin() {
+    
+    try {
+        
+        const usuario = document.getElementById('user').value;
+        const contraseña = document.getElementById('pass').value;
+        // Consultamos al PHP que trae los datos de MySQL
+        $.ajax({
+            type: "POST",
+            url: "./controller/login.php",
+            data: {user: usuario, pass: contraseña}, // Usa el objeto FormData en lugar de $(this).serialize(),
+            error: function () {
+                Swal.fire("¡Ocurrio un error inesperado", "No se pudo realizar la operación.", "error");
+            },
+            success: function (data) {
+                $('.msjFormSend').html(data);
+            }
+        });
+
+
+    } catch (error) {
+        console.error("Fallo de conexión con BD:", error);
+    }
+}

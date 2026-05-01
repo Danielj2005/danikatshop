@@ -76,7 +76,7 @@ if (!password_verify($contraseña, $hash)) {
 
 
 /** se verifica si el usuario esta activo **/
-if ($datos_usuario["state"] == 0) {
+if ($datos_usuario["state"] == 0 || $datos_usuario["role"] != 1) {
     alert_model::alerta_simple(
         '¡Cuenta inactiva!',
         'Su cuenta se encuentra inactiva, por favor contacte al administrador del sistema.',

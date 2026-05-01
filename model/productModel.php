@@ -62,7 +62,7 @@ class producto_model extends modeloPrincipal {
                     </div>
                 </div>
             </div>
-        <?php }
+        <?php } 
     }
 
     public static function obtenerProductosPublicados (){
