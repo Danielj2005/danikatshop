@@ -19,6 +19,7 @@ try {
         // Convertimos el string de imágenes de nuevo a Array para el JS
         $products['imgs'] = explode(",",$products['images']);  ?>
 
+            <input name="id" value="<?= $id ?>" type="hidden">
             <div class="col-12 col-md-6 mb-3">
                 <label class="col-form-label">Nombre del producto <span style="color:#f00;">*</span> </label>
                 <input name="producto" value="<?= $products['nombre'] ?>" placeholder="Nombre" required class="mb-3 w-full bg-slate-800 p-3 rounded-xl border-none text-white outline-none focus:ring-1 ring-purple-500">

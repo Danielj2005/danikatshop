@@ -210,7 +210,6 @@ class producto_model extends modeloPrincipal {
 
 
         while ($mostrar = mysqli_fetch_assoc($catalogo)) {
-            $idSecure = modeloPrincipal::encryptionId($mostrar["id"]); 
 
             $imgSrc = $mostrar['images'];
             // $url = '.' . $imgSrc[0];

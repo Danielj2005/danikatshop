@@ -98,7 +98,7 @@ if($modulo === 'Guardar'){
 }
 
 
-if($modulo === 'Modificar'){
+if($modulo == 'Modificar'){
     
     $id_producto = modeloPrincipal::decryptionId($_POST["id"]);
     $id_producto = modeloPrincipal::limpiar_cadena($id_producto);
@@ -179,8 +179,10 @@ if($modulo === 'Modificar'){
 
     // Se verifica que no se hayan recibido campos vacíos.
     // modeloPrincipal::validar_campos_vacios([$producto, $category, $desc]);
-    modeloPrincipal::validar_campos_vacios([$producto, $desc]);
-    
+    if ($id_producto === "" || $producto === "" || $desc === "") {
+        alert_model::alert_fields_empty();
+        exit();
+    }
     // se valida el campo nombre del producto
     if (modeloPrincipal::verificar_datos("[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]{3,200}", $producto)) {
         alert_model::alerta_simple("¡Ocurrió un error!","El nombre del producto $producto no cumple con el formato establecido","error");
