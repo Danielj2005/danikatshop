@@ -1,3 +1,4 @@
+
 /**
  * APP.JS - DANIKATSHOP
  * Carga dinámica desde archivos JSON externos
@@ -16,46 +17,11 @@ const DanikatAlert = Swal.mixin({
 });
 
 
-
-
-
 let estado = {
     loading: true, // Empezamos cargando
     productState: true,
     selectedProduct: null,
     editingId: null
-};
-
-
-
-const saveToStorage = async () => {
-    // 1. Guardar localmente (Persistencia inmediata para el admin)
-    localStorage.setItem('products', JSON.stringify(state.products));
-    localStorage.setItem('users', JSON.stringify(state.users));
-
-};
-
-
-// --- LÓGICA DE WHATSAPP ---
-window.askWhatsApp = (nombre, precio, numeroWhats) => {
-
-    const numeroLimpio = numeroWhats.replace(/\D/g, '');
-    
-    const precioTxt = precio ? `por un valor de *$${precio}*` : "(Precio a convenir según pedido)";
-    const msg = `¡Hola DanikatShop! Me interesa su producto:\n\n*${nombre}*\n\n${precioTxt}\n\n¿Podrían darme más detalles?`;
-    
-    const url = `https://api.whatsapp.com/send?phone=${numeroLimpio}&text=${encodeURIComponent(msg)}`;
-
-    // 2. Detectar si es móvil para usar una redirección más agresiva
-    const isMobile = /iPhone|Android/i.test(navigator.userAgent);
-
-    if (isMobile) {
-        // En móviles, mejor cambiar la ubicación de la pestaña actual
-        window.location.href = url;
-    } else {
-        // En PC, abrimos pestaña nueva
-        window.open(url, '_blank');
-    }
 };
 
 
@@ -66,23 +32,94 @@ window.askWhatsApp = (nombre, precio, numeroWhats) => {
  * Filtra en tiempo real. 
  * No necesita pegarle a la BD en cada tecla porque ya tenemos los datos en state.
  */
-window.handleSearch = (val) => { 
-    state.searchTerm = val.toLowerCase(); 
-    state.currentPage = 1; // Siempre volvemos a la página 1 al buscar
-    render(); 
+window.handleSearch = (val) => {
+    
+    const searchTerm = val.toLowerCase();
+    const products = document.querySelectorAll('.product-card'); 
+
+    products.forEach(product => {
+        // Busca en todo el texto de la tarjeta (Nombre, descripción, precio, etc.)
+        const text = product.innerText.toLowerCase();
+        
+        if (text.includes(searchTerm)) {
+            product.style.display = ""; // Muestra el elemento (usa el display original)
+        } else {
+            product.style.display = "none"; // Oculta el elemento
+        }
+    });
+};
+
+/**
+ * Filtra productos por categoría basándose en el texto del botón o data-attributes
+ */
+window.filterByCategory = (categoryName) => {
+    const products = document.querySelectorAll('.product-card');
+    const buttons = document.querySelectorAll('.category-btn');
+
+    // Actualizar estilos visuales de los botones de filtro
+    buttons.forEach(btn => {
+        const isMatch = btn.innerText.trim() === categoryName || (categoryName === 'all' && btn.innerText.trim() === 'Todos');
+        if (isMatch) {
+            btn.classList.add('bg-purple-600', 'text-white', 'border-purple-600', 'shadow-[0_0_10px_rgba(168,85,247,0.5)]');
+        } else {
+            btn.classList.remove('bg-purple-600', 'text-white', 'border-purple-600', 'shadow-[0_0_10px_rgba(168,85,247,0.5)]');
+        }
+    });
+
+    products.forEach(product => {
+        const productCategories = product.getAttribute('data-categories')?.toLowerCase().split(',') || [];
+        if (categoryName === 'all' || productCategories.includes(categoryName.toLowerCase())) {
+            product.style.display = "";
+        } else {
+            product.style.display = "none";
+        }
+    });
+};
+
+const scrappCoin = async () => {
+    try {
+        const url = `../controller/dolarApi.php`;
+    
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Error en la petición");
+
+        const data = await response.json();
+
+        if (data.status === "success") {
+            // Ejemplo de uso:
+            console.log(`Dólar BCV: ${data.USD} Bs.`);
+            console.log(`USDT P2P: ${data.EURO} Bs.`);
+            return data;
+        }
+    }catch (e){
+        console.error(e);
+    }
+    
 };
 
 let tableActiveHtml = ``;
 let tableInactiveHtml = ``;
 
-
 async function getProductos() {
     try {
         // Consultamos al PHP que trae los datos de MySQL
-        const active = await fetch(`../controller/listaProductos.php?UID=${1}`);
+        const catizacion = await scrappCoin();
+        let content = {
+            UID: 1,
+            prices: catizacion
+        };
+        const active = await fetch(`../controller/listaProductos.php`,{
+            method: "POST",
+            body: JSON.stringify(content)
+        });
+
         const data = await active.text();
 
-        const inactive = await fetch(`../controller/listaProductos.php?UID=${0}`);
+        content.UID = 0;
+        const inactive = await fetch(`../controller/listaProductos.php`, {
+            method: "POST",
+            body: JSON.stringify(content)
+        });
         const inact = await inactive.text();
 
         // let tableActive = document.getElementById('activos');
@@ -115,10 +152,10 @@ function changeState () {
     if (estado.productState) {
         document.getElementById('inactivos').classList.remove('d-none');
         document.getElementById('activos').classList.add('d-none');
-        btn.textContent = "Productos inactivos";
+        btn.textContent = "Ver Productos activos";
         estado.productState = false;
     }else{
-        btn.textContent = "Productos activos";
+        btn.textContent = "Ver Productos inactivos";
         document.getElementById('activos').classList.remove('d-none');
         document.getElementById('inactivos').classList.add('d-none');
         estado.productState = true;
@@ -129,6 +166,7 @@ function changeState () {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    
     if (document.getElementById('loader')) {
         setTimeout(() => {
             document.getElementById('loader').style.display = 'none';
@@ -142,11 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
         getProductos();
     } 
 });
-
-
-
-
-
 
 async function editingProduct(ID) {
 
@@ -163,26 +196,24 @@ async function editingProduct(ID) {
     }
 }
 
+const createList = (body) =>  `
+    <div class="table table-responsive">
+        <table class="table table-striped mb-3 tableListModal" id="tableList">
+            ${body}
+        </table>
+    </div>`;
 
-function handleLogin() {
-    
+
+// --- CARGA DE DATOS EXTERNOS ---
+async function getList() {
     try {
-        
-        const usuario = document.getElementById('user').value;
-        const contraseña = document.getElementById('pass').value;
-        // Consultamos al PHP que trae los datos de MySQL
-        $.ajax({
-            type: "POST",
-            url: "./controller/login.php",
-            data: {user: usuario, pass: contraseña}, // Usa el objeto FormData en lugar de $(this).serialize(),
-            error: function () {
-                Swal.fire("¡Ocurrio un error inesperado", "No se pudo realizar la operación.", "error");
-            },
-            success: function (data) {
-                $('.msjFormSend').html(data);
-            }
-        });
 
+        // Consultamos al PHP que trae los datos de MySQL
+        const resp = await fetch('../controller/api.php');
+        const data = await resp.text();
+
+        document.getElementById('bodyModalList').innerHTML = createList(data);
+        dataTable("tableListModal");
 
     } catch (error) {
         console.error("Fallo de conexión con BD:", error);

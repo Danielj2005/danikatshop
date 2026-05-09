@@ -9,10 +9,12 @@ try {
     $method = $_SERVER['REQUEST_METHOD'];
 
     // --- OBTENER PRODUCTOS PARA EDITAR (GET) ---
-    if ($method === 'GET') {
-        $id = $_GET['UID'];
-
-        producto_model::lista($id);
+    if ($method === 'POST') {
+        $data = json_decode(file_get_contents("php://input"), true);
+        $id = $data['UID'];
+        // $prices = ["status" => 'success', "USD" => 500.46, "EURO" => 589.27];
+        $prices = $data['prices'];
+        producto_model::lista($id, $prices);
     }
     
 } catch(PDOException $e) {

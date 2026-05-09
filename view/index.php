@@ -107,14 +107,13 @@ if ($_SESSION['logged_in'] === true) { ?>
 
                                     
                                 <div class=" mb-1 ">
-                                    <button id="btnChangeState" onclick="changeState()" type="submit" class="col-12 btn btn-secondary">Productos activos</button>
+                                    <button id="btnChangeState" onclick="changeState()" type="submit" class="col-12 btn btn-secondary">Ver Productos inactivos</button>
                                 </div>
                                 <div class="text-center mb-2">
                                     <button type="button" data-bs-toggle="modal" data-bs-target="#registrar_producto" 
                                         class="mb-2 btn_modal btn btn-success"><i class="bi bi-plus-circle"></i>&nbsp;Registrar Nuevo
                                     </button>
                                 </div>
-
                             </div>
                         </div> 
                     
@@ -216,7 +215,7 @@ if ($_SESSION['logged_in'] === true) { ?>
                                 </div>
                                 <div class="col-12 col-md-6 mb-3">
                                     <label class="col-form-label">Precio (opcional)</label>
-                                    <input name="price" type="number" step="0.01" placeholder="Precio ($)" class="w-full mb-3 bg-slate-800 p-3 rounded-xl border-none text-white outline-none focus:ring-1 ring-purple-500">
+                                    <input name="price" value="0.00" type="number" min="0" step="0.01" placeholder="Precio ($)" class="w-full mb-3 bg-slate-800 p-3 rounded-xl border-none text-white outline-none focus:ring-1 ring-purple-500">
                                 </div>
                                 <div class="col-12 mb-3">
                                     <div class="category-selector">
@@ -277,9 +276,6 @@ if ($_SESSION['logged_in'] === true) { ?>
             </div>
         </div>
 
-
-        
-
         <div class="modal fade" id="modalList" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-theme="dark">
             <div id="modal_tamano" class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-2xl">
@@ -317,7 +313,6 @@ if ($_SESSION['logged_in'] === true) { ?>
         <script src="js/datatables.min.js"></script>
         <script src="js/dataTables.bootstrap5.min.js"></script>
         
-        <script type="text/javascript" src="js/select2.min.js"></script>
         <script type="text/javascript" src="js/initialApp.js"></script>
     </body>
 

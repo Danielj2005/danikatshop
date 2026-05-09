@@ -286,23 +286,33 @@ class modeloPrincipal {
         return $cadena_encripted;
     }
 
-    /*------------------- funcion para limpiar una cadena y encriptarla ---------------*/
-    public static function limpiar_encriptar($cadena){
-        $cadena_limpia = Self::limpiar_cadena($cadena);
-        $cadena_encripted = Self::encryption($cadena_limpia);
-        return $cadena_encripted;
-    }
-
-    public static function obtener_id_recien_registrado($id, $tabla){
-        $id = mysqli_fetch_array(modeloPrincipal::consultar("SELECT MAX($id) AS id FROM $tabla"));
-        $id = $id['id'];
-        return $id;
-    }
 
     public static function obtener_precio_dolar(){
-        $id_dolar = self::obtener_id_precio_dolar();
-        $precio_dolar_actual = mysqli_fetch_array(modeloPrincipal::consultar("SELECT dolar from dolar WHERE id_dolar = $id_dolar "))['dolar'];
-        return $precio_dolar_actual;
+        
+        $ch = curl_init();
+
+        // Configurar la URL y otras opciones de cURL
+        curl_setopt($ch, CURLOPT_URL, SERVERURL."controller/dolarApi.php");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Desactivar verificación SSL (no recomendado en producción)
+
+        // Ejecutar la solicitud
+        $response = curl_exec($ch);
+
+        // Verificar si hubo un error
+        if (curl_errno($ch)) {
+            echo 'Error en la URL: ' . curl_error($ch);
+            exit;
+        }
+
+        $data = json_decode($response, true);
+
+        $data = [
+            "USD" => $data['USD'],
+            "EURO" => $data['EURO']
+        ];
+
+        return $data;
     }
     
     public static function obtener_id_precio_dolar(){
@@ -314,34 +324,6 @@ class modeloPrincipal {
             return $precio_dolar_actual;
         }
     }
-    
-    public static function obtener_tiempo_inactividad(){
-        $obtener_tiempo_inactividad = mysqli_fetch_array(modeloPrincipal::consultar("SELECT tiempo_inactividad from configuracion"));
-        $tiempo_inactividad = $obtener_tiempo_inactividad['tiempo_inactividad'];
-        return $tiempo_inactividad;
-    }
-    
-    // funcion para formatear una array y evitar duplicados en el mismo
-    public static function format_array_of_data_with_dublicated($array){
-        return $array = array_values(array_unique($array));
-    }
-
-
-    public static function obtener_array_id_producto_recien_registrado($CP) {
-        $id_max = mysqli_fetch_array(modeloPrincipal::consultar("SELECT MAX(id_producto) AS id FROM producto"))['id'];
-
-        $idSearch = intval($id_max) - intval($CP);
-        
-        $dataFind = [];
-
-        $i = 0;
-        for ( $idSearch += 1;  $idSearch <= $id_max; $idSearch++ ) {
-            $dataFind[$i++] .= $idSearch;
-        }
-        $dataFind = array_values(array_unique($dataFind));
-
-        return $dataFind;
-    }
 
     public static function number_format_prices($precio){
         return number_format($precio, 2, ",", ".");
@@ -349,72 +331,10 @@ class modeloPrincipal {
 
     
     /*******************************************************************/ 
-    /*          Funciones dedicadas a Verificar datos                  */
-    /*******************************************************************/ 
-
-    public static function verificarModuloATrabajar (string $modulo) {
-        if (!isset($_POST["$modulo"])) {
-            return alert_model::alerta_simple("Ocurrio un error!","Ha ocurrido un error al procesar tu solicitud","error");
-        }
-    }
-    
-    /*******************************************************************/ 
     /*          Funciones dedicadas a sanear cadenas de texto          */
     /*******************************************************************/ 
     public static function primeraLetraMayus ($string):string { return ucwords(strtolower($string)); }
 
 
-    /*******************************************************************/ 
-    /*     Funciones dedicadas a resolver peticiones del usuario       */
-    /*******************************************************************/
-    
-    public static function buscar_datos_cliente ($dni) { 
-        $cedula = self::LimpiarCadenaTexto($dni);
-        $datos['existe'] = "0";
-
-        //Consulta
-        $cliente =  self::consultar ("SELECT * FROM cliente WHERE cedula ='$cedula'");
-        
-        if (mysqli_num_rows($cliente) < 1) {
-            $datos['error'] = "El cliente no existe.";
-            echo json_encode($datos);
-            exit();
-        }
-        $cliente = mysqli_fetch_array($cliente);
-
-        $datos['existe'] = "1";
-        $datos['id_cliente'] = $cliente['id_cliente'];
-        $datos['nombre'] = $cliente['nombre'];
-        $datos['telefono'] = $cliente['telefono'];
-        
-        $datos = json_encode($datos); 
-        echo $datos;
-    }
-
-
-
-    public static function verificar_permisos_requeridos ($permisos_requeridos) { 
-        
-        if (!isset($_SESSION['permisosRol']) || !is_array($_SESSION['permisosRol'])) {
-            return false;
-        }
-        // Iterar sobre los permisos requeridos
-        foreach ($permisos_requeridos as $permiso) {
-            // Si encuentra CUALQUIERA de los permisos en la sesión, activa la bandera y sale del bucle
-            if (array_key_exists($permiso, $_SESSION['permisosRol'])) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    public static function verificar_permiso_a_controlador ($string) {
-
-        if (!array_key_exists("$string", $_SESSION['permisos'])) {
-            // Si no tiene el permiso, denegar inmediatamente.
-            die('Error: Acceso no autorizado para generar ventas.'); 
-        }
-    }
 
 }

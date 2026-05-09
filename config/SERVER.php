@@ -8,13 +8,6 @@ const PASS="";
 
 const SGBD="mysql:host=".SERVER.";dbname=".DB;
 
-/*
-const HOST = 'sql204.infinityfree.com'; 
-const DB_NAME = 'if0_41737603_danikat_bd';
-const USERNAME = 'if0_41737603';
-const PASSWORD = '0iAMk3Kc0lb'; 
-*/
-
 const HOST = 'localhost'; 
 const DB_NAME = 'danikat_db';
 const USERNAME = 'root';

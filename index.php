@@ -2,56 +2,54 @@
 <html lang="es" class="dark">
 <?php 
 
+include_once "./config/APP.php"; // se incluye el model principal
 include_once "./model/mainModel.php"; // se incluye el model principal
 include_once "./model/productModel.php"; // se incluye el model producto
 
 ?>
 
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta content="E-comerce catálogo de productos" name="description">
-<meta content="E-comerce, catálogo de productos, ventas, pedidos, whatsapp" name="keywords">
-<meta content="Daniel Barrueta" name="author">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="E-comerce catálogo de productos" name="description">
+    <meta content="E-comerce, catálogo de productos, ventas, pedidos, whatsapp" name="keywords">
+    <meta content="Daniel Barrueta" name="author">
 
-<title>DanikatShop - Todo lo que buscas en un solo lugar </title>
+    <title>DanikatShop - Todo lo que buscas en un solo lugar </title>
 
 
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<script>
-    tailwind.config = {
-        darkMode: 'class',
-        theme: {
-            extend: {
-                colors: {
-                    slate: { 950: '#020617', },
-                    purple: { 400: '#c084fc', 500: '#a855f7', 600: '#9333ea', },
-                    fuchsia: { 500: '#d946ef', 600: '#c026d3', 700: '#a21caf', },
-                },
-                fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], },
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 950: '#020617', },
+                        purple: { 400: '#c084fc', 500: '#a855f7', 600: '#9333ea', },
+                        fuchsia: { 500: '#d946ef', 600: '#c026d3', 700: '#a21caf', },
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'], },
+                }
             }
         }
-    }
-</script>
+    </script>
 
-<!-- Favicons -->
-<link href="./view/img/logo.jpeg" rel="shortcut icon" type="image/x-icon">
+    <!-- Favicons -->
+    <link href="./view/img/logo.jpeg" rel="shortcut icon" type="image/x-icon">
 
-<!-- Custom fonts for this template-->
-<link href="./view/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-
-<link href="./view/css/app.css" rel="stylesheet">
-<link href="./view/css/bootstrap.min.css" rel="stylesheet">
-<link href="./view/css/bootstrap-icons.css" rel="stylesheet">
-<link href="./view/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-<link href="./view/css/sweetalert2.min.css" rel="stylesheet">
-<link href="./view/css/toastify.css" rel="stylesheet">
+    <link href="./view/css/app.css" rel="stylesheet">
+    <link href="./view/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./view/css/bootstrap-icons.css" rel="stylesheet">
+    <link href="./view/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="./view/css/sweetalert2.min.css" rel="stylesheet">
+    <link href="./view/css/toastify.css" rel="stylesheet">
 </head>
 
 <body id="" class="font-sans antialiased brand-bg">
+    
 	<nav class="sticky top-0 z-40 bg-slate-950 border-b border-purple-900/20 p-4">
         <div class="max-w-7xl mx-auto d-flex flex-col flex-md-row gap-4 justify-content-between align-items-center">
             <a href="./" class=" text-center md:text-left">
@@ -61,7 +59,7 @@ include_once "./model/productModel.php"; // se incluye el model producto
 
             <div class="relative w-full md:w-1/2">
                 <input type="text" placeholder="Buscar tortas, arreglos, manualidades..." 
-                    oninput="handleSearch()" value=""
+                    oninput="handleSearch(this.value)"
                     class="w-full bg-slate-900 border border-slate-700 rounded-full px-5 py-2 text-sm focus:ring-2 ring-purple-500 outline-none">
                 <i class="fas fa-search absolute right-4 top-2.5 text-slate-500"></i>
             </div>
@@ -90,14 +88,17 @@ include_once "./model/productModel.php"; // se incluye el model producto
     <div id="app" style="display:none !important;" class=" min-h-screen">
         <header class="py-12 px-6 text-center animate-fade-in">
             <h2 class="text-4xl font-bold italic text-white mb-2">Todo lo que buscas en un solo lugar</h2>
+            
+            <!-- Filtros por Categoría -->
+            <div id="category-filters" class="flex flex-wrap justify-center gap-3 mt-6">
+                <button onclick="filterByCategory('all')" class="category-btn px-4 py-1.5 rounded-full border border-purple-500/50 text-slate-300 text-sm transition-all hover:bg-purple-500/20 bg-purple-600 text-white border-purple-600 shadow-[0_0_10px_rgba(168,85,247,0.5)]">Todos</button>
+                <!-- Aquí puedes inyectar más botones dinámicamente o manualmente -->
+            </div>
         </header>
         <main class="max-w-7xl mx-auto p-6">
-            <?php  producto_model::obtenerCatalogo();  ?>
+            <?php producto_model::obtenerCatalogo(false); ?>
         </main>
     </div>
-
-
-
 
     <script src="view/js/bootstrap.min.js"></script>
     <!-- Custom scripts for all pages-->

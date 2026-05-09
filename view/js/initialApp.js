@@ -1,7 +1,4 @@
 // inicializar la libreria Select2 
-$('.select2').select2();
-
-
 
 const getIndicators = (i, active) => `
     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${i}" class="${active}" aria-current="${i == 0 ? 'true' : 'false'}" aria-label="Slide ${i + 1}"></button>
@@ -19,8 +16,7 @@ const getCarrusel = (items, i) => `
         <div class="carousel-inner" id="inner">
             ${items.map((img) => getInners(img, i === 0 ? 'active' : ''))}
         </div>
-        ${items.length > 1 
-        ?
+        ${items.length > 1 ?
             `<button id="indicator_prev" class="text-purple-900 carousel-control-prev carousel-dark" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon bg-primary p-4 rounded-2xl" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -29,9 +25,7 @@ const getCarrusel = (items, i) => `
                 <span class="bg-primary carousel-control-next-icon p-4 rounded-2xl" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>` 
-        : 
-            ``
-        }
+        : ''}
     </div>
 `;
 

@@ -160,6 +160,9 @@ if ($id == null || empty($_SESSION["id_producto"])) {
 
 
 
+    <script type="text/javascript" >
+        const index = false;
+    </script>
     <script src="view/js/bootstrap.min.js"></script>
     <!-- Custom scripts for all pages-->
     <script src="view/js/sweetalert2.min.js"></script>

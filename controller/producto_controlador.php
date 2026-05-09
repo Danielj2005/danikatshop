@@ -6,24 +6,23 @@ require_once "../model/alertModel.php"; // se incluye el model de alertas
 require_once "../model/productModel.php"; // se incluye el model de categorias
 
 // modulo a trabajar
-modeloPrincipal::verificarModuloATrabajar("modulo");
-
 $modulo = modeloprincipal::limpiar_cadena($_POST["modulo"]);
 
 // verificar si el modulo es guardar
 if($modulo === 'Guardar'){
     
     $producto = $_POST['producto'];
-    $price = $_POST['price'] ?? 0.00; // si no se envía un precio, se asigna un valor por defecto de 1.00
-    $price = number_format($price, 2, '.', ',');
+    $price = empty($_POST['price']) ? 0.00 : $_POST['price']; // si no se envía un precio, se asigna un valor por defecto de 1.00
     $category = $_POST['category'];
     $image = $_POST['image'];
     $desc = $_POST['desc'];
 
     $uploaded_paths = [];
     $uploaded_hashes = [];
-    $UID = modeloPrincipal::generar_uuid();
 
+    $id_producto = mysqli_fetch_assoc(modeloPrincipal::consultar("SELECT  MAX(id) + 1 AS id FROM productos"))['id'];
+    
+    
     // 1. Procesar los archivos si existen
     if (isset($_FILES['image'])) {
         $files = $_FILES['image'];
@@ -39,7 +38,7 @@ if($modulo === 'Guardar'){
                 // Obtenemos la extensión del nombre original (ej: "foto.JPG" -> "jpg")
                 $extension = strtolower(pathinfo($files['name'][$key], PATHINFO_EXTENSION));
 
-                $name = $UID . '_' . $i++ . "." . $extension;
+                $name = $id_producto . '_' . $i++ . "." . $extension;
 
                 $target = "../storage/$name";
                 
@@ -51,15 +50,21 @@ if($modulo === 'Guardar'){
                 }
             }
         }
+
+        if (empty($uploaded_paths)) {
+            alert_model::alerta_simple("¡Ocurrió un error!", "No se pudo procesar ninguna imagen válida. Por favor, asegúrate de seleccionar archivos permitidos y vuelve a intentarlo.", "error");
+            exit();
+        }
     }
 
     // 2. Convertir el array de rutas y hashes a un solo string para la BD
     $images_string = implode(',', $uploaded_paths);
     $image_hash_string = implode(',', $uploaded_hashes);
-    
+
     // Se verifica que no se hayan recibido campos vacíos.
-    modeloPrincipal::validar_campos_vacios([$producto, $category, $desc]);
-    
+    modeloPrincipal::validar_campos_vacios([$producto, $price, $category, $desc]);
+    $price = number_format($price, 2, '.', ',');
+
     // se valida el campo nombre del producto
     if (modeloPrincipal::verificar_datos("[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9 ]{3,200}", $producto)) {
         alert_model::alerta_simple("¡Ocurrió un error!","El nombre del producto $producto no cumple con el formato establecido","error");
@@ -91,7 +96,9 @@ if($modulo === 'Guardar'){
         alert_model::alert_reg_success();
         exit();
     } catch (Exception $e) {
-        alert_model::alert_reg_error();
+        // alert_model::alert_reg_error();
+        alert_model::alerta_simple("$e","ocurrio un error al registrar las categorías de un producto.","error");
+
         exit();
     }
     
@@ -131,7 +138,6 @@ if($modulo == 'Modificar'){
 
     $uploaded_paths = [];
     $uploaded_hashes = [];
-    $UID = modeloPrincipal::generar_uuid();
 
     // 1. Procesar los archivos si existen
     if (isset($_FILES['image'])) {
@@ -152,7 +158,7 @@ if($modulo == 'Modificar'){
                 // Obtenemos la extensión del nombre original (ej: "foto.JPG" -> "jpg")
                 $extension = strtolower(pathinfo($files['name'][$key], PATHINFO_EXTENSION));
 
-                $name = $UID . '_' . $i++ . "." . $extension;
+                $name = $id_producto . '_' . $i++ . "." . $extension;
 
                 $target = "../storage/$name";
                 
@@ -197,17 +203,17 @@ if($modulo == 'Modificar'){
             exit();
         }
 
-        // if (is_array($category) && count($category) > 0) {
-        //     modeloPrincipal::DeleteSQL("categorias_productos", "producto_id = $id_producto");
-        //     foreach ($category as $key) {
-        //         $categoria_id = modeloPrincipal::decryptionId($key);
-        //         $registrar_categoria = modeloPrincipal::InsertSQL("categorias_productos", "categoria_id, producto_id", "$categoria_id, $id_producto");
-        //         if (!$registrar_categoria) {
-        //             alert_model::alerta_simple("¡Ocurrió un error!","ocurrio un error al registrar las categorías de un producto.","error");
-        //             exit();
-        //         }
-        //     }
-        // }
+        if (is_array($category) && count($category) > 0) {
+            modeloPrincipal::DeleteSQL("categorias_productos", "producto_id = $id_producto");
+            foreach ($category as $key) {
+                $categoria_id = modeloPrincipal::decryptionId($key);
+                $registrar_categoria = modeloPrincipal::InsertSQL("categorias_productos", "categoria_id, producto_id", "$categoria_id, $id_producto");
+                if (!$registrar_categoria) {
+                    alert_model::alerta_simple("¡Ocurrió un error!","ocurrio un error al registrar las categorías de un producto.","error");
+                    exit();
+                }
+            }
+        }
 
         alert_model::alert_mod_success();
         exit();
