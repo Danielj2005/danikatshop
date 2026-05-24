@@ -101,8 +101,8 @@ if ($_SESSION['logged_in'] === true) { ?>
 
                     <div id="" class="text-black bg-white p-6 rounded-3xl border border-slate-800 shadow-2xl justify-content-between align-items-center">
                         
-                        <div class="text-start col-12 fs-4">
-                            <div class="text-center mb-2 d-flex justify-content-between">
+                        <div class="text-start col-12 fs-4 mb-5">
+                            <div class="text-center d-flex justify-content-between">
                                 <h3 class="text-lg font-bold text-black mb-4 ">Productos en Línea (<?=  mysqli_num_rows($catalogo); ?>)</h3>
 
                                     
@@ -296,23 +296,24 @@ if ($_SESSION['logged_in'] === true) { ?>
 
         <div class="msjFormSend"></div>
         <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <!-- Custom scripts for all pages-->
-        <script src="js/sweetalert2.min.js"></script>
-        <script src="js/SendForm.js"></script>
+        <script type="text/javascript" src="js/sweetalert2.min.js"></script>
+        <script type="text/javascript" src="js/SendForm.js"></script>
         <script type="text/javascript" >
             const index = true;
         </script>
-        <script src="js/app.js"></script>
-        <script src="js/validator.js"></script>
-        <script src="js/tiempo_inactividad.js"></script>
-        <script src="js/cerrar_sesion.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
+        <script type="text/javascript" src="js/validator.js"></script>
+        <script type="text/javascript" src="js/tiempo_inactividad.js"></script>
+        <script type="text/javascript" src="js/cerrar_sesion.js"></script>
         
         <!-- datatable js files -->
-        <script src="js/jquery.dataTables.min.js"></script>
-        <script src="js/datatables.min.js"></script>
-        <script src="js/dataTables.bootstrap5.min.js"></script>
+        <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="js/datatables.min.js"></script>
+        <script type="text/javascript" src="js/dataTables.bootstrap5.min.js"></script>
         
+        <script type="text/javascript" src="js/carousell.js"></script>
         <script type="text/javascript" src="js/initialApp.js"></script>
     </body>
 

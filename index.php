@@ -50,22 +50,22 @@ include_once "./model/productModel.php"; // se incluye el model producto
 
 <body id="" class="font-sans antialiased brand-bg">
     
-	<nav class="sticky top-0 z-40 bg-slate-950 border-b border-purple-900/20 p-4">
+	<nav class=" top-0 z-40 bg-slate-950 border-b border-purple-900/20 p-4">
         <div class="max-w-7xl mx-auto d-flex flex-col flex-md-row gap-4 justify-content-between align-items-center">
-            <a href="./" class=" text-center md:text-left">
+            <a href="./" class="mb-3 text-center md:text-left sm:hidden">
                 <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-fuchsia-500 bg-clip-text text-transparent">DanikatShop</h1>
                 <p class="text-[10px] text-slate-500 uppercase tracking-widest">Todo lo que buscas en un solo lugar</p>
             </a>
 
-            <div class="relative w-full md:w-1/2">
+            <div class="sticky mb-3 position-relative d-flex align-items-center w-full">
                 <input type="text" placeholder="Buscar tortas, arreglos, manualidades..." 
                     oninput="handleSearch(this.value)"
-                    class="w-full bg-slate-900 border border-slate-700 rounded-full px-5 py-2 text-sm focus:ring-2 ring-purple-500 outline-none">
-                <i class="fas fa-search absolute right-4 top-2.5 text-slate-500"></i>
+                    class="w-full bg-slate-900 border border-slate-700 rounded-full px-4 py-2 text-sm focus:ring-2 ring-purple-500 outline-none">
+                <i class="bi bi-search absolute right-4 top-2 text-slate-500"></i>
             </div>
 
-            <div class="flex gap-4 items-center">
-                <a href="login.php" class="text-slate-700 hover:text-purple-500 transition"><i class="fs-3 fas fa-user-lock"></i></a> 
+            <div class="mb-3 flex gap-4 items-center">
+                <a href="login.php" class="text-slate-700 hover:text-purple-500 transition"><i class="fs-3 bi bi-person-circle"></i></a> 
             </div>
         </div>
     </nav>
@@ -95,17 +95,33 @@ include_once "./model/productModel.php"; // se incluye el model producto
                 <!-- Aquí puedes inyectar más botones dinámicamente o manualmente -->
             </div>
         </header>
-        <main class="max-w-7xl mx-auto p-6">
-            <?php producto_model::obtenerCatalogo(false); ?>
+        <main class="max-w-7xl mx-auto p-6" id="main">
+            <div id="cards" class="grid gap-4 justify-around items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3"></div>
         </main>
     </div>
+    
+    <!-- Modal -->
+    <div data-bs-theme="dark" class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content bg-slate-900 rounded-3xl border border-slate-800 shadow-2xl">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles de producto</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 modal-body" id="modalBody">
 
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="view/js/bootstrap.min.js"></script>
     <!-- Custom scripts for all pages-->
     <script src="view/js/sweetalert2.min.js"></script>
         <script type="text/javascript" >
             const index = false;
         </script>
+    <script src="view/js/capitalize.js"></script>
+    <script src="view/js/catalogo.js"></script>
     <script src="view/js/app.js"></script>
 </body>
 

@@ -16,12 +16,12 @@ const DanikatAlert = Swal.mixin({
     color: '#f8fafc'
 });
 
+const products = [];
+let categorys = [];
+let categoriasProductos = [];
 
 let estado = {
-    loading: true, // Empezamos cargando
     productState: true,
-    selectedProduct: null,
-    editingId: null
 };
 
 
@@ -76,6 +76,15 @@ window.filterByCategory = (categoryName) => {
     });
 };
 
+const addCategorias = () => {
+
+    const btn = `<button onclick="filterByCategory('all')" class="category-btn px-4 py-1.5 rounded-full border border-purple-500/50 text-slate-300 text-sm transition-all hover:bg-purple-500/20 bg-purple-600 text-white border-purple-600 shadow-[0_0_10px_rgba(168,85,247,0.5)]">Todos</button>
+    `;
+};
+
+
+
+
 const scrappCoin = async () => {
     try {
         const url = `../controller/dolarApi.php`;
@@ -87,8 +96,8 @@ const scrappCoin = async () => {
 
         if (data.status === "success") {
             // Ejemplo de uso:
-            console.log(`Dólar BCV: ${data.USD} Bs.`);
-            console.log(`USDT P2P: ${data.EURO} Bs.`);
+            // console.log(`Dólar BCV: ${data.USD} Bs.`);
+            // console.log(`USDT P2P: ${data.EURO} Bs.`);
             return data;
         }
     }catch (e){
@@ -165,22 +174,6 @@ function changeState () {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    
-    if (document.getElementById('loader')) {
-        setTimeout(() => {
-            document.getElementById('loader').style.display = 'none';
-            if (document.getElementById('app')) {
-                document.getElementById('app').style.display = 'block';
-            }
-        }, 1500);
-    }
-
-    if (index) {
-        getProductos();
-    } 
-});
-
 async function editingProduct(ID) {
 
     try {
@@ -219,3 +212,86 @@ async function getList() {
         console.error("Fallo de conexión con BD:", error);
     }
 }
+
+
+
+async function getCatalogo() {
+    try {
+        const withoutProducts = `<div class="grid grid-cols-1 gap-4"> 
+        <div class="bg-red-700 border border-slate-800 rounded-[2rem] transition-all duration-500 animate-slide-up">
+            <div class="p-4 text-center"> 
+                <i class="bi bi-exclamation-triangle-fill fs-1"></i>
+                <h3 class="h1 text-center text-white font-semibold mb-1 truncate mb-4">En este momento no hay productos disponibles.</h3> 
+            </div> </div> </div>`;
+
+        // Consultamos al PHP que trae los datos de MySQL
+        const response = await fetch('./controller/catalogo.php');
+        if (!response.ok) throw new Error("Error en la petición");
+
+        const data = await response.json();
+        if (data.status === "success") {
+            // data.productos ya viene como objeto si ajustaste el PHP
+            let productos = typeof data.productos === 'string' ? JSON.parse(data.productos) : data.productos;
+            categoriasProductos.push(JSON.parse(data.productosCategorias));
+
+            products.push(productos);
+            categorys = data.categorias;
+
+            const filtroCategorias = document.getElementById('category-filters');
+            categorys.forEach(categoria => {
+                const btn = document.createElement('button');
+                btn.className = "category-btn px-4 py-1.5 rounded-full border border-purple-500/50 text-slate-300 text-sm transition-all hover:bg-purple-500/20";
+                btn.textContent = categoria;
+                btn.addEventListener('click', () => filterByCategory(categoria));
+                filtroCategorias.appendChild(btn);
+            });
+
+            // .join('') elimina las comas entre las cards
+            document.getElementById('cards').innerHTML = productos.map((p) => createCatalogo(p.id, p.nombre, p.precio, p.images, p.categorias)).join('');
+            
+        }else{
+            
+            document.getElementById('main').innerHTML = withoutProducts;
+        }
+
+    } catch (error) {
+        console.error("Error al cargar los productos:", error);
+    }
+}
+
+const detallesProductoById = async (id) => {
+    try {
+        const modalBody = document.getElementById('modalBody');
+        modalBody.innerHTML = ``;
+
+        const resp = await fetch(`./controller/producto.php?UID=${id}&details=true`);
+        const data = await resp.text();
+        
+        modalBody.innerHTML = data;
+
+    } catch (error) {
+        console.error("No se pudo obtener los detallse del producto:", error);
+    }
+};
+
+// inicializacion de funciones
+
+document.addEventListener('DOMContentLoaded', () => {
+    
+    if (document.getElementById('loader')) {
+        setTimeout(() => {
+            document.getElementById('loader').style.display = 'none';
+            if (document.getElementById('app')) {
+                document.getElementById('app').style.display = 'block';
+            }
+        }, 1500);
+    }
+
+
+    
+
+    if (index) { getProductos(); } 
+
+    else{ getCatalogo(); }
+
+});

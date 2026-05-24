@@ -1,33 +1,3 @@
-// inicializar la libreria Select2 
-
-const getIndicators = (i, active) => `
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${i}" class="${active}" aria-current="${i == 0 ? 'true' : 'false'}" aria-label="Slide ${i + 1}"></button>
-`;
-
-const getInners = (file, active) => `
-    <div class="carousel-item ${active}">
-        <img src=".${file}" style="width: 35rem; height:35rem; " class="d-block" alt="...">
-    </div>
-`;
-
-const getCarrusel = (items, i) => `
-    <div id="carouselExampleIndicators" class="carousel slide carousel-dark">
-
-        <div class="carousel-inner" id="inner">
-            ${items.map((img) => getInners(img, i === 0 ? 'active' : ''))}
-        </div>
-        ${items.length > 1 ?
-            `<button id="indicator_prev" class="text-purple-900 carousel-control-prev carousel-dark" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon bg-primary p-4 rounded-2xl" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button id="indicator_next" class="carousel-control-next carousel-dark" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                <span class="bg-primary carousel-control-next-icon p-4 rounded-2xl" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>` 
-        : ''}
-    </div>
-`;
 
 function verImagen(url, producto) {
     let i = 0;
@@ -40,6 +10,8 @@ function verImagen(url, producto) {
         confirmButtonText: 'Cerrar'
     });
 }
+
+
 function dataTable(classTable = "example"){
     var t = $(`.${classTable}`).DataTable( { 
         language: {

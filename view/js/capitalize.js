@@ -1,0 +1,4 @@
+function capitalize(str) {
+    if (!str) return ''; // handle empty strings
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}

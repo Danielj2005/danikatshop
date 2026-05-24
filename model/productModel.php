@@ -37,6 +37,7 @@ class producto_model extends modeloPrincipal {
                                             </span>
                                             
                                         </div>
+
                                         <div class="backdrop-blur-md bg-black/60 border border-white/10 bottom-4 left-4 px-4 py-1 relative rounded-full">
         
                                             <span class="text-sm font-bold text-white">
@@ -49,6 +50,7 @@ class producto_model extends modeloPrincipal {
                                                 <?= "€ ".self::formatnumber("VES",$mostrar["precio"] * $prices['EURO']); ?>
                                             </span>
                                         </div>
+                                        
                                         <div class="hidden backdrop-blur-md bg-black/60 border border-white/10 bottom-4 left-4 px-4 py-1 relative rounded-full">
                                             <span class="text-sm font-bold text-white">
                                                 <?= "USDT ".self::formatnumber("VES",$mostrar["precio"] * ($prices['USD'] * 1.3 )); ?>
