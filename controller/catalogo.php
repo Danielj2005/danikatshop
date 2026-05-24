@@ -16,7 +16,7 @@ try {
         $stmt_categorias = modeloPrincipal::consultar("SELECT nombre FROM categorias WHERE state = 1 ORDER BY nombre ASC");
         $categorias_lista = array_column(mysqli_fetch_all($stmt_categorias, MYSQLI_ASSOC), 'nombre');
         
-        $productosCategorias = [];
+        $productosCategorias = []; 
 
         $productos = [];
         foreach ($catalogo as $producto) {

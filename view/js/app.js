@@ -239,11 +239,16 @@ async function getCatalogo() {
 
             const filtroCategorias = document.getElementById('category-filters');
             categorys.forEach(categoria => {
+                const li = document.createElement('li');
+                li.className = "dropdown-item";
+
                 const btn = document.createElement('button');
                 btn.className = "category-btn px-4 py-1.5 rounded-full border border-purple-500/50 text-slate-300 text-sm transition-all hover:bg-purple-500/20";
                 btn.textContent = categoria;
                 btn.addEventListener('click', () => filterByCategory(categoria));
-                filtroCategorias.appendChild(btn);
+
+                li.appendChild(btn);
+                filtroCategorias.appendChild(li);
             });
 
             // .join('') elimina las comas entre las cards
@@ -286,12 +291,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 1500);
     }
+    const restarURL = window.location.href.split("/").length - 1;
 
-
+    const URL = window.location.href.split("/")[restarURL] == '' ? "index.php" : window.location.href.split("/")[restarURL];
     
 
-    if (index) { getProductos(); } 
+    if (index && URL == "index.php") { getProductos() };
 
-    else{ getCatalogo(); }
+    if (!index && URL == "index.php") { getCatalogo() };
 
 });

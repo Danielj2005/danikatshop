@@ -36,7 +36,7 @@ include_once "./model/productModel.php"; // se incluye el model producto
             }
         }
     </script>
-
+    
     <!-- Favicons -->
     <link href="./view/img/logo.jpeg" rel="shortcut icon" type="image/x-icon">
 
@@ -50,14 +50,14 @@ include_once "./model/productModel.php"; // se incluye el model producto
 
 <body id="" class="font-sans antialiased brand-bg">
     
-	<nav class=" top-0 z-40 bg-slate-950 border-b border-purple-900/20 p-4">
+	<nav class="sticky top-0 z-40 bg-slate-950 border-b border-purple-900/20 p-4">
         <div class="max-w-7xl mx-auto d-flex flex-col flex-md-row gap-4 justify-content-between align-items-center">
-            <a href="./" class="mb-3 text-center md:text-left sm:hidden">
+            <a href="./" class="d-md-block d-none mb-3 text-center md:text-left sm:hidden">
                 <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-fuchsia-500 bg-clip-text text-transparent">DanikatShop</h1>
                 <p class="text-[10px] text-slate-500 uppercase tracking-widest">Todo lo que buscas en un solo lugar</p>
             </a>
 
-            <div class="sticky mb-3 position-relative d-flex align-items-center w-full">
+            <div class="mb-3 position-relative d-flex align-items-center w-full">
                 <input type="text" placeholder="Buscar tortas, arreglos, manualidades..." 
                     oninput="handleSearch(this.value)"
                     class="w-full bg-slate-900 border border-slate-700 rounded-full px-4 py-2 text-sm focus:ring-2 ring-purple-500 outline-none">
@@ -90,9 +90,17 @@ include_once "./model/productModel.php"; // se incluye el model producto
             <h2 class="text-4xl font-bold italic text-white mb-2">Todo lo que buscas en un solo lugar</h2>
             
             <!-- Filtros por Categoría -->
-            <div id="category-filters" class="flex flex-wrap justify-center gap-3 mt-6">
-                <button onclick="filterByCategory('all')" class="category-btn px-4 py-1.5 rounded-full border border-purple-500/50 text-slate-300 text-sm transition-all hover:bg-purple-500/20 bg-purple-600 text-white border-purple-600 shadow-[0_0_10px_rgba(168,85,247,0.5)]">Todos</button>
-                <!-- Aquí puedes inyectar más botones dinámicamente o manualmente -->
+            <div class="dropdown d-none" data-bs-theme="dark">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-sliders" ></i>
+                    Filtros 
+                </button>
+                
+                <ul id="category-filters" class="dropdown-menu">
+                    <li class="dropdown-item" >
+                        <button onclick="filterByCategory('all')" class="category-btn px-4 py-1.5 rounded-full border border-purple-500/50 text-slate-300 text-sm transition-all hover:bg-purple-500/20 bg-purple-600 text-white border-purple-600 shadow-[0_0_10px_rgba(168,85,247,0.5)]">Todos</button>
+                    </li>
+                </ul>
             </div>
         </header>
         <main class="max-w-7xl mx-auto p-6" id="main">
@@ -114,7 +122,7 @@ include_once "./model/productModel.php"; // se incluye el model producto
             </div>
         </div>
     </div>
-    <script src="view/js/bootstrap.min.js"></script>
+    <script src="view/js/bootstrap.bundle.min.js"></script>
     <!-- Custom scripts for all pages-->
     <script src="view/js/sweetalert2.min.js"></script>
         <script type="text/javascript" >
