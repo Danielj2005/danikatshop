@@ -194,13 +194,13 @@ class producto_model extends modeloPrincipal {
                         <form action="../controller/producto_controlador.php" method="post" class="SendFormAjax" data-type-form="update_estate" >
                             <input type="hidden" name="modulo" value="activo">          
                             <input type="hidden" name="id" value="<?= modeloPrincipal::encryptionId($mostrar['id']) ?>">
-                            <button class="btn btn-success bi-check-circle" title="state de la categoría">&nbsp;Activo</button>
+                            <button class="btn btn-danger bi bi-x-circle" title="estado del producto" type="submit"> </button>
                         </form>
-                    <?php } else { ?>
+                        <?php } else { ?>
                         <form action="../controller/producto_controlador.php" method="post" class="SendFormAjax" data-type-form="update_estate" >
                             <input type="hidden" name="modulo" value="inactivo">          
                             <input type="hidden" name="id" value="<?= modeloPrincipal::encryptionId($mostrar['id']) ?>">
-                            <button class="btn btn-danger bi-x-circle" title="estado del producto" type="submit">&nbsp;Inactivo</button>
+                            <button class="btn btn-success bi bi-check-circle" title="state de la categoría"> </button>
                         </form>
                     <?php }  ?>
                 </td>

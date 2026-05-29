@@ -1,13 +1,5 @@
 <!DOCTYPE html>
 <html lang="es" class="dark">
-<?php 
-
-include_once "./config/APP.php"; // se incluye el model principal
-include_once "./model/mainModel.php"; // se incluye el model principal
-include_once "./model/productModel.php"; // se incluye el model producto
-
-?>
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -122,15 +114,14 @@ include_once "./model/productModel.php"; // se incluye el model producto
             </div>
         </div>
     </div>
-    <script src="view/js/bootstrap.bundle.min.js"></script>
+
+
     <!-- Custom scripts for all pages-->
+    <script src="view/js/bootstrap.bundle.min.js"></script>
     <script src="view/js/sweetalert2.min.js"></script>
-        <script type="text/javascript" >
-            const index = false;
-        </script>
-    <script src="view/js/capitalize.js"></script>
+    <script src="view/js/DanikatAlert.js"></script>
     <script src="view/js/catalogo.js"></script>
-    <script src="view/js/app.js"></script>
+    <script src="view/js/index.js"></script>
 </body>
 
 </html>

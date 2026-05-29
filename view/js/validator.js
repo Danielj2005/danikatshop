@@ -62,32 +62,3 @@ window.handleLogin = async (e) => {
     // ... resto de tu fetch al api.php
 };
 
-
-window.handleProductSubmit = async (e) => {
-    e.preventDefault();
-    
-    const productData = {
-        name: e.target.name.value,
-        price: e.target.price.value || null,
-        category: e.target.category.value,
-        desc: e.target.desc.value,
-        imgs: e.target.imgs.value
-    };
-
-    const validation = Validator.product(productData);
-
-    if (!validation.isValid) {
-        
-        DanikatAlert.fire({
-            title: "¡Ocurrio un Error!",
-            text: "Errores en el formulario:\n- " + validation.errors.join("\n- "),
-            icon: "error",
-            confirmButtonText: "OK",
-        });
-        return;
-    }
-
-    // Si pasa la validación, procedemos al fetch
-    console.log("Datos validados, enviando a la base de datos...");
-    // ... tu fetch aquí
-};

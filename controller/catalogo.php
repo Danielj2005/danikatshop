@@ -1,8 +1,8 @@
 <?php
 
+require_once "../config/SERVER.php";
 require_once "../model/mainModel.php"; 
 require_once "../model/productModel.php"; 
-require_once "../config/SERVER.php";
 
 try {
 
@@ -44,8 +44,6 @@ try {
 
         }
 
-
-
         $data = [
             "status" => "success",
             "productos" => json_encode($productos),
@@ -53,9 +51,6 @@ try {
             "productosCategorias" => json_encode($productosCategorias),
             "categorias" => $categorias_lista
         ];
-
-
-
 
         echo json_encode($data);
 

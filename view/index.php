@@ -1,6 +1,7 @@
 <?php 
 session_start();
 
+require_once "../config/SERVER.php";
 require_once "../model/mainModel.php"; // se incluye el model principal
 require_once "../model/productModel.php"; // se incluye el model producto
 require_once "../model/categoryModel.php"; // se incluye el model de categorias
@@ -103,7 +104,7 @@ if ($_SESSION['logged_in'] === true) { ?>
                         
                         <div class="text-start col-12 fs-4 mb-5">
                             <div class="text-center d-flex justify-content-between">
-                                <h3 class="text-lg font-bold text-black mb-4 ">Productos en Línea (<?=  mysqli_num_rows($catalogo); ?>)</h3>
+                                <h3 class="text-lg font-bold text-succes mb-4 ">Productos en Línea (<?=  mysqli_num_rows($catalogo); ?>)</h3>
 
                                     
                                 <div class=" mb-1 ">
@@ -118,7 +119,7 @@ if ($_SESSION['logged_in'] === true) { ?>
                         </div> 
                     
                         <div id="activos" class="table-responsive overflow-hidden overflow-x-auto">
-                            
+                            <h3 class="fs-1 fw-bold mb-3">Productos Activos &nbsp;<i class="text-success bi bi-check-circle"></i></h3>
                             <table class="tableActivos mb-3 no-footer table table-group-divider table-hover table-striped" id="tableActivos">
                                 <thead>
                                     <tr class="text-black">
@@ -127,7 +128,7 @@ if ($_SESSION['logged_in'] === true) { ?>
                                         <th class="col text-center" scope="col">Precio ($)</th>
                                         <th class="col text-center" scope="col">Imagen</th>
                                         <th class="col text-center" scope="col">Editar</th>
-                                        <th class="col text-center" scope="col">Estado</th>
+                                        <th class="col text-center" scope="col">Desactivar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -137,6 +138,7 @@ if ($_SESSION['logged_in'] === true) { ?>
                         </div>
 
                         <div  id="inactivos" class="d-none table-responsive overflow-hidden overflow-x-auto">
+                            <h3 class="fs-1 fw-bold mb-3">Productos Inactivos &nbsp;<i class="text-danger bi bi-x-circle"></i></h3>
 
                             <table class="tableInactivos mb-3 no-footer table table-group-divider table-hover table-striped" id="tableInactivos">
                                 <thead>
@@ -146,7 +148,7 @@ if ($_SESSION['logged_in'] === true) { ?>
                                         <th class="col text-center" scope="col">Precio ($)</th>
                                         <th class="col text-center" scope="col">Imagen</th>
                                         <th class="col text-center" scope="col">Editar</th>
-                                        <th class="col text-center" scope="col">Estado</th>
+                                        <th class="col text-center" scope="col">Activar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -295,16 +297,14 @@ if ($_SESSION['logged_in'] === true) { ?>
 
 
         <div class="msjFormSend"></div>
+
         <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <!-- Custom scripts for all pages-->
         <script type="text/javascript" src="js/sweetalert2.min.js"></script>
+        <script type="text/javascript" src="js/DanikatAlert.js"></script>
         <script type="text/javascript" src="js/SendForm.js"></script>
-        <script type="text/javascript" >
-            const index = true;
-        </script>
-        <script type="text/javascript" src="js/app.js"></script>
-        <script type="text/javascript" src="js/validator.js"></script>
+                
         <script type="text/javascript" src="js/tiempo_inactividad.js"></script>
         <script type="text/javascript" src="js/cerrar_sesion.js"></script>
         
@@ -313,6 +313,8 @@ if ($_SESSION['logged_in'] === true) { ?>
         <script type="text/javascript" src="js/datatables.min.js"></script>
         <script type="text/javascript" src="js/dataTables.bootstrap5.min.js"></script>
         
+        <script type="text/javascript" src="js/dolar.js"></script>
+        <script type="text/javascript" src="js/productos.js"></script>
         <script type="text/javascript" src="js/carousell.js"></script>
         <script type="text/javascript" src="js/initialApp.js"></script>
     </body>

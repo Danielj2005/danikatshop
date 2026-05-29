@@ -6,17 +6,14 @@ const DB="danikat_db";
 const USER="root";
 const PASS="";
 
-const SGBD="mysql:host=".SERVER.";dbname=".DB;
-
-const HOST = 'localhost'; 
-const DB_NAME = 'danikat_db';
-const USERNAME = 'root';
-const PASSWORD = '';
+const PHONE = "584244189963";
 
 /*----------  Datos de la encriptacion (No modificar) ----------*/
 const METHOD="AES-256-CBC";
-const SECRET_KEY='';
+const SECRET_KEY = 'CTS_PRO_2026_SECURITY_99';
 const SECRET_IV='102791';
 
-$conn = new PDO("mysql:host=".HOST.";dbname=".DB_NAME, USERNAME, PASSWORD);
+/*----------  Datos de la conexión PDO (No modificar) ----------*/
+const DBA="mysql:host=".SERVER.";dbname=".DB;
+$conn = new PDO(DBA, USER, PASS);
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

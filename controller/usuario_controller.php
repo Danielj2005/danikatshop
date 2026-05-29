@@ -1,5 +1,6 @@
 <?php 
 session_start();
+require_once "../config/SERVER.php";
 
 include_once "../include/modelos_include.php"; // se incluyen los modelos necesarios para la vista
 

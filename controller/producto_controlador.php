@@ -1,6 +1,8 @@
 <?php 
 session_start();
 
+require_once "../config/SERVER.php";
+
 require_once "../model/mainModel.php"; // se incluye el model principal
 require_once "../model/alertModel.php"; // se incluye el model de alertas
 require_once "../model/productModel.php"; // se incluye el model de categorias
@@ -38,12 +40,14 @@ if($modulo === 'Guardar'){
                 // Obtenemos la extensión del nombre original (ej: "foto.JPG" -> "jpg")
                 $extension = strtolower(pathinfo($files['name'][$key], PATHINFO_EXTENSION));
 
-                $name = $id_producto . '_' . $i++ . "." . $extension;
+                $name = $id_producto.'_'.$i.".$extension";
+                $i++;
 
                 $target = "../storage/$name";
                 
                 if (move_uploaded_file($tmp_name, $target)) {
                     $target = "./storage/$name";
+                    $file_hash = md5_file($target);
 
                     $uploaded_paths[] = $target;
                     $uploaded_hashes[] = $file_hash;

@@ -2,27 +2,12 @@
 error_reporting(E_PARSE);
 date_default_timezone_set('America/Caracas');
 
-// Definimos contantes podemos utilizar define("NOMBRE", "valor");
-// tambien podemos utilizar const NOMBRE="valor";
-
-const SERVER = "localhost"; // Servidor de mysql
-const DB = "danikat_db"; // Nombre de la base de datos
-const USER = "root";  // Nombre de usuario de mysql
-const PASSWORD = ""; // Contraseña de myqsl
-const PHONE = "584244189963"; // Contraseña de myqsl
-
-/*----------  Datos de la encriptacion (No modificar) ----------*/
-const METHOD="AES-256-CBC";
-const SECRET_KEY = 'CTS_PRO_2026_SECURITY_99';
-const SECRET_IV='102791';
-
-
 class modeloPrincipal {
 
     
     /*----------- Funcion para conectar con la base de datos -----------*/
     public static function Conexion(){
-        if(!$con = mysqli_connect(SERVER, USER, PASSWORD)){
+        if(!$con = mysqli_connect(SERVER, USER, PASS)){
             die("Los datos de conexión con la base de datos ingresados son incorrectos, por favor verifique");
         }
         if (!mysqli_select_db($con, DB)) {

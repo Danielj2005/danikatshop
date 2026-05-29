@@ -1,30 +1,5 @@
 function SendFormAjax() {
 
-    var MsjErrorSending = `<div class="responseProcess text-white">
-                                <div class="container-loader">
-                                    <div class="loader">
-                                        <i class="zmdi zmdi-alert-triangle zmdi-hc-5x"></i>
-                                    </div>
-                                    <p class="text-center lead text-white">Ocurrio un problema, recargue la página e intente nuevamente o presione F5</p>
-                                </div>
-                            </div>`;
-
-    var MsjSending = `<div class="responseProcess text-white">
-                        <div class="container-loader">
-                            <div class="loader">
-                                <svg class="circular"><circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/></svg>
-                            </div>
-                            <p class="text-center lead text-white">Procesando... Un momento por favor</p>
-                        </div>
-                    </div>`;
-    
-    var MjProcesando= `<div class="responseProcess text-white bg-dark">
-                            <div class="container-loader p-5 d-flex justify-content-center align-items-center">
-                                <div class="loader"></div>
-                            </div>
-                            <p class="text-center lead text-white">Procesando... Un momento por favor</p>
-                        </div>`;
-
     
     $('.SendFormAjax').submit(function (e) {
         e.preventDefault();
@@ -64,8 +39,22 @@ function SendFormAjax() {
                 data: formData, // Usa el objeto FormData en lugar de $(this).serialize(),
                 processData: false, // Evita que jQuery procese los datos
                 contentType: false, // Evita que jQuery establezca el tipo de contenido
+                beforeSend: function(){
+                    Swal.fire({
+                        title: "Procesando...",
+                        text: "",
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+                },
                 error: function() {
-                    $('.msjFormSend').html(MsjErrorSending);
+                    Swal.fire({
+                        title: "¡Ocurrio un problema!",
+                        text: "Recargue la página e intente nuevamente o presione F5",
+                        icon: "error"
+                    });
                 }, 
                 success: function (data) {
                     $('.msjFormSend').html(data);
@@ -91,6 +80,15 @@ function SendFormAjax() {
             }).then((result) => {
                 if (result.isConfirmed) {
                     // el usuario confirme la acción
+                    DanikatAlert.fire({
+                        title: "Procesando...",
+                        text: "",
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
                     $.ajax({
                         type: metodo,
                         url: peticion,
@@ -98,12 +96,14 @@ function SendFormAjax() {
                         processData: false, // Evita que jQuery procese los datos
                         contentType: false, // Evita que jQuery establezca el tipo de contenido
                         error: function () {
-                            $('.msjFormSend').html(MsjErrorSending);
+                            Swal.fire({
+                                title: "¡Ocurrio un problema!",
+                                text: "Recargue la página e intente nuevamente o presione F5",
+                                icon: "error"
+                            });
                         },
-                        process: function (){
-                            $('.msjFormSend').html(MjProcesando);
-                        }, 
                         success: function (data) {
+                            Swal.close();
                             $('.msjFormSend').html(data);
                         }
                     });

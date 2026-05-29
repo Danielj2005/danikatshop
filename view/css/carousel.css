@@ -1,0 +1,57 @@
+.custom-carousel {
+  position: relative;
+  width: 100%;
+  max-width: 800px; /* Ajusta al tamaño de tu catálogo */
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.carousel-track-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  /* Esta transición maneja el desplazamiento fluido */
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform; /* Optimiza el rendimiento en navegadores modernos */
+}
+
+.carousel-slide {
+  min-width: 100%; /* Fuerza a que cada imagen ocupe todo el ancho */
+  box-sizing: border-box;
+}
+
+.carousel-slide img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  height: 400px; /* Altura fija para mantener consistencia */
+}
+
+/* Botones */
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 15px;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+
+.carousel-button:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.prev-btn { left: 15px; }
+.next-btn { right: 15px; }

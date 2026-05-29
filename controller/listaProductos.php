@@ -1,8 +1,8 @@
 <?php
 
+require_once "../config/SERVER.php";
 require_once "../model/mainModel.php"; 
 require_once "../model/productModel.php"; 
-require_once "../config/SERVER.php";
 
 try {
 

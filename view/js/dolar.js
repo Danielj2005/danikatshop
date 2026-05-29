@@ -1,40 +1,23 @@
-function obtener_precio_dolar_auto() {
-	$.ajax({
-        data:  '',
-        url:   '../include/obtener_precio_dolar.php',
-        type:  'get',
-        dataType: 'JSON',
-        success: function (datos) {
-			if (datos.existe == 1) {
-				document.getElementById('tasa_dolar').innerText = datos.usd_price_bs;
-				guardar_precio_dolar_auto(parseFloat(datos.usd_price_bs));
-			}
-        },
-        error: function () {
-			Swal.fire("Ocurrio un error!","Ocurrido un error al procesar tu solicitud, por favor revise su conexión a internet he intente nuevamente o actualice la tasa de manera manual.","error");
+
+
+const scrappCoin = async () => {
+    try {
+        const url = `../controller/dolarApi.php`;
+    
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Error en la petición");
+
+        const data = await response.json();
+
+        if (data.status === "success") {
+            // Ejemplo de uso:
+            // console.log(`Dólar BCV: ${data.USD} Bs.`);
+            // console.log(`USDT P2P: ${data.EURO} Bs.`);
+            return data;
         }
-    });
-}
+    }catch (e){
+        console.error(e);
+    }
+    
+};
 
-
-function guardar_precio_dolar_auto(datos) {
-	$.ajax({
-        data:  {'priceDolar': datos, 'manera': "automática"},
-        url:   '../controlador/dolar.php',
-        type:  'post',
-        success: function (data) {
-			$('.msjFormSend').html(data);
-        }, error: function () {
-			Swal.fire("Ocurrio un error!","Ocurrido un error al procesar tu solicitud, por favor recargue la página he intente nuevamente.","error");
-		}
-    });
-}
-
-const btn_update_dolar_auto = document.querySelector("#btn_update_dolar_auto");
-
-if (btn_update_dolar_auto) {
-	btn_update_dolar_auto.addEventListener("click", function(e){
-		e.preventDefault();
-		obtener_precio_dolar_auto();
-	});
-}

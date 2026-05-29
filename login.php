@@ -21,7 +21,6 @@ include_once "./model/mainModel.php"; // se incluye el model principal
 
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <script>
         tailwind.config = {
@@ -42,9 +41,6 @@ include_once "./model/mainModel.php"; // se incluye el model principal
     <!-- Favicons -->
     <link href="./view/img/logo.jpeg" rel="shortcut icon" type="image/x-icon">
 
-    <!-- Custom fonts for this template-->
-    <link href="./view/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-
     <link href="./view/css/app.css" rel="stylesheet">
     <link href="./view/css/bootstrap.min.css" rel="stylesheet">
     <link href="./view/css/bootstrap-icons.css" rel="stylesheet">
@@ -52,7 +48,7 @@ include_once "./model/mainModel.php"; // se incluye el model principal
     <link href="./view/css/sweetalert2.min.css" rel="stylesheet">
 </head>
 
-<body id="" class="font-sans antialiased brand-bg">
+<body id="" class="font-sans antialiased brand-bg" >
 	<nav class="top-0 z-40 bg-slate-950 border-b border-purple-900/20 p-4">
         <div class="max-w-7xl mx-auto d-flex flex-col flex-md-row gap-4 justify-content-between align-items-center">
             <a href="./" class=" text-center md:text-left">
@@ -61,7 +57,9 @@ include_once "./model/mainModel.php"; // se incluye el model principal
             </a>
 
             <div class="flex gap-4 items-center">
-                <a href="./index.php" class="d-flex align-items-center text-slate-400 hover:text-purple-500 transition"><i class="fs-2 bi bi-house-fill me-3"></i>Volver al Catálogo</a> 
+                <a href="./index.php" class="d-flex align-items-center text-slate-400 hover:text-purple-500 transition">
+                    <i class="fs-md-2 bi bi-house-fill me-3"></i>Volver al Catálogo
+                </a> 
             </div>
         </div>
     </nav>
@@ -70,18 +68,35 @@ include_once "./model/mainModel.php"; // se incluye el model principal
     
         <main class="max-w-7xl mx-auto p-6">
             
-            <div class="row items-center justify-center p-4">
-                <form id="login" method="POST" action="./controller/login.php" data-type-form="load" autocomplete="off" class="SendFormAjax text-start bg-[#020617] border border-slate-800 p-8 rounded-[2.5rem] col-12 col-md-4 shadow-2xl">
+            <div class="row align-items-center justify-content-center p-4">
+                <form id="login" method="POST" action="./controller/login.php" data-type-form="load" autocomplete="off" class="SendFormAjax text-start bg-[#020617] border border-slate-800 p-3 rounded-5 col-12 col-md-4 shadow-2xl">
                     
                     <div class="text-center mb-4">
                         <h2 class="text-2xl font-bold text-center my-8 bg-gradient-to-r from-purple-400 to-fuchsia-500 bg-clip-text text-transparent">Acceso Administrativo</h2>
                     </div>
         
-                    <label for="user" class="form-label fw-bold"><i style="font-size: 1.2rem" class="bi bi-person-circle"></i>&nbsp; Correo Electrónico &nbsp;<span style="color:#f00; font-size: 1rem;">*</span></label>
-                    <input id="user" name="user" type="email" placeholder="Correo" required class="w-full p-2 rounded-2xl mb-4 text-black outline-none ring-purple-500 focus:ring-2">
                     
-                    <label for="pass" class="form-label fw-bold"><i style="font-size: 1.2rem" class="bi bi-lock"></i>&nbsp; Contraseña &nbsp;<span style="color:#f00; font-size: 1rem;">*</span></label>
-                    <input id="pass" name="pass" type="password" placeholder="Contraseña" required class="w-full p-2 rounded-2xl mb-6 text-black outline-none ring-purple-500 focus:ring-2">
+                    <div class="text-start mb-3" data-bs-theme="dark">
+                        <label for="user" class="form-label fw-bold">Correo Electrónico &nbsp;<span style="color:#f00; font-size: 1.5rem;">*</span></label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text"> <i class="bi bi-person-circle"></i> </span>
+                            <input id="user" name="user" type="email" placeholder="Correo" 
+                                required class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="text-start mb-3" data-bs-theme="dark">
+                        <label for="pass" class="form-label fw-bold">Contraseña &nbsp;<span style="color:#f00; font-size: 1.5rem;">*</span></label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"> <i class="bi bi-lock"></i> </span>
+                            <input id="pass" name="pass" type="password" placeholder="Contraseña" required class="form-control">
+                            <button id="btnEyeIcon" type="button" class="btn btn-secondary input-group-text position-" title="Mostrar contraseña" 
+                                onclick="show_password('eyeIcon', 'pass')">
+                                    <i class="bi bi-eye" id="eyeIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     
                     <div class="text-start mb-4">
                         <p class="w-full text-slate-200 mt-4 text-sm">Los campos con  <span style="color:#f00; font-size: 1rem;">*</span> son obligatorios.</p>
@@ -90,7 +105,7 @@ include_once "./model/mainModel.php"; // se incluye el model principal
                     <button class="mb-4 w-full bg-purple-600 p-2 rounded-2xl font-bold hover:bg-purple-900 transition shadow-lg shadow-purple-500/20">Entrar</button>
                     
                     <div class="text-center mb-4">
-                        <a href="./" class="w-full text-slate-200 mt-4 text-sm underline">Volver al catálogo</a>
+                        <a href="./" class="btn btn-outline-secondary w-full text-slate-200 mt-4 text-sm">Volver al catálogo</a>
                     </div>
                 </form>
             </div>
@@ -131,13 +146,10 @@ include_once "./model/mainModel.php"; // se incluye el model principal
     <script src="view/js/bootstrap.min.js"></script>
     <!-- Custom scripts for all pages-->
     <script src="view/js/sweetalert2.min.js"></script>
-        <script type="text/javascript" >
-            const index = false;
-        </script>
-    <script src="view/js/app.js"></script>
+    <script src="view/js/DanikatAlert.js"></script>
+    <script src="view/js/hiddenInput.js"></script>
     <script src="view/js/SendForm.js"></script>
     <script> SendFormAjax(); </script>
-
     <script src="view/js/validator.js"></script>
 </body>
 

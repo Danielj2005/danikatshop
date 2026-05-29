@@ -1,13 +1,10 @@
 <?php 
 session_start();
 
-include_once "../model/mainModel.php"; // se incluye el model principal
-
-include_once "../model/userModel.php";  // se incluye el model de usuario
-// include_once "../../model/roleModel.php"; // se incluye el model rol
-
-// include_once "../../model/bitacoraModel.php"; // se incluye el model de bitacora
-include_once "../model/alertModel.php"; // se incluye el model de alertas
+require_once "../config/SERVER.php";
+include_once "../model/mainModel.php";
+include_once "../model/userModel.php"; 
+include_once "../model/alertModel.php"; 
 
 // se incluyen los modelos necesarios para la vista
 
@@ -42,19 +39,13 @@ if(mysqli_num_rows($selectUser) < 1){
 // se verifica si el numero de intentos de inicio de sesión es igual, a 3
 if ($_SESSION["intentos_sesion"] == $intentos_inicio_sesion) {
     // se bloquea el usuario para iniciar sesion en caso de alcanzar el limite de intentos
-    modeloPrincipal::UpdateSQL(
-        "users",
-        "state = 0",
-        "id = $id_usuario"
-    );
+    modeloPrincipal::UpdateSQL( "users", "state = 0", "id = $id_usuario" );
 
     $_SESSION["intentos_sesion"] = 0;
 
-    alert_model::alerta_simple(
-        '¡Cuenta bloqueada!',
+    alert_model::alerta_simple('¡Cuenta bloqueada!',
         'Su cuenta ha sido bloqueada por razones de seguridad. Para activar nuevamente, por favor contacte al administrador del sistema.',
-        'warning'
-    );
+        'warning' );
     exit();
 }
 
@@ -76,7 +67,8 @@ if (!password_verify($contraseña, $hash)) {
 
 
 /** se verifica si el usuario esta activo **/
-if ($datos_usuario["state"] == 0 || $datos_usuario["role"] != 1) {
+// if ($datos_usuario["state"] == 0 || $datos_usuario["role"] != 1) {
+if ($datos_usuario["state"] == 0) {
     alert_model::alerta_simple(
         '¡Cuenta inactiva!',
         'Su cuenta se encuentra inactiva, por favor contacte al administrador del sistema.',
@@ -97,10 +89,7 @@ $_SESSION['dataUser'] = [
 ];
 
 
-echo '<script type="text/javascript">
-
-        window.location = "./view/index.php";
-    </script>';
+echo '<script type="text/javascript"> window.location = "./view/index.php";  </script>';
 
 
 mysqli_free_result($selectUser);

@@ -1,6 +1,8 @@
 <?php 
 session_start();
 
+require_once "../config/SERVER.php";
+
 require_once "../model/mainModel.php"; // se incluye el model principal
 require_once "../model/alertModel.php"; // se incluye el model de alertas
 require_once "../model/categoryModel.php"; // se incluye el model de categorias

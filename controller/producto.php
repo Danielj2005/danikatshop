@@ -1,7 +1,7 @@
 <?php
 
-require_once "../model/mainModel.php"; 
 require_once "../config/SERVER.php";
+require_once "../model/mainModel.php"; 
 
 try {
 
