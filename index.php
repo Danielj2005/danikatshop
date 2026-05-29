@@ -49,15 +49,17 @@
                 <p class="text-[10px] text-slate-500 uppercase tracking-widest">Todo lo que buscas en un solo lugar</p>
             </a>
 
-            <div class="mb-3 position-relative d-flex align-items-center w-full">
-                <input type="text" placeholder="Buscar tortas, arreglos, manualidades..." 
-                    oninput="handleSearch(this.value)"
-                    class="w-full bg-slate-900 border border-slate-700 rounded-full px-4 py-2 text-sm focus:ring-2 ring-purple-500 outline-none">
-                <i class="bi bi-search absolute right-4 top-2 text-slate-500"></i>
-            </div>
+            <div class="align-items-center d-flex gap-3 w-100">
+                <div class="mb-3 position-relative d-flex align-items-center w-full mx-auto">
+                    <input type="text" placeholder="Buscar tortas, arreglos..." 
+                        oninput="handleSearch(this.value)"
+                        class="w-full bg-slate-900 border border-slate-700 rounded-full px-4 py-2 text-sm focus:ring-2 ring-purple-500 outline-none">
+                    <i class="bi bi-search absolute right-4 top-2 text-slate-500"></i>
+                </div>
 
-            <div class="mb-3 flex gap-4 items-center">
-                <a href="login.php" class="text-slate-700 hover:text-purple-500 transition"><i class="fs-3 bi bi-person-circle"></i></a> 
+                <div class="mb-3 flex gap-4 items-center">
+                    <a href="login.php" class="text-slate-700 hover:text-purple-500 transition"><i class="fs-3 bi bi-person-circle"></i></a> 
+                </div>
             </div>
         </div>
     </nav>
