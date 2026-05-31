@@ -66,7 +66,7 @@ window.askWhatsApp = (nombre, precio, numeroWhats) => {
 
     const numeroLimpio = numeroWhats;
     
-    const precioTxt = precio ? `por un valor de *$${precio}*` : "(Precio a convenir según pedido)";
+    const precioTxt = precio ? `por un valor de *$${precio}*` : "";
     const msg = `¡Hola DanikatShop! Me interesa su producto:\n\n*${nombre}*\n\n${precioTxt}\n\n¿Podrían darme más detalles?`;
     
     const url = `https://api.whatsapp.com/send?phone=${numeroLimpio}&text=${encodeURIComponent(msg)}`;

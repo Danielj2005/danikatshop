@@ -12,7 +12,7 @@ try {
     if ($method === 'GET') {
         $multiMoneda = $_GET['multiMoneda'] ?? false;
 
-        $catalogo = mysqli_fetch_all(modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos WHERE state = 1 ORDER BY nombre ASC")); 
+        $catalogo = mysqli_fetch_all(modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos WHERE state = 1")); 
         $stmt_categorias = modeloPrincipal::consultar("SELECT nombre FROM categorias WHERE state = 1 ORDER BY nombre ASC");
         $categorias_lista = array_column(mysqli_fetch_all($stmt_categorias, MYSQLI_ASSOC), 'nombre');
         
@@ -28,7 +28,7 @@ try {
 
             $productos[] = [
                 "id" => $id,
-                "nombre" => $nombre,
+                "nombre" => ucwords(strtolower($nombre)),
                 "precio" => $precio,
                 "images" => $images
             ];

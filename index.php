@@ -81,7 +81,7 @@
 
     <div id="app" style="display:none !important;" class=" min-h-screen">
         <header class="py-12 px-6 text-center animate-fade-in">
-            <h2 class="text-4xl font-bold italic text-white mb-2">Todo lo que buscas en un solo lugar</h2>
+            <h2 class="md:text-2xl sm:text-xl font-bold italic text-white mb-2">Todo lo que buscas en un solo lugar</h2>
             
             <!-- Filtros por Categoría -->
             <div class="dropdown d-none" data-bs-theme="dark">
@@ -97,8 +97,8 @@
                 </ul>
             </div>
         </header>
-        <main class="max-w-7xl mx-auto p-6" id="main">
-            <div id="cards" class="grid gap-4 justify-around items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3"></div>
+        <main class="max-w-7xl mx-auto p-3" id="main">
+            <div id="cards" class="grid gap-3 justify-around grid-cols-2 sm:grid-cols-2 md:grid-cols-4"></div>
         </main>
     </div>
     

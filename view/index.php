@@ -103,14 +103,14 @@ if ($_SESSION['logged_in'] === true) { ?>
                     <div id="" class="text-black bg-white p-6 rounded-3xl border border-slate-800 shadow-2xl justify-content-between align-items-center">
                         
                         <div class="text-start col-12 fs-4 mb-5">
-                            <div class="text-center d-flex justify-content-between">
-                                <h3 class="text-lg font-bold text-succes mb-4 ">Productos en Línea (<?=  mysqli_num_rows($catalogo); ?>)</h3>
+                            <div class="text-center row justify-content-between">
+                                <h3 class="col-12 col-md-4 text-lg font-bold text-succes mb-4 ">Productos en Línea (<?=  mysqli_num_rows($catalogo); ?>)</h3>
 
                                     
-                                <div class=" mb-1 ">
-                                    <button id="btnChangeState" onclick="changeState()" type="submit" class="col-12 btn btn-secondary">Ver Productos inactivos</button>
+                                <div class="col-12 col-md-4 mb-1 ">
+                                    <button id="btnChangeState" onclick="changeState()" type="submit" class="btn btn-secondary">Ver Productos inactivos</button>
                                 </div>
-                                <div class="text-center mb-2">
+                                <div class="col-12 col-md-4 text-center mb-2">
                                     <button type="button" data-bs-toggle="modal" data-bs-target="#registrar_producto" 
                                         class="mb-2 btn_modal btn btn-success"><i class="bi bi-plus-circle"></i>&nbsp;Registrar Nuevo
                                     </button>
@@ -118,8 +118,8 @@ if ($_SESSION['logged_in'] === true) { ?>
                             </div>
                         </div> 
                     
-                        <div id="activos" class="table-responsive overflow-hidden overflow-x-auto">
-                            <h3 class="fs-1 fw-bold mb-3">Productos Activos &nbsp;<i class="text-success bi bi-check-circle"></i></h3>
+                        <div id="activos" class="text-center table-responsive overflow-hidden overflow-x-auto">
+                            <h3 class="sm:text-3xl md:text-4xl fw-bold mb-3">Productos Activos &nbsp;<i class="text-success bi bi-check-circle"></i></h3>
                             <table class="tableActivos mb-3 no-footer table table-group-divider table-hover table-striped" id="tableActivos">
                                 <thead>
                                     <tr class="text-black">
@@ -137,8 +137,8 @@ if ($_SESSION['logged_in'] === true) { ?>
                             </table>
                         </div>
 
-                        <div  id="inactivos" class="d-none table-responsive overflow-hidden overflow-x-auto">
-                            <h3 class="fs-1 fw-bold mb-3">Productos Inactivos &nbsp;<i class="text-danger bi bi-x-circle"></i></h3>
+                        <div  id="inactivos" class="text-center d-none table-responsive overflow-hidden overflow-x-auto">
+                            <h3 class="sm:text-2xl md:text-3xl fw-bold mb-3">Productos Inactivos &nbsp;<i class="text-danger bi bi-x-circle"></i></h3>
 
                             <table class="tableInactivos mb-3 no-footer table table-group-divider table-hover table-striped" id="tableInactivos">
                                 <thead>
