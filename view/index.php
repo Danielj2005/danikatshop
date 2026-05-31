@@ -41,10 +41,10 @@ if ($_SESSION['logged_in'] === true) { ?>
             </div>
         </nav>
 
-        <div id="" class=" min-h-screen">
+        <div id="" class="min-h-screen">
 
-            <main class="max-w-7xl mx-auto p-6">
-                <div class="max-w-6xl mx-2 p-3 space-y-3 animate-fade-in">
+            <main class=" mx-auto p-3">
+                <div class=" mx-2 p-3 space-y-3 animate-fade-in">
                     <div class="flex justify-between items-center border-b border-slate-200 pb-2">
                         <h2 class="text-3xl font-bold text-white">Panel de <span class="text-purple-500">Gestión</span></h2>
                         <div class="text-right">
@@ -100,11 +100,11 @@ if ($_SESSION['logged_in'] === true) { ?>
                     </div>
 
 
-                    <div id="" class="text-black bg-white p-6 rounded-3xl border border-slate-800 shadow-2xl justify-content-between align-items-center">
+                    <section id="" class="text-black bg-slate-900 p-3 rounded-3xl border border-slate-800 shadow-2xl justify-content-between align-items-center">
                         
-                        <div class="text-start col-12 fs-4 mb-5">
+                        <section data-bs-theme="dark" class="text-start mb-3 ">
                             <div class="text-center row justify-content-between">
-                                <h3 class="col-12 col-md-4 text-lg font-bold text-succes mb-4 ">Productos en Línea (<?=  mysqli_num_rows($catalogo); ?>)</h3>
+                                <h3 class="col-12 col-md-4 text-lg font-bold text-emerald-400 mb-4 shadow-3xl shadow-emerald-300">Productos en Línea (<?=  mysqli_num_rows($catalogo); ?>)</h3>
 
                                     
                                 <div class="col-12 col-md-4 mb-1 ">
@@ -116,16 +116,16 @@ if ($_SESSION['logged_in'] === true) { ?>
                                     </button>
                                 </div>
                             </div>
-                        </div> 
+                        </section> 
                     
-                        <div id="activos" class="text-center table-responsive overflow-hidden overflow-x-auto">
-                            <h3 class="sm:text-3xl md:text-4xl fw-bold mb-3">Productos Activos &nbsp;<i class="text-success bi bi-check-circle"></i></h3>
-                            <table class="tableActivos mb-3 no-footer table table-group-divider table-hover table-striped" id="tableActivos">
-                                <thead>
-                                    <tr class="text-black">
+                        <section data-bs-theme="dark" id="activos" class="text-white d-non d-md-block text-center table-responsive overflow-hidden overflow-x-auto">
+                            <h3 class="text-white sm:text-3xl md:text-4xl fw-bold mb-3">Productos Activos &nbsp;<i class="text-success bi bi-check-circle"></i></h3>
+                            <table class="tableActivos no-footer table table-group-divider table-hover table-striped" id="tableActivos">
+                                <thead class="mt-3">
+                                    <tr class="">
                                         <th class="col text-center" scope="col">N.º</th>
                                         <th class="col text-center" scope="col">Producto</th>
-                                        <th class="col text-center" scope="col">Precio ($)</th>
+                                        <th class="col text-center" scope="col">Precios</th>
                                         <th class="col text-center" scope="col">Imagen</th>
                                         <th class="col text-center" scope="col">Editar</th>
                                         <th class="col text-center" scope="col">Desactivar</th>
@@ -135,17 +135,17 @@ if ($_SESSION['logged_in'] === true) { ?>
 
                                 </tbody>
                             </table>
-                        </div>
+                        </section>
 
-                        <div  id="inactivos" class="text-center d-none table-responsive overflow-hidden overflow-x-auto">
-                            <h3 class="sm:text-2xl md:text-3xl fw-bold mb-3">Productos Inactivos &nbsp;<i class="text-danger bi bi-x-circle"></i></h3>
+                        <section  data-bs-theme="dark" id="inactivos" class="text-center d-none table-responsive overflow-hidden">
+                            <h3 class="text-white sm:text-2xl md:text-3xl fw-bold mb-3">Productos Inactivos &nbsp;<i class="text-danger bi bi-x-circle"></i></h3>
 
                             <table class="tableInactivos mb-3 no-footer table table-group-divider table-hover table-striped" id="tableInactivos">
                                 <thead>
-                                    <tr class="text-black">
+                                    <tr class="">
                                         <th class="col text-center" scope="col">N.º</th>
                                         <th class="col text-center" scope="col">Producto</th>
-                                        <th class="col text-center" scope="col">Precio ($)</th>
+                                        <th class="col text-center" scope="col">Precios</th>
                                         <th class="col text-center" scope="col">Imagen</th>
                                         <th class="col text-center" scope="col">Editar</th>
                                         <th class="col text-center" scope="col">Activar</th>
@@ -155,10 +155,15 @@ if ($_SESSION['logged_in'] === true) { ?>
 
                                 </tbody>
                             </table>
-                        </div>
+                        </section>
 
-                    </div>
+                        
+                    </section>
                 </div>
+
+                <section class="max-w-7xl mx-auto p-3" id="main">
+                    <div id="cards" class="grid gap-3 justify-around grid-cols-2 sm:grid-cols-2 md:grid-cols-4"></div>
+                </section>
             </main>
         </div>
 
@@ -299,7 +304,7 @@ if ($_SESSION['logged_in'] === true) { ?>
         <div class="msjFormSend"></div>
 
         <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
-        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
         <!-- Custom scripts for all pages-->
         <script type="text/javascript" src="js/sweetalert2.min.js"></script>
         <script type="text/javascript" src="js/DanikatAlert.js"></script>

@@ -62,8 +62,29 @@ function initCustomSelect() {
     });
 }
 
+/**
+ * Copia cualquier texto al portapapeles en Desktop y Mobile.
+ * @param {string} text - El texto que se desea copiar.
+ * @returns {Promise<boolean>} - Devuelve true si se copió con éxito.
+ */
+async function copyToClipboard(text) {
+    // Método 1: API Moderna (Navigator Clipboard)
+    if (navigator.clipboard && window.isSecureContext) {
+        try {
+            await navigator.clipboard.writeText(text);
+            return true;
+        } catch (err) {
+            console.warn("Fallo con navigator.clipboard, usando fallback...", err);
+        }
+    }
+}
+
+
+
 // Ejecutar al cargar la página o el modal
 document.addEventListener('DOMContentLoaded', () => {
     initCustomSelect();
     getProductos();
+
+    
 });
