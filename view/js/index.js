@@ -1,9 +1,4 @@
 
-/**
- * APP.JS - DANIKATSHOP
- * Carga dinámica desde archivos JSON externos
- */
-
 const products = [];
 let categorys = [];
 let categoriasProductos = [];
@@ -57,6 +52,38 @@ window.filterByCategory = (categoryName) => {
 };
 
 
+/**
+ * Procesa el texto recibido desde el chatbot de WhatsApp,
+ * extrae los datos del producto y los envía a la API en InfinityFree.
+ * 
+ * @param {string} nombre - El texto crudo del mensaje de WhatsApp.
+ * @param {float} precio - El texto crudo del mensaje de WhatsApp.
+ * @param {number} numeroWhats - El texto crudo del mensaje de WhatsApp.
+ */
+
+// --- LÓGICA DE WHATSAPP ---
+window.askWhatsApp = (nombre, precio, numeroWhats) => {
+
+    const numeroLimpio = numeroWhats;
+    
+    const precioTxt = precio ? `por un valor de *$${precio}*` : "(Precio a convenir según pedido)";
+    const msg = `¡Hola DanikatShop! Me interesa su producto:\n\n*${nombre}*\n\n${precioTxt}\n\n¿Podrían darme más detalles?`;
+    
+    const url = `https://api.whatsapp.com/send?phone=${numeroLimpio}&text=${encodeURIComponent(msg)}`;
+
+    // 2. Detectar si es móvil para usar una redirección más agresiva
+    const isMobile = /iPhone|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+        // En móviles, mejor cambiar la ubicación de la pestaña actual
+        window.location.href = url;
+    } else {
+        // En PC, abrimos pestaña nueva
+        window.open(url, '_blank');
+    }
+};
+
+
 // inicializacion de funciones
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -70,6 +97,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1500);
     }
     getCatalogo()
-    
-
 });

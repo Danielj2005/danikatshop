@@ -110,7 +110,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles de producto</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 modal-body" id="modalBody">
+                <div class="gap-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 modal-body" id="modalBody">
 
                 </div>
             </div>

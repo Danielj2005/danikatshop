@@ -56,6 +56,7 @@ try {
                 <?php endif;  ?>
 
             </div>
+            
             <hr class="md:hidden mt-5 mb-3">
             <div class="p-3 text-start border border-slate-800 rounded-3" style="height: fit-content;">
                 <h3 class="font-bold mb-4 text-3xl text-white">

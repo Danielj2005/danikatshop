@@ -65,6 +65,7 @@ class producto_model extends modeloPrincipal {
                                 <?php endif; ?>
                             </div>
                         </div>
+                        
                         <div class="p-6">
                             <h3 class="text-white text-md font-semibold mb-1 truncate mb-4"><?= ucwords(strtolower($mostrar['nombre'])) ?></h3>
                             <div class="row justify-content-center align-items-center">
