@@ -138,9 +138,9 @@ class producto_model extends modeloPrincipal {
                 <td class="text-center"></td>
                 <td class="text-start">
                     <p class=" fw-bold mb-1"><?= ucwords(strtolower($mostrar["nombre"])) ?> </p>
-                    <small class="d-md-none d-flex gap-1 text-muted align-items-center"> 
+                    <small class="d-flex gap-1 text-muted align-items-center"> 
                         <?php while ($cat = mysqli_fetch_assoc($categorias)) { ?> 
-                            <span class="bg-indigo-600 text-white px-2 py-1 rounded-3xl text-xs">
+                            <span class="bg-indigo-600 badge text-white rounded-3xl">
                                 <?= $cat['categorias'] ?>
                             </span>
                         <?php } ?> 
@@ -178,9 +178,9 @@ class producto_model extends modeloPrincipal {
                     <?php endif; ?>
                 </td>
                 <td>
-                    <button onclick="verImagen('<?= $imgSrc; ?>','<?= $mostrar['nombre'] ?>' )" class="btn btn-secondary px-2 py-1 text-xs">
+                    <button onclick="verImagen('<?= $imgSrc; ?>','<?= $mostrar['nombre'] ?>' )" class="btn btn-secondary text-xs">
                         <i class="bi bi-image mr-1"></i> 
-                        <span class="d-none d-lg-block font-bold">Ver Imagen</span>
+                        <span class="d-none d-md-block font-bold">Ver Imagen</span>
                     </button>
                 </td>
                 <td class="col text-center">

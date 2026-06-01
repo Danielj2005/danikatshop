@@ -9,7 +9,7 @@ function verImagen(url, producto) {
         html: getCarrusel(data, i),
         confirmButtonText: 'Cerrar'
     });
-    inicializarCarrusel()
+    inicializarCarrusel();
 }
 
 
@@ -72,6 +72,17 @@ async function copyToClipboard(text) {
     if (navigator.clipboard && window.isSecureContext) {
         try {
             await navigator.clipboard.writeText(text);
+            Toastify({
+                text: "Precio Copiado correctamente",
+                duration: 3000,
+                close: true,
+                gravity: "top", // `top` or `bottom`
+                position: "right", // `left`, `center` or `right`
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+                style: {
+                    background: "linear-gradient(to right, #370863, #870873)",
+                }
+            }).showToast();
             return true;
         } catch (err) {
             console.warn("Fallo con navigator.clipboard, usando fallback...", err);

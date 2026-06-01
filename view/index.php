@@ -55,7 +55,7 @@ if ($_SESSION['logged_in'] === true) { ?>
 
                     <div class="row justify-content-around align-items-center p-2">
 
-                        <div class="mb-3 text-center col-11 col-md-4 bg-slate-900 p-4 rounded-3xl border border-slate-800 shadow-2xl">
+                        <div class=" mb-3 text-center col-11 col-md-4 bg-slate-900 p-4 rounded-3xl border border-slate-800 shadow-2xl">
                             <h3 class="border-bottom font-bold mb-3 fs-3 text-slate-400">Categorías</h3>
     
                             <div class="text-center mb-2 row ">
@@ -118,7 +118,7 @@ if ($_SESSION['logged_in'] === true) { ?>
                             </div>
                         </section> 
                     
-                        <section data-bs-theme="dark" id="activos" class="text-white d-non d-md-block text-center table-responsive overflow-hidden overflow-x-auto">
+                        <section data-bs-theme="dark" id="activos" class="text-white d-non d-md-block text-center table-responsive overflow-hidden ">
                             <h3 class="text-white sm:text-3xl md:text-4xl fw-bold mb-3">Productos Activos &nbsp;<i class="text-success bi bi-check-circle"></i></h3>
                             <table class="tableActivos no-footer table table-group-divider table-hover table-striped" id="tableActivos">
                                 <thead class="mt-3">
@@ -162,7 +162,12 @@ if ($_SESSION['logged_in'] === true) { ?>
                 </div>
 
                 <section class="max-w-7xl mx-auto p-3" id="main">
-                    <div id="cards" class="grid gap-3 justify-around grid-cols-2 sm:grid-cols-2 md:grid-cols-4"></div>
+                    <div id="cards_activos" class="d-block d-md-none grid gap-3 justify-around grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
+                        
+                    </div>
+                    <div id="cards_inactivos" class="d-none grid gap-3 justify-around grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
+                        
+                    </div>
                 </section>
             </main>
         </div>
@@ -319,6 +324,7 @@ if ($_SESSION['logged_in'] === true) { ?>
         <script type="text/javascript" src="js/dataTables.bootstrap5.min.js"></script>
         
         <script type="text/javascript" src="js/dolar.js"></script>
+        <script type="text/javascript" src="js/toastify.js"></script>
         <script type="text/javascript" src="js/productos.js"></script>
         <script type="text/javascript" src="js/carousell.js"></script>
         <script type="text/javascript" src="js/initialApp.js"></script>

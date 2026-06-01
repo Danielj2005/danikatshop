@@ -1,13 +1,4 @@
 
-
-
-
-// TODO getIndicators Esta funcion crea los indicadores de un carousel en base a un iterador y un estado
-// @param {iterador} i - iterador en caso de ser >= 1
-// @param {status} active - estado del indicador
-const getIndicators = (i, active) => `
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${i}" class="${active}" aria-current="${i == 0 ? 'true' : 'false'}" aria-label="Slide ${i + 1}"></button>`;
-
 // TODO getInners Esta funcion crea los inners(imagenes dentro del carousel) en base a una url del array original y un estado
 // @param {array} url - array con url de imagenes
 // @param {status} active - estado de la imaagen
@@ -17,9 +8,17 @@ const getImgs = (url, active) => `<li class="carousel-slide ${active}">
 <img src=".${url}" onerror="this.onerror=null; this.src='./img/404.png';" onerror="this.src='ruta/imagen-no-encontrada.jpg'"></li>`;
 
 
-// TODO getCarrusel Esta funcion crea un carousel en base a un array de url de imagenes
-// @param {array} items - array con url de imagenes
-// @param {iterador} i - iterador en caso de ser >= 1
+/**
+ * getCarrusel Esta funcion crea un carousel en base a un array de url de imagenes
+ * 
+ * @param {array} items - array con url de imagenes
+ * @param {iterador} i - iterador en caso de ser >= 1
+ * @return {string} - retorna el html del carousel
+ * 
+ * El carousel se crea con una estructura de lista no ordenada, donde cada imagen es un elemento de la lista. 
+ * Se agregan botones de navegación si hay más de una imagen. El carrusel es responsive y se adapta al tamaño del contenedor.
+ */
+
 const getCarrusel = (items, i) => `
     <div class="custom-carousel">
         <div class="carousel-track-container">
@@ -82,6 +81,6 @@ function inicializarCarrusel() {
     });
 }
 
-/*
+
 // Inicializar cuando el DOM esté listo
-// document.addEventListener('DOMContentLoaded', inicializarCarrusel);*/
+// document.addEventListener('DOMContentLoaded', inicializarCarrusel);
