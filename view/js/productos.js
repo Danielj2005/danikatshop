@@ -49,7 +49,7 @@ const createCatalogo = (id, nombre, precio, urlImage) =>
 
 
 function inicializarCarrusel() {
-    const track = document.querySelectorAll('.carousel-track');
+    const track = document.getElementById('carouselTrack');
     const slides = document.querySelectorAll('#carouselTrack li');
     const nextButton = document.getElementById('nextBtn') ?? null;
     const prevButton = document.getElementById('prevBtn') ?? null;
@@ -142,7 +142,8 @@ async function getProductos() {
             
             document.getElementById('main-content').appendChild(cardsProductosActivos);
             document.getElementById('main-content').appendChild(cardsProductosInactivos);
-
+            SendFormAjax();
+            
         } else {
             // En PC, abrimos pestaña nueva
             const [active, inactive] = await Promise.all([
@@ -222,6 +223,25 @@ function changeState () {
     
 
 }
+
+
+const detallesProductoById = async (id) => {
+    try {
+        const modalBody = document.getElementById('modalBodyDetalles');
+
+        modalBody.innerHTML = ``;
+
+        const resp = await fetch(`../controller/producto.php?UID=${id}&details=true&path=true`);
+        const detallesProducto = await resp.text();
+        
+        modalBody.innerHTML = detallesProducto;
+        inicializarCarrusel();
+
+
+    } catch (error) {
+        console.error("No se pudo obtener los detallse del producto:", error);
+    }
+};
 
 
 // --- CARGA DE Lista de Categorias ---

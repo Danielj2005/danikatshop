@@ -13,6 +13,7 @@ try {
 
         if ($details): 
             $id = $_GET['UID'];
+            $path = $_GET['path'] ?? null;
             
             $phone = $conn->prepare("SELECT telefono FROM users WHERE id = 2");
             $phone->execute();
@@ -27,35 +28,24 @@ try {
             // Ruta de la carpeta de imágenes
             $files = explode(",",$products['images']);  
             $quety = $products;
-        
+            
         ?>
-
-            <div id="carouselExampleIndicators" class="carousel slide carousel-dark" style="height: fit-content;">
-                <div class="carousel-inner">
-
-                    <?php 
-                        $active = 'active';
-                        foreach ($files as $file) {
-                            echo '<div class="carousel-item '.$active.' ">';
-                            echo '<img src="'.$file.'" style="width:20rem; height: 20rem; " class="" alt="...">';
-                            echo '</div>';
-                            $active = '';
-                        }
-                    ?>
-
+            <div class="custom-carousel">
+                <div class="carousel-track-container">
+                    <ul class="carousel-track" id="carouselTrack">
+                        <?php foreach ($files as $file) { ?>
+                            <li class="carousel-slide ${active}">
+                                <img class="h-100" src=".<?= $file ?>" onerror="this.onerror=null; this.src='./img/404.png';" onerror="this.src='ruta/imagen-no-encontrada.jpg'">
+                            </li>
+                        <?php  } ?>
+                    </ul>
                 </div>
-                <?php if (count($files) > 1): ?>
-                    <button class="text-purple-900 carousel-control-prev carousel-dark" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon bg-primary p-4 rounded-2xl" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next carousel-dark" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                        <span class="bg-primary carousel-control-next-icon p-4 rounded-2xl" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                <?php endif;  ?>
-
+                <?php if (count($files) > 1) { ?>
+                    <button class="carousel-button prev-btn" id="prevBtn">&#10094;</button>
+                    <button class="carousel-button next-btn" id="nextBtn">&#10095;</button>
+                <?php  } ?>
             </div>
+
             
             <hr class="md:hidden mt-5 mb-3">
             <div class="p-3 text-start border border-slate-800 rounded-3" style="height: fit-content;">

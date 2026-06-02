@@ -29,6 +29,8 @@ try {
         
                 $imgSrc = explode(',', $mostrar['images']);
 
+                $images = $imgSrc[0];
+
                 $id_producto = $mostrar["id"];
                 $categorias = modeloPrincipal::consultar("SELECT C.nombre AS categorias FROM `categorias_productos` AS CP 
                     INNER JOIN categorias AS C ON C.id = CP.categoria_id
@@ -39,24 +41,10 @@ try {
 
                 <div data-categories="" class="product-card product_${id} group bg-slate-900/40 border border-slate-800 rounded-3xl overflow-hidden hover:border-purple-500/50 transition-all duration-500 animate-slide-up">
                     
-                    
-                    <div class="custom-carousel" style="height: 15rem;">
-                        <div class="carousel-track-container">
-                            <ul class="carousel-track" id="carouselTrack">
-                                <?php  foreach ($imgSrc as $img) { ?>
-                                    <li class="carousel-slide ">
-                                        <img src=".<?= $img ?>" onerror="this.onerror=null; this.src='./img/404.png';" onerror="this.src='./img/404.png'">
-                                    </li>
-                                <?php } ?>
-
-                            </ul>
-                        </div>
-
-                        <?php if (count($imgSrc) > 1): ?>
-                            <button class="carousel-button prev-btn" id="prevBtn">&#10094;</button>
-                            <button class="carousel-button next-btn" id="nextBtn">&#10095;</button>
-                        <?php endif; ?>
+                    <div class="overflow-hidden cursor-pointer" style="height: 15rem;">
+                        <img src=".<?= $images ?>" onerror="this.onerror=null; this.src='./img/404.png';" onerror="this.src='./img/404.png'">
                     </div>
+
 
                     <div class="p-3">
                         <div class="">
@@ -111,14 +99,14 @@ try {
 
                         <div class="flex flex-wrap justify-between">
                             <div class="mb-3">
-                                <button onclick="editingProduct('<?= modeloPrincipal::encryptionId($mostrar['id']) ?>')" type="button" class="text-sm btn_details btn btn-outline-warning transition-all gap-2 flex items-center justify-center " data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <button onclick="editingProduct('<?= modeloPrincipal::encryptionId($mostrar['id']) ?>')" type="button" class="text-sm btn_details btn btn-outline-warning transition-all gap-2 flex items-center justify-center " data-bs-toggle="modal" data-bs-target="#editar_producto">
                                     <i class="bi bi-pencil-square"></i>
                                     <span class="d-none d-md-block font-bold"> Editar</span>
                                 </button> 
                             </div>
 
                             <div class="mb-3">
-                                <button onclick="detallesProductoById(<?= $mostrar['id'] ?>)" type="button" class="text-sm btn_details btn btn-outline-secondary transition-all gap-2 flex items-center justify-center " data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <button onclick="detallesProductoById(<?= $mostrar['id'] ?>)" type="button" class="text-sm btn_details btn btn-outline-secondary transition-all gap-2 flex items-center justify-center " data-bs-toggle="modal" data-bs-target="#detallesModal">
                                     <i class="bi bi-eye"></i> 
                                     <span class="d-none d-md-block font-bold"> Ver Detalles</span>
                                 </button> 

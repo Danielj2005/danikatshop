@@ -291,11 +291,27 @@ if ($_SESSION['logged_in'] === true) { ?>
             </div>
         </div>
 
+        <!-- Modal detalles de producto -->
+        <div data-bs-theme="dark" class="modal fade" id="detallesModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                <div class="modal-content bg-slate-900 rounded-3xl border border-slate-800 shadow-2xl">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles de producto</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="gap-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 modal-body" id="modalBodyDetalles">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <div class="msjFormSend"></div>
 
         <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
         <!-- Custom scripts for all pages-->
         <script type="text/javascript" src="js/sweetalert2.min.js"></script>
 
