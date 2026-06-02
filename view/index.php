@@ -41,136 +41,122 @@ if ($_SESSION['logged_in'] === true) { ?>
             </div>
         </nav>
 
-        <div id="" class="min-h-screen">
+        <main id="main-content" class="min-h-screen mx-auto p-3">
 
-            <main class=" mx-auto p-3">
-                <div class=" mx-2 p-3 space-y-3 animate-fade-in">
-                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-                        <h2 class="text-3xl font-bold text-white">Panel de <span class="text-purple-500">Gestión</span></h2>
-                        <div class="text-right">
-                            <p class="text-slate-200 font-bold"><?= $_SESSION['dataUser']['nombre']; ?></p>
-                            <p class="text-xs text-slate-500"><?= $_SESSION['dataUser']['rol'] == 1 ? "Dev Master" : "Administrador" ?></p>
-                        </div>
+            <div class=" mx-2 p-3 space-y-3 animate-fade-in mb-3">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                    <h2 class="text-3xl font-bold text-white">Panel de <span class="text-purple-500">Gestión</span></h2>
+                    <div class="text-right">
+                        <p class="text-slate-200 font-bold"><?= $_SESSION['dataUser']['nombre']; ?></p>
+                        <p class="text-xs text-slate-500"><?= $_SESSION['dataUser']['rol'] == 1 ? "Dev Master" : "Administrador" ?></p>
                     </div>
-
-                    <div class="row justify-content-around align-items-center p-2">
-
-                        <div class=" mb-3 text-center col-11 col-md-4 bg-slate-900 p-4 rounded-3xl border border-slate-800 shadow-2xl">
-                            <h3 class="border-bottom font-bold mb-3 fs-3 text-slate-400">Categorías</h3>
-    
-                            <div class="text-center mb-2 row ">
-                                <div class="text-center mb-3 col-12">
-                                    <button type="button" data-bs-toggle="modal" data-bs-target="#registrar_categoria" 
-                                            class="mb-2 btn_modal btn btn-success"><i class="bi bi-plus-circle"></i>&nbsp;Registrar Nueva
-                                        </button>
-                                </div>
-                                <div class="text-center mb-1 col-12">
-                                    <button onclick="getList()" id="btn_ver_listas_categoria" type="button" class="btn_modal btn btn btn-secondary" data-bs-toggle="modal" 
-                                        data-bs-target="#modalList"><i class="bi bi-list-columns-reverse"></i>&nbsp;Ver Lista
-                                    </button>
-                                </div>
-                            </div>
-                        </div> 
-
-                        <div class="mb-3 d-none text-center col-12 col-md-5 fs-4 bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-2xl">
-                            <h3 class="border-bottom font-bold mb-3 text-lg text-slate-400">Marcas</h3>
-    
-                            <div class="text-center mb-2 row ">
-                                <div class="text-center mb-2 col-12 col-md-6">
-                                    <button 
-                                        modal="registrarCategoria" 
-                                        type="button" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#modal" 
-                                        class="mb-2 btn_modal btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Nueva
-                                    </button>
-                                </div>
-                                <div class="text-center mb-2 col-12 col-md-6">
-                                    <button 
-                                        modal="listaCategoria" 
-                                        id="btn_ver_listas_categoria" 
-                                        type="button" 
-                                        class="btn_modal btn btn btn-secondary" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#modal"><i class="bi bi-list-columns-reverse"></i> Lista de Marcas
-                                    </button>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>
-
-
-                    <section id="" class="text-black bg-slate-900 p-3 rounded-3xl border border-slate-800 shadow-2xl justify-content-between align-items-center">
-                        
-                        <section data-bs-theme="dark" class="text-start mb-3 ">
-                            <div class="text-center row justify-content-between">
-                                <h3 class="col-12 col-md-4 text-lg font-bold text-emerald-400 mb-4 shadow-3xl shadow-emerald-300">Productos en Línea (<?=  mysqli_num_rows($catalogo); ?>)</h3>
-
-                                    
-                                <div class="col-12 col-md-4 mb-1 ">
-                                    <button id="btnChangeState" onclick="changeState()" type="submit" class="btn btn-secondary">Ver Productos inactivos</button>
-                                </div>
-                                <div class="col-12 col-md-4 text-center mb-2">
-                                    <button type="button" data-bs-toggle="modal" data-bs-target="#registrar_producto" 
-                                        class="mb-2 btn_modal btn btn-success"><i class="bi bi-plus-circle"></i>&nbsp;Registrar Nuevo
-                                    </button>
-                                </div>
-                            </div>
-                        </section> 
-                    
-                        <section data-bs-theme="dark" id="activos" class="text-white d-non d-md-block text-center table-responsive overflow-hidden ">
-                            <h3 class="text-white sm:text-3xl md:text-4xl fw-bold mb-3">Productos Activos &nbsp;<i class="text-success bi bi-check-circle"></i></h3>
-                            <table class="tableActivos no-footer table table-group-divider table-hover table-striped" id="tableActivos">
-                                <thead class="mt-3">
-                                    <tr class="">
-                                        <th class="col text-center" scope="col">N.º</th>
-                                        <th class="col text-center" scope="col">Producto</th>
-                                        <th class="col text-center" scope="col">Precios</th>
-                                        <th class="col text-center" scope="col">Imagen</th>
-                                        <th class="col text-center" scope="col">Editar</th>
-                                        <th class="col text-center" scope="col">Desactivar</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </section>
-
-                        <section  data-bs-theme="dark" id="inactivos" class="text-center d-none table-responsive overflow-hidden">
-                            <h3 class="text-white sm:text-2xl md:text-3xl fw-bold mb-3">Productos Inactivos &nbsp;<i class="text-danger bi bi-x-circle"></i></h3>
-
-                            <table class="tableInactivos mb-3 no-footer table table-group-divider table-hover table-striped" id="tableInactivos">
-                                <thead>
-                                    <tr class="">
-                                        <th class="col text-center" scope="col">N.º</th>
-                                        <th class="col text-center" scope="col">Producto</th>
-                                        <th class="col text-center" scope="col">Precios</th>
-                                        <th class="col text-center" scope="col">Imagen</th>
-                                        <th class="col text-center" scope="col">Editar</th>
-                                        <th class="col text-center" scope="col">Activar</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
-                        </section>
-
-                        
-                    </section>
                 </div>
 
-                <section class="max-w-7xl mx-auto p-3" id="main">
-                    <div id="cards_activos" class="d-block d-md-none grid gap-3 justify-around grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
+                
+                <div class="row justify-content-around align-items-center p-2">
+
+                    <div class=" mb-3 text-center col-11 col-md-4 bg-slate-900 p-4 rounded-3xl border border-slate-800 shadow-2xl">
+                        <h3 class="border-bottom font-bold mb-3 fs-3 text-slate-400">Categorías</h3>
+
+                        <div class="text-center mb-2 row ">
+                            <div class="text-center mb-3 col-12">
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#registrar_categoria" 
+                                        class="mb-2 btn_modal btn btn-success"><i class="bi bi-plus-circle"></i>&nbsp;Registrar Nueva
+                                    </button>
+                            </div>
+                            <div class="text-center mb-1 col-12">
+                                <button onclick="getList()" id="btn_ver_listas_categoria" type="button" class="btn_modal btn btn btn-secondary" data-bs-toggle="modal" 
+                                    data-bs-target="#modalList"><i class="bi bi-list-columns-reverse"></i>&nbsp;Ver Lista
+                                </button>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="mb-3 d-none text-center col-12 col-md-5 fs-4 bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-2xl">
+                        <h3 class="border-bottom font-bold mb-3 text-lg text-slate-400">Marcas</h3>
+
+                        <div class="text-center mb-2 row ">
+                            <div class="text-center mb-2 col-12 col-md-6">
+                                <button 
+                                    modal="registrarCategoria" 
+                                    type="button" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#modal" 
+                                    class="mb-2 btn_modal btn btn-success"><i class="bi bi-plus-circle"></i> Registrar Nueva
+                                </button>
+                            </div>
+                            <div class="text-center mb-2 col-12 col-md-6">
+                                <button 
+                                    modal="listaCategoria" 
+                                    id="btn_ver_listas_categoria" 
+                                    type="button" 
+                                    class="btn_modal btn btn btn-secondary" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#modal"><i class="bi bi-list-columns-reverse"></i> Lista de Marcas
+                                </button>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+
+
+                <section id="" class="text-black bg-slate-900 p-3 rounded-3xl border border-slate-800 shadow-2xl justify-content-between align-items-center">
+                    
+                    <div data-bs-theme="dark" class="text-start mb-3 text-center row justify-content-between">
+                        <h3 class="col-12 col-md-4 text-lg font-bold text-emerald-400 mb-4">Productos en Línea (<?=  mysqli_num_rows($catalogo); ?>)</h3>
                         
+                        <div class="col-12 col-md-4 mb-3 ">
+                            <button id="btnChangeState" onclick="changeState()" type="submit" class="btn btn-danger"><i class="bi bi-x-circle"></i>&nbsp; Ver Productos inactivos</button>
+                        </div>
+                        <div class="col-12 col-md-4 mb-3">
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#registrar_producto" class="mb-2 btn_modal btn btn-success"><i class="bi bi-plus-circle"></i>&nbsp;Registrar Nuevo
+                            </button>
+                        </div>
+                    </div> 
+                
+                    <div data-bs-theme="dark" id="activos" class="text-white d-none d-md-block text-center table-responsive overflow-hidden ">
+                        <h3 class="text-white sm:text-3xl md:text-4xl fw-bold mb-3">Productos Activos &nbsp;<i class="text-success bi bi-check-circle"></i></h3>
+                        <table class="tableActivos no-footer table table-group-divider table-hover table-striped" id="tableActivos">
+                            <thead class="mt-3">
+                                <tr class="">
+                                    <th class="col text-center" scope="col">N.º</th>
+                                    <th class="col text-center" scope="col">Producto</th>
+                                    <th class="col text-center" scope="col">Precios</th>
+                                    <th class="col text-center" scope="col">Imagen</th>
+                                    <th class="col text-center" scope="col">Editar</th>
+                                    <th class="col text-center" scope="col">Desactivar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
                     </div>
-                    <div id="cards_inactivos" class="d-none grid gap-3 justify-around grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
-                        
+
+                    <div  data-bs-theme="dark" id="inactivos" class="text-center d-none table-responsive overflow-hidden">
+                        <h3 class="text-white sm:text-2xl md:text-3xl fw-bold mb-3">Productos Inactivos &nbsp;<i class="text-danger bi bi-x-circle"></i></h3>
+
+                        <table class="tableInactivos mb-3 no-footer table table-group-divider table-hover table-striped" id="tableInactivos">
+                            <thead>
+                                <tr class="">
+                                    <th class="col text-center" scope="col">N.º</th>
+                                    <th class="col text-center" scope="col">Producto</th>
+                                    <th class="col text-center" scope="col">Precios</th>
+                                    <th class="col text-center" scope="col">Imagen</th>
+                                    <th class="col text-center" scope="col">Editar</th>
+                                    <th class="col text-center" scope="col">Activar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
                     </div>
                 </section>
-            </main>
-        </div>
+
+            </div>
+
+        </main>
 
         <div class="modal fade" id="registrar_categoria" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-theme="dark">
             <div id="modal_tamano" class="modal-dialog modal-dialog-scrollable">
@@ -309,10 +295,12 @@ if ($_SESSION['logged_in'] === true) { ?>
         <div class="msjFormSend"></div>
 
         <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
-        <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <!-- Custom scripts for all pages-->
         <script type="text/javascript" src="js/sweetalert2.min.js"></script>
+
         <script type="text/javascript" src="js/DanikatAlert.js"></script>
+
         <script type="text/javascript" src="js/SendForm.js"></script>
                 
         <script type="text/javascript" src="js/tiempo_inactividad.js"></script>

@@ -48,6 +48,53 @@ const createCatalogo = (id, nombre, precio, urlImage) =>
 
 
 
+function inicializarCarrusel() {
+    const track = document.querySelectorAll('.carousel-track');
+    const slides = document.querySelectorAll('#carouselTrack li');
+    const nextButton = document.getElementById('nextBtn') ?? null;
+    const prevButton = document.getElementById('prevBtn') ?? null;
+    
+    let currentIndex = 0;
+
+    // Función central que mueve el carrusel
+    function moverAlSlide(index) {
+        // Calculamos el desplazamiento exacto en porcentaje
+        const desplazamiento = index * -100;
+        track.style.transform = `translateX(${desplazamiento}%)`;
+        currentIndex = index;
+    }
+
+    // Evento Botón Siguiente
+    if (nextButton !== null) {
+        nextButton.addEventListener('click', () => {
+            let nextIndex = currentIndex + 1;
+            // Si llega al final, vuelve al principio de forma infinita
+            if (nextIndex >= slides.length) {
+            nextIndex = 0;
+            }
+            moverAlSlide(nextIndex);
+        });
+
+    }
+
+    // Evento Botón Anterior
+    if (prevButton !== null) {
+        prevButton.addEventListener('click', () => {
+            let prevIndex = currentIndex - 1;
+            // Si retrocede desde el principio, va al final
+            if (prevIndex < 0) {
+            prevIndex = slides.length - 1;
+            }
+            moverAlSlide(prevIndex);
+        });
+    }
+
+    // Opcional: Ajustar el tamaño si la ventana cambia (resposivo nativo)
+    window.addEventListener('resize', () => {
+        moverAlSlide(currentIndex);
+    });
+}
+
 
 async function getProductos() {
     try {
@@ -58,6 +105,9 @@ async function getProductos() {
         
         if (isMobile) {
             // En móviles, mejor cambiar la ubicación de la pestaña actual
+            document.getElementById('activos').remove();
+            document.getElementById('inactivos').remove();
+
             const [active, inactive] = await Promise.all([
                 fetch(`../controller/listaProductos.php`,{
                     method: "POST", 
@@ -73,11 +123,25 @@ async function getProductos() {
             const productosActivos = await active.text();
             const productosInactivos = await inactive.text();
 
-            let cardsProductosActivos = document.getElementById('#cards_activos');
-            let cardsProductosInactivos = document.getElementById('#cards_inactivos');
-    
-            cardsProductosActivos.innerHTML = productosActivos;
+            // se crean los elementos contenedores de las cards de los productos
+            const cardsProductosActivos = document.createElement('div');
+            const cardsProductosInactivos = document.createElement('div');
+            
+            // se asignan las clases css de los contenedores de las cards de los productos
+            cardsProductosActivos.className = "grid gap-3 justify-around grid-cols-2 md:grid-cols-4";
+            cardsProductosInactivos.className = "d-none grid gap-3 justify-around grid-cols-2 md:grid-cols-4";
+            
+            // se asignan las ID de los contenedores cards de los productos
+            cardsProductosActivos.id = "cards_activos";
+            cardsProductosInactivos.id = "cards_inactivos";
+
+            // btn.addEventListener('click', () => filterByCategory(categoria));
+            
+            cardsProductosActivos.innerHTML = productosActivos; 
             cardsProductosInactivos.innerHTML = productosInactivos;
+            
+            document.getElementById('main-content').appendChild(cardsProductosActivos);
+            document.getElementById('main-content').appendChild(cardsProductosInactivos);
 
         } else {
             // En PC, abrimos pestaña nueva

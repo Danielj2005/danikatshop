@@ -110,7 +110,7 @@ class producto_model extends modeloPrincipal {
         return $id_producto;
     }
 
-    private static function formatnumber (string $moneda, float $precio) {
+    public static function formatnumber (string $moneda, float $precio) {
         if ($moneda == "USD") {
             return number_format($precio, 2, ".", ",");
         }else{

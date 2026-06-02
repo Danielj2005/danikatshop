@@ -7,7 +7,7 @@ const createCatalogo = (id, nombre, precio, urlImage) =>
             <img src="${urlImage}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
             <div class="absolute bottom-0 flex flex-wrap gap-2 items-center">
                 <div class="backdrop-blur-md bg-black/60 border border-white/10 bottom-4 left-4 px-4 py-1 relative rounded-full">
-                    <span class="text-sm font-bold text-white">${precio >= 1.00 ? "$ "+precio : 'Bajo pedido'}</span>
+                    <span class="text-sm font-bold text-white">${precio >= 1.00 ? "$ "+ precio : 'Bajo pedido'}</span>
                 </div>
             </div>
         </div>
