@@ -2,6 +2,7 @@
 const products = [];
 let categorys = [];
 let categoriasProductos = [];
+const FILTERS = [];
 
 /**
  * Filtra en tiempo real. 
@@ -27,28 +28,85 @@ window.handleSearch = (val) => {
 /**
  * Filtra productos por categoría basándose en el texto del botón o data-attributes
  */
-window.filterByCategory = (categoryName) => {
+window.filterByCategory = async (categoryName, ID, page = 1) => {
     const products = document.querySelectorAll('.product-card');
     const buttons = document.querySelectorAll('.category-btn');
+    const filtersActive = document.getElementById('num_filter');
+
+    // Agregar el filtro a la lista de filtros activos
+    if (categoryName !== 'all') {
+        if (!FILTERS.includes(categoryName)) {
+            FILTERS.push(categoryName);
+        }else{
+            let index = FILTERS.indexOf(categoryName);
+            if (index > -1) {
+                FILTERS.splice(index, 1); // Elimina el filtro del array
+                document.getElementById(`dropdown-item-${ID}`).classList.remove('bg-purple-600');
+
+            }
+        }
+    }else{
+        // Si se selecciona "Todos", limpiar todos los filtros
+        FILTERS.length = 0; // Limpia el array de filtros
+        // Actualizar estilos de los botones para reflejar que "Todos" está activo
+        document.getElementById('dropdown-item-all').classList.add('bg-purple-600');
+        document.querySelectorAll('#category-filters .dropdown-item').forEach(item => {
+            if (item.id !== 'dropdown-item-all') {
+                item.classList.remove('bg-purple-600');
+            }
+        });
+    }
+
+    if (FILTERS.length > 0) {
+        filtersActive.textContent = FILTERS.length;
+        filtersActive.classList.remove('d-none');
+
+        document.getElementById(`dropdown-item-${ID}`).classList.add('bg-purple-600');
+    } else {
+        filtersActive.classList.add('d-none');
+    }
+    
 
     // Actualizar estilos visuales de los botones de filtro
-    buttons.forEach(btn => {
-        const isMatch = btn.innerText.trim() === categoryName || (categoryName === 'all' && btn.innerText.trim() === 'Todos');
-        if (isMatch) {
-            btn.classList.add('bg-purple-600', 'text-white', 'border-purple-600', 'shadow-[0_0_10px_rgba(168,85,247,0.5)]');
-        } else {
-            btn.classList.remove('bg-purple-600', 'text-white', 'border-purple-600', 'shadow-[0_0_10px_rgba(168,85,247,0.5)]');
-        }
-    });
 
-    products.forEach(product => {
-        const productCategories = product.getAttribute('data-categories')?.toLowerCase().split(',') || [];
-        if (categoryName === 'all' || productCategories.includes(categoryName.toLowerCase())) {
-            product.style.display = "";
-        } else {
-            product.style.display = "none";
+    try {
+        let response;
+        const per_page = 15;
+        if (FILTERS.length < 1) {
+            response = await fetch(`./controller/catalogo.php?page=${page}&per_page=${per_page}`);
+        
+        }else {
+            // Consultamos al PHP que trae los datos de MySQL
+            response = await fetch('./controller/catalogo.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ filter: FILTERS, page: page, per_page: per_page })
+            });
         }
-    });
+
+        if (!response.ok) throw new Error("Error en la petición");
+
+        const data = await response.json();
+        if (data.status === "success") {
+
+            // data.productos ya viene como objeto si ajustaste el PHP
+            const productos = typeof data.productos === 'string' ? JSON.parse(data.productos) : data.productos;
+            
+            renderCatalogo(productos);
+            if (typeof renderPagination === 'function') {
+                renderPagination(data.total, data.per_page, data.page);
+            }
+
+        }else{
+            
+            document.getElementById('main').innerHTML = ``;
+        }
+
+    } catch (error) {
+        console.error("Error al cargar los productos:", error);
+    }
 };
 
 

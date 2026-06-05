@@ -84,15 +84,16 @@
             <h2 class="md:text-2xl sm:text-xl font-bold italic text-white mb-2">Todo lo que buscas en un solo lugar</h2>
             
             <!-- Filtros por Categoría -->
-            <div class="dropdown d-none" data-bs-theme="dark">
-                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="dropdown " data-bs-theme="dark">
+                <button class="btn btn-primary dropdown-toggle position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-sliders" ></i>
-                    Filtros 
+                    <span class="" > Filtros  </span>
+                    <span id="num_filter" class="d-none badge position-absolute text-bg-danger" style="top: -.8rem;  right: -1rem;"></span>
                 </button>
                 
                 <ul id="category-filters" class="dropdown-menu">
-                    <li class="dropdown-item" >
-                        <button onclick="filterByCategory('all')" class="category-btn px-4 py-1.5 rounded-full border border-purple-500/50 text-slate-300 text-sm transition-all hover:bg-purple-500/20 bg-purple-600 text-white border-purple-600 shadow-[0_0_10px_rgba(168,85,247,0.5)]">Todos</button>
+                    <li id="dropdown-item-all" class="dropdown-item transition-all hover:bg-purple-500/20" >
+                        <button onclick="filterByCategory('all', 0)" class="category-btn">Todos</button>
                     </li>
                 </ul>
             </div>
@@ -122,6 +123,7 @@
     <script src="view/js/bootstrap.bundle.min.js"></script>
     <script src="view/js/sweetalert2.min.js"></script>
     <script src="view/js/DanikatAlert.js"></script>
+    <script src="view/js/renderCatalogo.js"></script>
     <script src="view/js/catalogo.js"></script>
     <script src="view/js/index.js"></script>
 </body>
