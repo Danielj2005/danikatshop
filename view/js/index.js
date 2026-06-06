@@ -35,21 +35,27 @@ window.filterByCategory = async (categoryName, ID, page = 1) => {
 
     // Agregar el filtro a la lista de filtros activos
     if (categoryName !== 'all') {
+
         if (!FILTERS.includes(categoryName)) {
             FILTERS.push(categoryName);
+            document.getElementById(`dropdown-item-${ID}`).classList.add('bg-purple-600');
+
         }else{
+            
+            document.getElementById(`dropdown-item-${ID}`).classList.remove('bg-purple-600');
             let index = FILTERS.indexOf(categoryName);
             if (index > -1) {
                 FILTERS.splice(index, 1); // Elimina el filtro del array
-                document.getElementById(`dropdown-item-${ID}`).classList.remove('bg-purple-600');
-
             }
         }
+
     }else{
+
         // Si se selecciona "Todos", limpiar todos los filtros
         FILTERS.length = 0; // Limpia el array de filtros
         // Actualizar estilos de los botones para reflejar que "Todos" está activo
         document.getElementById('dropdown-item-all').classList.add('bg-purple-600');
+
         document.querySelectorAll('#category-filters .dropdown-item').forEach(item => {
             if (item.id !== 'dropdown-item-all') {
                 item.classList.remove('bg-purple-600');
@@ -58,10 +64,10 @@ window.filterByCategory = async (categoryName, ID, page = 1) => {
     }
 
     if (FILTERS.length > 0) {
+
         filtersActive.textContent = FILTERS.length;
         filtersActive.classList.remove('d-none');
 
-        document.getElementById(`dropdown-item-${ID}`).classList.add('bg-purple-600');
     } else {
         filtersActive.classList.add('d-none');
     }
@@ -71,7 +77,7 @@ window.filterByCategory = async (categoryName, ID, page = 1) => {
 
     try {
         let response;
-        const per_page = 15;
+        const per_page = 16;
         if (FILTERS.length < 1) {
             response = await fetch(`./controller/catalogo.php?page=${page}&per_page=${per_page}`);
         

@@ -41,7 +41,7 @@ async function getCatalogo(page = 1) {
                 <h3 class="h1 text-center text-white font-semibold mb-1 truncate mb-4">En este momento no hay productos disponibles.</h3> 
             </div> </div> </div>`;
 
-        const per_page = 15;
+        const per_page = 16;
 
         // Consultamos al PHP que trae los datos de MySQL
         const response = await fetch(`./controller/catalogo.php?page=${page}&per_page=${per_page}`);
