@@ -1,10 +1,7 @@
 
-<!-- Footer -->
-<footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Create Tech Solutions 2025</span>
-        </div>
-    </div>
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer static-bottom">
+    <div class="copyright"> &copy; <strong><span>DaniKat Shop</span></strong> </div>
+    <div class="credits"> <p>DESAROLLADO POR:  DANIEL BARRUETA</p> </div>
 </footer>
-<!-- End of Footer -->
+<!-- End Footer -->
