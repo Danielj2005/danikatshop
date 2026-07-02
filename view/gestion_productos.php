@@ -92,7 +92,7 @@ $l_marca = 1;
                             <?php if ($categoria || $presentacion > 0 || $marca > 0) : ?>
 
                                 <?php if ($categoria): ?>
-                                    <div class="text-center col-12 col-md-3 fs-4 border card">
+                                    <div class="text-center col-12 col-md-3 fs-4 rounded-2 card">
                                         <h3 class="text-center mt-2 titulosH fs-4 fw-bold ">Categorías</h3>
 
                                         <?php if ($r_categoria == 1 ): ?>
@@ -116,7 +116,7 @@ $l_marca = 1;
                                 <?php endif; ?>
 
                                 <?php if ($presentacion): ?>
-                                    <div class="text-center col-12 col-md-3 fs-4 border card">
+                                    <div class="text-center col-12 col-md-3 fs-4 rounded-2 card">
                                         <h3 class="text-center mt-2 titulosH fs-4 fw-bold ">Presentaciones</h3>
 
                                         <?php if ($r_presentacion == 1 ): ?>
@@ -140,7 +140,7 @@ $l_marca = 1;
                                 <?php endif; ?>
 
                                 <?php if ($marca): ?>
-                                    <div class="text-center col-12 col-md-3 fs-4 border card">
+                                    <div class="text-center col-12 col-md-3 fs-4 rounded-2 card">
                                         <h3 class="text-center mt-2 titulosH fs-4 fw-bold ">Marcas</h3>
 
                                         <?php if ($r_marca == 1 ): ?>
@@ -169,8 +169,8 @@ $l_marca = 1;
                         <!-- registro y listado de productos -->
 
                         <div class="col-12 mb-3 pagetitle text-center">
-                            <div class="card">
-                                <div class="card-body row p-3">
+                            <div class="card rounded-2 p-2">
+                                <div class="car-body row p-3">
                                     
                                     
                                     
@@ -238,15 +238,15 @@ $l_marca = 1;
                                         <ul class="list-unstyled overflow-hidden">
                                             <li class="list-item">
                                                 <span class="rounded-5 badge fw-bold text-bg-primary text-primary">.</span>
-                                                <span class="fw-bold">Gran cantidad de stock (50 o más)</span>
+                                                <span class="fw-bold">Productos con Gran cantidad de stock (50 o más)</span>
                                             </li>
                                             <li class="list-item">
                                                 <span class="rounded-5 badge fw-bold text-bg-warning text-warning">.</span>
-                                                <span class="fw-bold">Poca cantidad de stock (30 o menos)</span>
+                                                <span class="fw-bold">Productos con Poca cantidad de stock (30 o menos)</span>
                                             </li>
                                             <li class="list-item">
                                                 <span class="rounded-5 badge fw-bold text-bg-danger text-danger">.</span>
-                                                <span class="fw-bold">Baja cantidad de stock (20 o menos)</span>
+                                                <span class="fw-bold">Productos con Baja cantidad de stock (20 o menos)</span>
                                             </li>
                                             <li class="list-item">
                                                 <span class="rounded-5 badge fw-bold text-bg-success text-success">.</span>
