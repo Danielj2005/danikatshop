@@ -6,9 +6,6 @@
 <link href="./css/sweetalert2.min.css" rel="stylesheet">
 <link href="./css/toastify.css" rel="stylesheet">
 
-<!-- estilos custom -->
-<link href="./css/man.css" rel="stylesheet">
-
 <link href="./css/select2.min.css" rel="stylesheet">
 
 <link href="./css/bootstrap.min.css" rel="stylesheet">
@@ -68,8 +65,8 @@ $configuracion = ['iva' => 20 /*config_model::obtener_dato('porcentaje_iva')*/,
 ?>
 <!-- se obtiene el porcentaje del iva y de la ganancia para los productos -->
 <script type="text/javascript">
-    const IVA = <?php $configuracion['iva'] ?> ;
-    const PORCENTAJE_GANANCIA = <?php $configuracion['ganancia'] ?>;
+    const IVA = <?= $configuracion['iva'] ?> ;
+    const PORCENTAJE_GANANCIA = <?= $configuracion['ganancia'] ?>;
     // url de la api del router
     const URL_API = "./inc/api.php";
 </script>

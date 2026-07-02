@@ -133,14 +133,25 @@ class producto_model extends modeloPrincipal {
                 INNER JOIN categorias AS C ON C.id = CP.categoria_id
                 WHERE CP.producto_id = $id_producto"); 
 
+            $stock = rand(1,60);
+            
+            $stock = $stock > 30 ? "primary" : $stock;
+            $stock = $stock < 30 ? "warning" : $stock;
+            $stock = $stock < 20 ? "danger" : $stock;
+            $stock = $mostrar["precio"] < 1 ? "secondary" : $stock;
+            $stock = $mostrar["precio"] > 1 && $stock ? "success" : $stock;
+
             ?>
             <tr class="text-center">
                 <td class="text-center"></td>
                 <td class="text-start">
-                    <p class=" fw-bold mb-1"><?= ucwords(strtolower($mostrar["nombre"])) ?> </p>
+                    <p class="fw-bold mb-1">
+                        <span class="rounded-5 badge fw-bold text-bg-<?= $stock ?> text-<?= $stock ?>">.</span>
+                        <?= ucwords(strtolower($mostrar["nombre"])) ?>
+                    </p>
                     <small class="d-flex gap-1 text-muted align-items-center"> 
                         <?php while ($cat = mysqli_fetch_assoc($categorias)) { ?> 
-                            <span class="bg-indigo-600 badge text-white rounded-3xl">
+                            <span class="bg-indigo-600 badge p-2 text-white rounded-5 text-bg-dark">
                                 <?= $cat['categorias'] ?>
                             </span>
                         <?php } ?> 
@@ -149,7 +160,7 @@ class producto_model extends modeloPrincipal {
                 <td class="text-center">
                     <?php if ($mostrar["precio"] < 1): ?>
                         <div class="flex justify-center gap-2 flex-wrap items-center">
-                            <span class="badge text-bg-danger text-sm">Bajo pedido</span>
+                            <span class="badge text-bg-danger p-2 text-sm">Bajo pedido</span>
                         </div>
 
                     <?php else: ?>
@@ -180,7 +191,7 @@ class producto_model extends modeloPrincipal {
                 <td>
                     <button onclick="verImagen('<?= $imgSrc; ?>','<?= $mostrar['nombre'] ?>' )" class="btn btn-secondary text-xs">
                         <i class="bi bi-image mr-1"></i> 
-                        <span class="d-none d-md-block font-bold">Ver Imagen</span>
+                        <span class="small d-none d-md-block">Ver Imagen</span>
                     </button>
                 </td>
                 <td class="col text-center">
