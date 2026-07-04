@@ -35,7 +35,7 @@ try {
                     <ul class="carousel-track" id="carouselTrack">
                         <?php foreach ($files as $file) { ?>
                             <li class="carousel-slide ${active}">
-                                <img class="h-100" src=".<?= $file ?>" onerror="this.onerror=null; this.src='./img/404.png';" onerror="this.src='ruta/imagen-no-encontrada.jpg'">
+                                <img src=".<?= $file ?>" onerror="this.onerror=null; this.src='./img/404.png';" onerror="this.src='ruta/imagen-no-encontrada.jpg'">
                             </li>
                         <?php  } ?>
                     </ul>
@@ -49,18 +49,16 @@ try {
             
             <hr class="md:hidden mt-5 mb-3">
             <div class="p-3 text-start border border-slate-800 rounded-3" style="height: fit-content;">
-                <h3 class="font-bold mb-4 text-3xl text-white">
+                <h3 class="fw-bold mb-4 text-xl">
                     <?= ucwords(strtolower($quety['nombre'])) ?>
                 </h3>
-                <div class="bottom-0 flex flex-wrap gap-2 items-center mb-3">
-
-                    <div class="absolute backdrop-blur-md bg-black/60 border border-white/10 bottom-4 left-4 px-4 py-1 relative rounded-full">
-
-                        <span class="text-sm font-bold text-emerald-400"><?= $quety['precio'] < 1.00 ? 'Bajo pedido' : "$". $quety['precio'] ?></span>
+                <div class="">
+                    <div class="bg_badge_precio badge border border-white rounded-5">
+                        <span class="fs-5"><?= $quety['precio'] >= 1.00 ? "$ ".$quety['precio'] : 'Bajo pedido' ?></span>
                     </div>
                 </div>
                 
-                <p class="col-12 font-bold text-slate-400 mb-4 "><?= $quety['description'] ?></p>
+                <p class="col-12 fw-bold text-muted mb-4 "><?= $quety['description'] ?></p>
             </div>
 
         <?php else:

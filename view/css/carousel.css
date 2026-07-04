@@ -30,7 +30,8 @@
 .carousel-slide img {
   width: 100%;
   display: block;
-  object-fit: cover;
+  /* object-fit: cover; */
+  object-fit: scale-down;
   height: 400px; /* Altura fija para mantener consistencia */
 }
 

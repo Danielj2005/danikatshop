@@ -14,5 +14,13 @@
             <button type="submit" title="Search"><i class="bi bi-search"></i></button>
         </form>
     </div>
+
+    <div class="d-flex align-items-center">
+        
+        <a href="login-admin.php" class="nav-link nav-profile d-flex align-items-center pe-0" data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle fs-3"></i>
+            <span class="ms-2">Login</span>
+        </a>
+    </div>
 </header>
 <div class="msjFormSend"></div>
