@@ -60,8 +60,10 @@
 
 <?php 
 // se obtiene la configuracion de la base de datos
-$configuracion = ['iva' => 20 /*config_model::obtener_dato('porcentaje_iva')*/,
-    'ganancia' => 20 /*config_model::obtener_dato('porcentaje_ganancia')*/];
+$configuracion = [
+    'iva' => 20 /*config_model::obtener_dato('porcentaje_iva')*/,
+    'ganancia' => 20 /*config_model::obtener_dato('porcentaje_ganancia')*/
+];
 ?>
 <!-- se obtiene el porcentaje del iva y de la ganancia para los productos -->
 <script type="text/javascript">

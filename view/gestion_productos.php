@@ -61,8 +61,6 @@ $l_marca = 1;
     <!DOCTYPE html>
     <html lang="en">
         <head>
-            <!-- titulo --> 
-            <title>Gestión de Productos</title> 
             <?php 
                 // se incluyen los meta datos 
                 include_once "./inc/meta_include.php"; 

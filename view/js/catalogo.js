@@ -61,11 +61,11 @@ async function getCatalogo(page = 1) {
             if (!filtroCategorias.dataset.inited) {
                 categorys.forEach(categoria => {
                     const li = document.createElement('li');
-                    li.className = "dropdown-item transition-all hover:bg-purple-500/20";
+                    li.className = "btn dropdown-item transition-all hover:bg-purple-500/20";
                     li.id = `dropdown-item-${categorys.indexOf(categoria)+1}`;
 
                     const btn = document.createElement('button');
-                    btn.className = "category-btn";
+                    btn.className = "category-btn btn";
                     btn.textContent = categoria;
                     btn.addEventListener('click', () => filterByCategory(categoria, categorys.indexOf(categoria)+1, 1));
 

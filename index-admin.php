@@ -6,23 +6,21 @@ require_once "config/SERVER.php";
 require_once "model/mainModel.php"; // se incluye el model principal
 require_once "model/productModel.php";
 
-// se evalua que este rol tenga el acceso a esta vista
-// if ($permiso_productos) {  
+
+$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$per_page = isset($_GET['per_page']) ? max(1, intval($_GET['per_page'])) : 15;
+
+$offset = ($page - 1) * $per_page;
+
+$catalogo = mysqli_fetch_all(modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos WHERE state = 1 ORDER BY nombre ASC LIMIT $per_page OFFSET $offset")); 
+$PHONE = "04244189963";
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <!-- titulo -->
-    <title>DANIKAT SHOP</title>
-    <!-- metadatos -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sistema de Control de Inventario, Punto de Venta y Gestión de Clientes y Proveedores.">
-    <meta name="keywords" content="Inventario, POS, gestión de clientes, proveedores">
-    <meta name="author" content="DANIEL BARRUETA">
+    <?php require_once "./view/inc/meta_include.php"; ?>
 
     <!-- Favicons -->
     <link href="./view/img/logo.jpeg" rel="shortcut icon" type="image/x-icon">
@@ -30,8 +28,6 @@ require_once "model/productModel.php";
     <!-- sweet-alert 2 -->
     <link href="./view/css/sweetalert2.min.css" rel="stylesheet">
     <link href="./view/css/toastify.css" rel="stylesheet">
-
-    <link href="./view/css/select2.min.css" rel="stylesheet">
 
     <link href="./view/css/bootstrap.min.css" rel="stylesheet">
     <link href="./view/css/bootstrap-icons.css" rel="stylesheet">
@@ -41,195 +37,79 @@ require_once "model/productModel.php";
     <!-- Template Main CSS File -->
     <link href="./view/css/nice_admin_styles/styles.css" rel="stylesheet">
 
+    <link href="./view/css/catalogo.css" rel="stylesheet">
 
 </head>
 
-<body class="toggle-sidebar">
+<body class="toggle-sidebar" data-bs-theme="dak">
 
-    <header id="header" class="header fixed-top d-flex align-items-center">
-
-        <div class="d-flex align-items-center justify-content-between">
-            <a href="./" class="logo d-flex align-items-center">
-                <img src="view/img/logo.jpeg" alt="">
-                <span class="d-none d-lg-block">DaniKat Shop</span>
-            </a>
-        </div>
-
-
-        <div class="search-bar">
-            <form class="search-form d-flex align-items-center" method="POST" action="#">
-                <input type="text" name="query" placeholder="Buscar tortas, arreglos, manualidades..." title="Enter search keyword">
-                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-            </form>
-        </div>
-
-        <?php
-        // $id_usuario = $_SESSION['id_usuario'];
-
-        // $precio_dolar_actual = modeloPrincipal::obtener_precio_dolar();
-
-        // $_SESSION['dolar'] = $precio_dolar_actual;
-
-        // $tiempo_config = modeloPrincipal::obtener_tiempo_inactividad();
-
-        // echo '<script type="text/javascript"> const tiempo_config = '.$tiempo_config.' * 60 * 1000</script>';
-
-        ?>
-
-        <nav class="header-nav ms-auto">
-            <ul class="d-flex align-items-center">
-
-                <li class="nav-item dropdown">
-
-                    <button class="btn bg-secondary-light nav-icon fst-italic fs-6" data-bs-toggle="dropdown">
-                        <i class="bi bi-currency-exchange"></i>
-                        &nbsp; Tasa USD: <span id="tasa_dolar">623.56<?php // modeloPrincipal::number_format_prices((float)$precio_dolar_actual) 
-                                                                        ?></span>Bs
-                    </button>
-
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                        <li class="dropdown-header row justify-content-center">
-                            <h6 class="text-center mb-3">Opciones de Actualización</h6>
-                            <div class=" col-12 mb-2">
-                                <button id="btn_update_dolar_auto" class="w-100 btn btn-success text-center">
-                                    <i class="bi bi-arrow-repeat"></i>
-                                    <span class="p-2 ms-2">Sincronizar Tasa (Automático)</span>
-                                </button>
-                            </div>
-                            <div class=" col-12 mb-2">
-                                <button class="btn btn-warning text-center w-100" data-bs-toggle="modal" data-bs-target="#dolarUpdate" id="btnUpdate">
-                                    <i class="bi bi-pencil-square"></i>
-                                    <span class="p-2 ms-2">Establecer Tasa (Manual)</span>
-                                </button>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown pe-3">
-
-                    <button class="nav-link nav-profile d-flex align-items-center pe-0">
-                        <span class="d-none d-md-block bi bi-person-circle">&nbsp;USER
-                            <?php // $_SESSION['dataUsuario']['nombre']." ".$_SESSION['dataUsuario']['apellido']; ?>
-                        </span>
-                    </button>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    <div class="msjFormSend"></div>
-
-
+    <?php require_once "./view/inc/catalogo_header.php"; ?>
 
     <main id="main" class="main">
-        <div class="pagetitle">
-            <h1 class="text-center fs-1 titulosH my-2">Todo lo que buscas en un solo lugar</h1>
+        <div class="pagetitle mb-5">
+            <h1 class="text-center fs-1 titulosH mb-4">Todo lo que buscas en un solo lugar</h1>
+            
+            <!-- Filtros por Categoría -->
+            <div class="dropdown text-center" data-bs-theme="dark">
+                <button class="btn btn-primary dropdown-toggle position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-sliders" ></i>
+                    <span class="" > Filtros  </span>
+                    <span id="num_filter" class="d-none badge position-absolute text-bg-danger" style="top: -.8rem;  right: -1rem;"></span>
+                </button>
+                
+                <ul id="category-filters" class="dropdown-menu overflow-scroll overflow-x-hidden" style="max-height: 25rem;">
+                    <li id="dropdown-item-all" class="btn dropdown-item transition-all hover:bg-purple-500/20" >
+                        <button onclick="filterByCategory('all', 0)" class="btn category-btn">Todos</button>
+                    </li>
+                </ul>
+            </div>
         </div>
         <section class="section dashboard">
-            <div class="row gap-1 justify-content-around align-items-center">
 
-                <div class="col-12 col-md-3 fs-4 rounded-4 card" data-bs-theme="drk">
-                    <div data-categories="" class="product-card product_${id} overflow-hidden">
-                        <div class="position-relative overflow-hidden " style="height: 15rem;">
-                            <img src="view/img/products/lonchera_grande.jpg" class="w-100 h-100" alt="Imagen del producto">
-                            <div class="position-absolute bottom-0 d-flex flex-wrap gap-2 align-items-center">
-                                <div class="badge bg-black border border-white bottom-4 left-4 px-4 py-1 position-relative rounded-5">
-                                    <span class="small fw-bold"><?= 2 >= 1.00 ? "$ 34" : 'Bajo pedido' ?></span>
+            <div class="producto-card-container">
+                <?php
+                    
+                    foreach ($catalogo as $producto) {
+                        $id = $producto[0];
+                        $nombre = $producto[1];
+                        $precio = $producto[2];
+                        $images = explode(',', $producto[3]);
+                        $images = $images[0];
+
+                        ?>
+                            <div class="fs-4 rounded-4 card p-2" data-bs-theme="drk">
+                                <div data-categories="" class="product-card product_<?= $id ?> overflow-hidden">
+                                    <div class="position-relative overflow-hidden" style="height: 15rem;">
+                                        <img src="<?= $images ?>" class="w-100 h-100 rounded-bottom-0 rounded-4" alt="Imagen del producto">
+                                        <div class="badge_precio_container">
+                                            <div class="badge_precio badge border border-white position-relative rounded-5">
+                                                <span class="precio_card"><?= $precio >= 1.00 ? "$ ".$precio : 'Bajo pedido' ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="border-top border-2">
+                                        <div class="text-start">
+                                            <button onclick="detallesProductoById(<?= $id ?>)" class="btn btn-white mb-3 fw-semibold" data-bs-toggle="modal" data-bs-target="#exampleModal"><?= ucwords(strtolower($nombre)) ?></button>
+                                        </div>
+                                        <div class="row justify-content-around align-items-center">
+                                            <div class="w-auto mb-3 text-center">
+                                                <button onclick="detallesProductoById(<?= $id ?>)" type="button" class="btn_details w-full p-sm-3 p-md-2 rounded-4 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                    <i class="bi bi-eye text-lg"></i> <span class="small fw-bold">Ver Detalles</span>
+                                                </button> 
+                                            </div>
+                                            <div class="w-auto mb-2 text-center">
+                                                <button onclick="askWhatsApp('<?= $nombre ?>', <?= $precio ?>, <?= $PHONE ?>)" 
+                                                    type="submit" class="w-full btn btn-success p-sm-3 p-md-2 d-flex items-center justify-center gap-2 rounded-5">
+                                                        <i class="bi bi-whatsapp text-lg"></i> <span class="small fw-bold">Consultar por WhatsApp</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="border-top border-2">
-                            <div class="text-start">
-                                <button onclick="detallesProductoById(${id})" class="btn btn-white mb-3 fw-semibold" data-bs-toggle="modal" data-bs-target="#exampleModal">lonchera_grande</button>
-                            </div>
-                            <div class="row justify-content-center align-items-center">
-                                <div class="w-auto mb-3 text-center">
-                                    <button onclick="detallesProductoById(${id})" type="button" class="btn_details w-full p-2 rounded-4 btn btn-secondary gap-2 d-flex items-center justify-center " data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                        <i class="bi bi-eye text-lg"></i> <span class="d-none d-md-block text-sm font-bold">Ver Detalles</span>
-                                    </button> 
-                                </div>
-                                <div class="w-auto mb-2 text-center">
-                                    <button onclick="askWhatsApp('${nombre}', ${precio}, ${PHONE})" 
-                                        type="submit" class="w-full btn btn-success  p-2 d-flex items-center justify-center gap-2 rounded-5">
-                                            <i class="bi bi-whatsapp text-lg"></i> <span class="d-none d-md-block text-sm font-bold">Consultar por WhatsApp</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>  
-
-                <div class="text-center col-12 col-md-3 fs-4 rounded-2 card">
-                    <h3 class="text-center mt-2 titulosH fs-4 fw-bold ">Categorías</h3>
-
-
-                    <div class="text-center mb-2">
-                        <button modal="registrarCategoria" type="button" data-bs-toggle="modal" data-bs-target="#modal" class="mb-2 btn_modal btn btn-success">
-                            <i class="bi bi-plus-circle"></i> Registrar nueva
-                        </button>
-                    </div>
-
-                    <div class="text-center mb-2">
-                        <button modal="listaCategoria" id="btn_ver_listas_categoria" type="button" class="btn_modal btn btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal">
-                            <i class="bi bi-list-columns-reverse"></i> Ver Lista
-                        </button>
-                    </div>
-
-                </div>  
-
-                <div class="text-center col-12 col-md-3 fs-4 rounded-2 card">
-                    <h3 class="text-center mt-2 titulosH fs-4 fw-bold ">Categorías</h3>
-
-
-                    <div class="text-center mb-2">
-                        <button modal="registrarCategoria" type="button" data-bs-toggle="modal" data-bs-target="#modal" class="mb-2 btn_modal btn btn-success">
-                            <i class="bi bi-plus-circle"></i> Registrar nueva
-                        </button>
-                    </div>
-
-                    <div class="text-center mb-2">
-                        <button modal="listaCategoria" id="btn_ver_listas_categoria" type="button" class="btn_modal btn btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal">
-                            <i class="bi bi-list-columns-reverse"></i> Ver Lista
-                        </button>
-                    </div>
-
-                </div>  
-
-                <div class="text-center col-12 col-md-3 fs-4 rounded-2 card">
-                    <h3 class="text-center mt-2 titulosH fs-4 fw-bold ">Categorías</h3>
-
-
-                    <div class="text-center mb-2">
-                        <button modal="registrarCategoria" type="button" data-bs-toggle="modal" data-bs-target="#modal" class="mb-2 btn_modal btn btn-success">
-                            <i class="bi bi-plus-circle"></i> Registrar nueva
-                        </button>
-                    </div>
-
-                    <div class="text-center mb-2">
-                        <button modal="listaCategoria" id="btn_ver_listas_categoria" type="button" class="btn_modal btn btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal">
-                            <i class="bi bi-list-columns-reverse"></i> Ver Lista
-                        </button>
-                    </div>
-
-                </div>  
-
-                <div class="text-center col-12 col-md-3 fs-4 rounded-2 card">
-                    <h3 class="text-center mt-2 titulosH fs-4 fw-bold ">Categorías</h3>
-
-
-                    <div class="text-center mb-2">
-                        <button modal="registrarCategoria" type="button" data-bs-toggle="modal" data-bs-target="#modal" class="mb-2 btn_modal btn btn-success">
-                            <i class="bi bi-plus-circle"></i> Registrar nueva
-                        </button>
-                    </div>
-
-                    <div class="text-center mb-2">
-                        <button modal="listaCategoria" id="btn_ver_listas_categoria" type="button" class="btn_modal btn btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal">
-                            <i class="bi bi-list-columns-reverse"></i> Ver Lista
-                        </button>
-                    </div>
-
-                </div>   
+                            </div>  
+                        <?php
+                    }
+                ?>
             </div>
         </section>
     </main>

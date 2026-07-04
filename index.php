@@ -84,7 +84,7 @@
             <h2 class="md:text-2xl sm:text-xl font-bold italic text-white mb-2">Todo lo que buscas en un solo lugar</h2>
             
             <!-- Filtros por Categoría -->
-            <div class="dropdown " data-bs-theme="dark">
+            <div class="dropdown text-center" data-bs-theme="dark">
                 <button class="btn btn-primary dropdown-toggle position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-sliders" ></i>
                     <span class="" > Filtros  </span>
@@ -92,7 +92,7 @@
                 </button>
                 
                 <ul id="category-filters" class="dropdown-menu">
-                    <li id="dropdown-item-all" class="dropdown-item transition-all hover:bg-purple-500/20" >
+                    <li id="dropdown-item-all" class=" dropdown-item transition-all hover:bg-purple-500/20" >
                         <button onclick="filterByCategory('all', 0)" class="category-btn">Todos</button>
                     </li>
                 </ul>
