@@ -96,10 +96,9 @@ if ($end - $start < $maxButtons - 1) {
         </div>
 
         <section class="section dashboard">
-
+            <!-- contenedor de tarjetas de productos -->
             <div class="producto-card-container">
                 <?php
-                    
                     foreach ($catalogo as $producto) {
                         $id = $producto[0];
                         $nombre = $producto[1];
@@ -145,12 +144,13 @@ if ($end - $start < $maxButtons - 1) {
                 ?>
             </div>
 
+            <!-- pagination -->
             <div id="catalog-pagination" class="w-100 d-flex justify-content-center align-items-center gap-2 my-6">
                 
                 <form id="" method="POST" action="index-admin.php" class="SendFormAjax text-start">
                     
                     <input id="" name="page" type="hidden" value="<?= $page - 1 ?>">
-                    <button type="submit" class="btn btn-secondary">
+                    <button <?= $page >= $totalPages ? 'disabled' : '' ?> type="submit" class="btn btn-secondary">
                         <i class="bi bi-arrow-left"></i>
                         <span class="small">Anterior</span>
                     </button>   

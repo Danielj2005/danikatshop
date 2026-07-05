@@ -7,6 +7,7 @@ const USER="root";
 const PASS="";
 
 const PHONE = "584244189963";
+const COMPANY = "Tecnosystem";
 
 /*----------  Datos de la encriptacion (No modificar) ----------*/
 const METHOD="AES-256-CBC";
