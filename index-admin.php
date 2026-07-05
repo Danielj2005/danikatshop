@@ -7,13 +7,42 @@ require_once "model/mainModel.php"; // se incluye el model principal
 require_once "model/productModel.php";
 
 
-$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-$per_page = isset($_GET['per_page']) ? max(1, intval($_GET['per_page'])) : 15;
+$page = isset($_POST['page']) ? max(1, intval($_POST['page'])) : 1;
+$per_page = isset($_POST['per_page']) ? max(1, intval($_POST['per_page'])) : 16;
 
 $offset = ($page - 1) * $per_page;
 
 $catalogo = mysqli_fetch_all(modeloPrincipal::consultar("SELECT id, nombre, precio, images FROM productos WHERE state = 1 ORDER BY nombre ASC LIMIT $per_page OFFSET $offset")); 
 $PHONE = "04244189963";
+
+$filters = $data['filter'] ?? null;
+
+if ($filters !== null) {
+    $addQuery = "WHERE C.nombre IN ('" . implode("','", $filters) . "') GROUP BY P.id";
+    // obtener total filtrado
+    $countQuery = "SELECT COUNT(DISTINCT P.id) AS total FROM productos AS P INNER JOIN categorias_productos AS CP ON P.id = CP.producto_id INNER JOIN categorias AS C ON C.id = CP.categoria_id WHERE C.nombre IN ('" . implode("','", $filters) . "')";
+    $total_stmt = modeloPrincipal::consultar($countQuery);
+    $total_row = mysqli_fetch_assoc($total_stmt);
+    $total = intval($total_row['total']);
+    $query = "SELECT P.id, P.nombre, P.precio, P.images FROM productos AS P INNER JOIN categorias_productos AS CP ON P.id = CP.producto_id INNER JOIN categorias AS C ON C.id = CP.categoria_id $addQuery ORDER BY P.nombre ASC LIMIT $per_page OFFSET $offset";
+} else {
+    $total_stmt = modeloPrincipal::consultar("SELECT COUNT(*) AS total FROM productos WHERE state = 1");
+    $total_row = mysqli_fetch_assoc($total_stmt);
+    $total = intval($total_row['total']);
+    $query = "SELECT P.id, P.nombre, P.precio, P.images FROM productos AS P WHERE P.state = 1 ORDER BY P.nombre ASC LIMIT $per_page OFFSET $offset";
+}
+
+$total_pages = ceil($total / $per_page);
+
+$totalPages = max(1, ceil($total / $per_page));
+
+$maxButtons = 7;
+$start = max(1, $page - floor($maxButtons / 2));
+$end = min($totalPages, $start + $maxButtons - 1);
+if ($end - $start < $maxButtons - 1) {
+    $start = max(1, $end - $maxButtons + 1);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -94,13 +123,13 @@ $PHONE = "04244189963";
                                     </div>
                                     <div class="">
                                         <div class="row justify-content-around align-items-cente">
-                                            <div class="col-5 col-md-6 mb-2 text-center">
+                                            <div class="col-6 mb-2 text-center">
                                                 <button onclick="detallesProductoById(<?= $id ?>)" type="button" class="btn_details rounded-5 btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                     <i class="bi bi-eye"></i>
                                                     <span class="small">Ver Detalles</span>
                                                 </button> 
                                             </div>
-                                            <div class="col col-md-6 mb-2 text-center">
+                                            <div class="col-6 mb-2 text-center">
                                                 <button onclick="askWhatsApp('<?= $nombre ?>', <?= $precio ?>, <?= $PHONE ?>)" 
                                                     type="submit" class="btn btn-success rounded-5">
                                                         <i class="bi bi-whatsapp"></i>
@@ -115,7 +144,36 @@ $PHONE = "04244189963";
                     }
                 ?>
             </div>
+
+            <div id="catalog-pagination" class="w-100 d-flex justify-content-center align-items-center gap-2 my-6">
+                
+                <form id="" method="POST" action="index-admin.php" class="SendFormAjax text-start">
+                    
+                    <input id="" name="page" type="hidden" value="<?= $page - 1 ?>">
+                    <button type="submit" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i>
+                        <span class="small">Anterior</span>
+                    </button>   
+                </form>
+                <?php for ($p = $start; $p <= $end; $p++) { ?>
+
+                    <button type="button" class="<?= $p === $page ? 'btn btn-primary' : 'btn btn-outline-primary' ?>">
+                        <span class="small"><?= $p ?></span>
+                    </button>  
+
+                <?php } ?>
+
+                <form id="" method="POST" action="index-admin.php" class="SendFormAjax text-start">
+            
+                    <input id="" name="page" type="hidden" value="<?= $page + 1 ?>">
+                    <button <?= $page >= $totalPages ? 'disabled' : '' ?> type="submit" class="btn btn-primary">
+                        <span class="small">Siguiente</span>
+                        <i class="bi bi-arrow-right"></i>
+                    </button>  
+                </form>
+            </div>
         </section>
+
     </main>
 
 
